@@ -1,0 +1,34 @@
+<ul class="nav">
+    <li class="nav-item">
+        <a href="/profile" class="nav-link" id="profile">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="/change_password" class="nav-link" id="password">
+            <i class="fa-solid fa-key"></i>
+            <span>Change Password</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" id="company">
+            <i class="fa-solid fa-building"></i>
+            <span>Company</span>
+        </a>
+    </li>
+</ul>
+<script>
+    // JavaScript to handle active class on click
+const navLinks = document.querySelectorAll('.nav .nav-link');
+
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        // Remove active class from all links
+        navLinks.forEach(l => l.classList.remove('active'));
+        
+        // Add active class to clicked link
+        link.classList.add('active');
+    });
+});
+</script>

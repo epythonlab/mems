@@ -1,0 +1,631 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family     : 'Raleway', sans-serif;
+}
+body {
+  background-color: #F4F4F4;
+  display         : flex;
+  justify-content : center;
+  /* Horizontally center content */
+  align-items     : center;
+  /* Vertically center content */
+  height          : 100vh;
+
+}
+
+
+
+/* Custom CSS for Material Style Navigation Drawer */
+.nav-drawer {
+  height          : 100%;
+  width           : 250px;
+  position        : fixed;
+  z-index         : 1040;
+  /* Higher z-index than Bootstrap's navbar */
+  top             : 0;
+  right           : -250px;
+  /* Position on the right side */
+  background-color: #fff;
+  overflow-x      : hidden;
+  transition      : 0.5s;
+  padding-top     : 60px;
+}
+
+.nav-drawer a {
+  padding        : 10px 15px;
+  text-decoration: none;
+  font-size      : 18px;
+  color          : #000;
+  display        : block;
+  transition     : 0.3s;
+}
+
+.nav-drawer a:hover {
+  background-color: #f2f2f2;
+}
+
+.navbar {
+  background: #303f9f;
+}
+
+.drawer-open {
+  right: 0;
+  /* Open the drawer from the right side */
+}
+
+.menu-icon {
+  position : absolute;
+  top      : 20px;
+  right    : 0;
+  /* Position on the right side */
+  cursor   : pointer;
+  font-size: 24px;
+}
+
+.navbar-brand {
+  position : absolute;
+  top      : 20px;
+  /* Adjust top position */
+  left     : 20px;
+  /* Adjust left position */
+  max-width: 180px;
+  /* Limit the maximum width of the logo */
+}
+
+/* Logo styling */
+.navbar-brand img {
+  max-width: 100%;
+  /* Ensure the logo fits within the navbar */
+}
+
+/* Custom CSS to remove default border from toggler button */
+.navbar-toggler {
+  border : none;
+  /* Remove default border */
+  outline: none;
+  /* Remove outline */
+}
+
+/* 2. icomoon (assuming you're using it for icons) */
+.icon {
+  font-family: 'icomoon';
+  /* Add additional icon-specific styles here */
+}
+
+
+
+/* End of header styles  */
+
+
+/* New addition for main content */
+.container-fluid {
+  width        : 100% !important;
+  padding-right: 0 !important;
+  padding-left : 0 !important;
+  margin-right : auto !important;
+  margin-left  : auto !important;
+  height       : 100vh;
+  flex-wrap    : wrap;
+  overflow     : hidden;
+}
+
+.main {
+  height    : calc(100% - 50px);
+  display   : flex;
+  flex      : 1;
+  overflow-x: hidden;
+  /* Add this line to avoid horizontal scrolling */
+}
+
+/* Side Styles */
+
+
+.sidebar {
+  height     : 100%;
+  width      : 220px;
+  box-sizing : border-box;
+  box-shadow : 0 0 2rem 0 rgb(0 0 0 / 5%);
+  overflow   : hidden;
+  transition : width 0.5s ease;
+  margin-left: 17px;
+}
+
+.container-fluid.nav-closed .sidebar,
+.container-fluid.nav-closed .header-logo {
+  width: 0;
+}
+
+.sidebar ul {
+  display       : flex;
+  flex-direction: column;
+  padding       : 5px;
+}
+
+.sidebar ul li {
+  display    : flex;
+  align-items: center;
+}
+
+.sidebar ul li a {
+  color          : #000;
+  text-decoration: none;
+  display        : flex;
+  align-items    : center;
+  width          : 100%;
+  padding        : 10px;
+  white-space    : nowrap;
+}
+
+.sidebar ul li a.active,
+.sidebar ul li a:hover {
+  background: #e8ecef;
+}
+
+.sidebar ul li span {
+  margin-left: 16px;
+  font-size  : 16px;
+  font-weight: 100;
+}
+
+.sidebar ul li i {
+  font-size  : 18px;
+  color      : #111;
+  font-weight: normal;
+}
+
+.header {
+  height         : 50px;
+  background     : #303f9f;
+  width          : 100%;
+  display        : flex;
+  align-items    : center;
+  flex-basis     : 100%;
+  color          : #FF4072;
+  padding        : 0 20px;
+  /* Adjust padding as needed */
+  display        : flex;
+  justify-content: space-between;
+  align-items    : center;
+
+}
+
+.sidebar ul li a.active i {
+  color: #303f9e;
+}
+
+.site-logo {
+  height    : 32px;
+  width     : 32px;
+  min-height: 32px;
+  min-width : 32px;
+  margin    : 0 18px 0 15px;
+}
+
+.site-logo path {
+  fill: #fff;
+}
+
+.site-title {
+  color         : #fff;
+  font-size     : 24px;
+  letter-spacing: 1px;
+  font-weight   : 400;
+}
+
+.page-content {
+  padding   : 10px 20px;
+  box-sizing: border-box;
+  width     : 100%;
+  flex      : 1;
+  overflow-x: hidden;
+}
+
+.page-content h1 {
+  font-size  : 20px;
+  font-weight: 400;
+  color      : #333;
+}
+
+.header-search {
+  height     : 100%;
+  align-items: center;
+  display    : flex;
+  padding    : 0 20px;
+  margin-left: -37px;
+  flex       : 1;
+}
+
+.header-search .button-menu {
+  width       : 28px;
+  height      : 28px;
+  margin-right: 15px;
+  background  : none;
+  border      : 0;
+  cursor      : pointer;
+}
+
+.header-logo {
+  display    : flex;
+  align-items: center;
+  width      : 220px;
+  overflow   : hidden;
+  transition : width 0.5s ease;
+}
+
+.header-search input[type="search"] {
+  height     : 100%;
+  width      : 300px;
+  padding    : 10px 20px;
+  box-sizing : border-box;
+  font-size  : 14px;
+  font-weight: 100;
+  background : none;
+  border     : none;
+  color      : #fff;
+}
+
+.header-search input[type="search"]:focus {
+  outline: none;
+}
+
+.header-search input[type="search"]::placeholder {
+  color: #ccc;
+}
+
+.header-search .button-menu:focus {
+  outline: none;
+  border : none;
+}
+
+.header-search .button-menu svg path {
+  fill: #fff;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .header {
+    flex-direction : row;
+    justify-content: space-between;
+    align-items    : center;
+    padding        : 0 10px;
+    /* Adjust padding as needed */
+  }
+
+  .header-search {
+    margin-left: -10px;
+  }
+
+  .sidebar {
+    margin-left: 0;
+  }
+
+  .header-logo {
+    flex: 0 0 auto;
+  }
+
+  .header-logo svg {
+    width       : 32px;
+    height      : 32px;
+    margin-right: 8px;
+  }
+
+  .site-title {
+    font-size: 1em;
+  }
+
+  .profile {
+    display    : flex;
+    align-items: center;
+    gap        : 8px;
+    margin-left: auto;
+    /* Push the profile to the right */
+  }
+
+  .user {
+    margin-right: 8px;
+  }
+
+  .user h3 {
+    font-size  : 14px;
+    font-weight: bold;
+  }
+
+  .user p {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .page-content {
+    width: 100vw;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .header-logo {
+    display: none;
+  }
+}
+
+/* css style user settings menu */
+/* profile menu */
+
+.profile {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: end;
+}
+
+.profile h3 {
+  text-align: end;
+  line-height: 1;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.profile p {
+  line-height: 1;
+  font-size: 14px;
+  opacity: .6;
+}
+
+.profile .img-box {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile .img-box img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* menu (the right one) */
+
+.menu {
+  position: absolute;
+  top: calc(100% + 24px);
+  right: 16px;
+  width: 200px;
+  min-height: 100px;
+  background: #fff;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
+  opacity: 0;
+  transform: translateY(-10px);
+  visibility: hidden;
+  transition: 300ms;
+  z-index: 9999;
+}
+
+.menu::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+.menu.active {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+/* menu links */
+
+.menu ul {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  background: #fff;
+}
+
+.menu ul li {
+  list-style: none;
+}
+
+.menu ul li:hover {
+  background: #eee;
+}
+
+.menu ul li a {
+  text-decoration: none;
+  color: #000;
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  gap: 6px;
+}
+
+.menu ul li a i {
+  font-size: 1.2em;
+}
+/* user settings css end */
+/* custom card */
+.custom-card-border {
+    
+    border: 2px solid #fff; /* Border color is blue */
+    border-radius: 10px; /* Rounded corners */
+    padding: 10px; /* Padding inside the card */
+
+}
+
+.custom-btn {
+  width: fit-content;
+  margin: 10px;
+
+}
+.red-asterisk {
+  color: red;
+  font-weight: bold;
+  margin-left: 4px;
+  padding: 2px;
+}
+
+/* Define the active background color */
+.nav .nav-link.active {
+    background-color: #007bff; /* Change to your desired color */
+    color: #fff; /* Change text color if needed */
+}
+
+/* Login form styles */
+.login-text{
+  
+  max-width               : 550px;
+  /* Limit the width of the form */
+  width                   : 100%;
+  /* Take full width of the container */
+  text-align              : center;
+  /* Center align content */
+  border                  : 0;
+  margin: 10 !important;
+}
+.login-container {
+  background-color        : rgba(255, 255, 255, 0.8);
+  /* Semi-transparent background */
+  /* padding              : 30px; */
+  border-radius           : 8px;
+  box-shadow              : 0px 0px 10px rgba(0, 0, 0, 0.1);
+  max-width               : 550px;
+  /* Limit the width of the form */
+  width                   : 100%;
+  /* Take full width of the container */
+  text-align              : center;
+  /* Center align content */
+  color                   : #39414e !important;
+  padding                 : 60px !important;
+  padding                 : 12px 40px 12px 16px;
+  margin: 10px !important;
+  border                  : 0;
+  font-family             : 'Raleway', sans-serif !important;
+  font-size               : 16px;
+  line-height             : 22px;
+  font-weight             : 500;
+  font-feature-settings   : 'pnum'on, 'lnum'on, 'liga'off;
+  -webkit-transition      : all 250ms ease-in-out;
+  -moz-transition         : all 250ms ease-in-out;
+  -o-transition           : all 250ms ease-in-out;
+  -ms-transition          : all 250ms ease-in-out;
+  transition              : all 250ms ease-in-out;
+}
+
+.form-container input {
+  color        : #39414e !important;
+  width        : 100%;
+  padding      : 12px 40px 12px 16px;
+  border-radius: 8px;
+  box-sizing   : border-box;
+  border       : 0;
+  box-shadow   : inset 0 0 0 2px #788394;
+  font-family  : 'Raleway', sans-serif !important;
+  font-size    : 16px;
+  line-height  : 22px;
+  font-weight  : 500;
+  transition   : #303f9f 0.3s ease;
+  /* Smooth transition for border color */
+
+}
+
+a,
+input,
+button {
+  -webkit-transition: 0.5s;
+  -o-transition     : 0.5s;
+  transition        : 0.5s;
+}
+
+button,
+input {
+  overflow: visible;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size  : 100%;
+  line-height: 1.15;
+  margin     : 0;
+}
+
+.login-container input:focus {
+  border-color: #303f9f;
+}
+
+/* Generic button styles */
+.btn {
+  position             : relative;
+  padding              : 16px;
+  color                : #fff;
+  border               : none;
+  cursor               : pointer;
+  width                : 100%;
+  box-sizing           : border-box;
+  transition           : background-color 0.3s ease;
+  /* Remove transition for transform */
+  border-radius        : 6px;
+  font-family          : 'Raleway', sans-serif;
+  font-size            : 20px;
+  line-height          : 26px;
+  font-weight          : 600;
+  font-feature-settings: 'pnum'on, 'lnum'on, 'liga'off;
+}
+
+
+/* Additional button hover styles */
+.btn.hover-orange:hover {
+  color           : #111;
+  background-color: #FBB040;
+
+}
+
+
+/* Specific button style */
+.btn.blue {
+  background-color: #303f9f;
+  color           : #fff;
+}
+
+
+.text_center,
+.text-center {
+  text-align: center;
+}
+
+.error-message {
+  color     : red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 1023px) {
+  .login-container, .login-text {
+    padding      : 12px 40px 12px 16px;
+    padding      : 16px !important;
+    border-radius: 0 !important;
+    margin-right: 16px;
+
+  }
+}
+
+/* End of Login Form Style */

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<title>{% block title %}Home{% endblock title %}</title>
+{% block body %}
+{% include 'header.html' %}
+<!-- Main content -->
+<div class="container-fluid">
+    {% include 'sideheader.html' %}
+    <div class="main">
+        <!-- Container for sidebar content -->
+        {% include 'sidenav.html' %}
+        <div class="page-content">
+            <h1>Welcome back, Medem!</h1>
+            <!-- <div class="header-search">
+                <input type="search" placeholder="Search Documentation...">
+            </div> -->
+           
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
