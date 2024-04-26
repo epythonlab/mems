@@ -1,7 +1,9 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask_login.utils import login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from . import index_bp
 from app.models.users import User
+from app import db
 
 @index_bp.route('/')
 @login_required
@@ -28,10 +30,3 @@ def profile():
     
     return render_template('users/profile.html', user = user)
 
-@index_bp.route('/change_password')
-def change_password():
-    
-    # retreive the current user profile based on the current login id
-    user = User.query.filter_by(id=current_user.id).first()
-    # update the password
-    return render_template('users/change_password.html', user = user)

@@ -3,7 +3,7 @@
 {% block title %}Sign in to Medem{% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="container login-container">
     <div class="login-header">
         <img src="static/logos/logo.ico" alt="MedEM">
         <h2>Sign in to Medem</h2>
@@ -23,10 +23,13 @@
         {% endwith %}
         
         <form method="post" id="login-form" action="/login">
+            
             <div class="mb-3">
+                <label for="username">Username or email address</label>
                 <input type="email" class="form-control" id="username" name="username" placeholder="Enter email" required>
             </div>
             <div class="mb-3">
+                <label for="password">Password</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
             </div>
             <button class="btn btn-primary hover-orange" type="submit">Sign in</button>

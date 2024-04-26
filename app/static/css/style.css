@@ -486,6 +486,7 @@ body {
     color: #fff; /* Change text color if needed */
 }
 
+
 /* Login form styles */
 
 .login-container {
@@ -494,7 +495,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  margin-top: 20px; /* Adjust as needed */
+  margin-top: 100px; /* Adjust as needed */
   margin-bottom: 200px; /* Adjust as needed */
 }
 
@@ -518,7 +519,6 @@ body {
   font-size: 16px;
   line-height: 22px;
   font-weight: 500;
-
   font-feature-settings: 'pnum'on, 'lnum'on, 'liga'off;
   transition: all 250ms ease-in-out;
 }
@@ -537,16 +537,6 @@ body {
   transition: border-color 0.3s ease; /* Smooth transition for border color */
 }
 
-/* Form styling */
-
-
-/* Label styling */
-.login-container label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: block;
-  text-align: left;
-}
 
 
 .login-form input:focus {
@@ -578,5 +568,9 @@ body {
     margin-bottom: 100px; /* Adjust bottom margin for small devices */
   }
 
+}
+
+.error-message{
+  color:red;
 }
 /* End of Login Form Style */

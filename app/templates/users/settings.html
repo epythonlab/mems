@@ -19,16 +19,15 @@
     </li>
 </ul>
 <script>
-    // JavaScript to handle active class on click
-const navLinks = document.querySelectorAll('.nav .nav-link');
+    
+    // JavaScript to handle active class based on current URL
+    const currentUrl = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav .nav-link');
 
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        // Remove active class from all links
-        navLinks.forEach(l => l.classList.remove('active'));
-        
-        // Add active class to clicked link
-        link.classList.add('active');
+    navLinks.forEach(link => {
+        const linkUrl = link.getAttribute('href');
+        if (currentUrl === linkUrl) {
+            link.classList.add('active');
+        }
     });
-});
 </script>

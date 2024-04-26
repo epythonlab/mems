@@ -124,21 +124,34 @@ def logout():
 #     return redirect(url_for('auth_bp.login'))
 
 """Change an existing user's password."""
-@auth_bp.route('/change_password', methods=['POST', 'GET'])
+
+@auth_bp.route('/change_password')
 @login_required
 def change_password():
-    try:
-        if request.method=='POST':
-            user = User.query.filter_by(id=current_user.id).first()
-            if not check_password_hash(user.password, request.form.get('oldpassword')):
-                flash("ይቅርታ! አሮጌው የይለፍ ቃል ተሳስተዋል። እባክዎ ደግመው ይሞክሩ!")
-                return redirect(url_for('dashboard_bp.dashboard'))
-            else:
-                user.password = generate_password_hash(request.form['newpassword'], method='sha256')
-                db.session.commit()
-                flash('የይለፍ ቃል በትክክል ተቀይሯል።', 'success')
-                return redirect(url_for('auth_bp.login'))
+    
+    # update the password
+    return render_template('users/change_password.html')
 
+@auth_bp.route('/update_password', methods=['POST', 'GET'])
+@login_required
+def update_password():
+    try:
+        if request.method == 'POST':
+            # retreive the current user by id
+            user = User.query.filter_by(id=current_user.id).first()
+            
+            # check that the old password is correct
+            if not check_password_hash(user.password, request.form.get('oldpassword')):
+                flash("Sorry! The old password is incorrect!", 'warning')
+                return redirect(url_for('auth_bp.change_password'))
+            else:
+                user.password = generate_password_hash(request.form['new_password'], method='scrypt')
+                # Create a new UserLog entry and store it in the database
+                # user_log = UserLog(username=current_user.email, action='Password changed')
+                # db.session.add(user_log)
+                db.session.commit()
+                flash('Password changed successfully.', 'success')
+                return redirect(url_for('auth_bp.login'))
 
     except Exception as e:
         print(e)
