@@ -1,33 +1,27 @@
 /* Global Styles */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family     : 'Raleway', sans-serif;
+  margin      : 0;
+  padding     : 0;
+  box-sizing  : border-box;
+  font-family : 'Raleway', sans-serif;
 }
+
 body {
-  background-color: #F4F4F4;
-  display         : flex;
-  justify-content : center;
-  /* Horizontally center content */
-  align-items     : center;
-  /* Vertically center content */
-  height          : 100vh;
-
+  background-color : #F4F4F4;
+  display          : flex;
+  justify-content  : center; /* Horizontally center content */
+  align-items      : center; /* Vertically center content */
+  height           : 100vh;
 }
-
-
 
 /* Custom CSS for Material Style Navigation Drawer */
 .nav-drawer {
   height          : 100%;
   width           : 250px;
   position        : fixed;
-  z-index         : 1040;
-  /* Higher z-index than Bootstrap's navbar */
+  z-index         : 1040; /* Higher z-index than Bootstrap's navbar */
   top             : 0;
-  right           : -250px;
-  /* Position on the right side */
+  right           : -250px; /* Position on the right side */
   background-color: #fff;
   overflow-x      : hidden;
   transition      : 0.5s;
@@ -35,9 +29,9 @@ body {
 }
 
 .nav-drawer a {
-  padding        : 10px 15px;
+  padding         : 10px 15px;
   text-decoration: none;
-  font-size      : 18px;
+  font-size      : 1rem; /* Standard font size */
   color          : #000;
   display        : block;
   transition     : 0.3s;
@@ -52,15 +46,13 @@ body {
 }
 
 .drawer-open {
-  right: 0;
-  /* Open the drawer from the right side */
+  right: 0; /* Open the drawer from the right side */
 }
 
 .menu-icon {
   position : absolute;
   top      : 20px;
-  right    : 0;
-  /* Position on the right side */
+  right    : 0; /* Position on the right side */
   cursor   : pointer;
   font-size: 24px;
 }
@@ -68,69 +60,56 @@ body {
 .navbar-brand {
   position : absolute;
   top      : 20px;
-  /* Adjust top position */
   left     : 20px;
-  /* Adjust left position */
-  max-width: 180px;
-  /* Limit the maximum width of the logo */
+  max-width: 180px; /* Limit the maximum width of the logo */
 }
 
 /* Logo styling */
 .navbar-brand img {
-  max-width: 100%;
-  /* Ensure the logo fits within the navbar */
+  max-width: 100%; /* Ensure the logo fits within the navbar */
 }
 
 /* Custom CSS to remove default border from toggler button */
 .navbar-toggler {
-  border : none;
-  /* Remove default border */
-  outline: none;
-  /* Remove outline */
+  border : none; /* Remove default border */
+  outline: none; /* Remove outline */
 }
 
 /* 2. icomoon (assuming you're using it for icons) */
 .icon {
-  font-family: 'icomoon';
-  /* Add additional icon-specific styles here */
+  font-family: 'icomoon'; /* Add additional icon-specific styles here */
 }
 
-
-
-/* End of header styles  */
-
+/* End of header styles */
 
 /* New addition for main content */
 .container-fluid {
-  width        : 100% !important;
-  padding-right: 0 !important;
-  padding-left : 0 !important;
-  margin-right : auto !important;
-  margin-left  : auto !important;
-  height       : 100vh;
-  flex-wrap    : wrap;
-  overflow     : hidden;
+  width         : 100% !important;
+  padding-right : 0 !important;
+  padding-left  : 0 !important;
+  margin-right  : auto !important;
+  margin-left   : auto !important;
+  height        : 100vh;
+  flex-wrap     : wrap;
+  overflow      : hidden;
 }
 
 .main {
   height    : calc(100% - 50px);
   display   : flex;
   flex      : 1;
-  overflow-x: hidden;
-  /* Add this line to avoid horizontal scrolling */
+  overflow-x: hidden; /* Add this line to avoid horizontal scrolling */
 }
 
 /* Side Styles */
-
-
 .sidebar {
-  height     : 100%;
-  width      : 220px;
-  box-sizing : border-box;
-  box-shadow : 0 0 2rem 0 rgb(0 0 0 / 5%);
-  overflow   : hidden;
-  transition : width 0.5s ease;
-  margin-left: 17px;
+  height      : 100%;
+  width       : 220px;
+  box-sizing  : border-box;
+  box-shadow  : 0 0 2rem 0 rgb(0 0 0 / 5%);
+  overflow    : hidden;
+  transition  : width 0.5s ease;
+  margin-left : 17px;
 }
 
 .container-fluid.nav-closed .sidebar,
@@ -139,9 +118,9 @@ body {
 }
 
 .sidebar ul {
-  display       : flex;
-  flex-direction: column;
-  padding       : 5px;
+  display        : flex;
+  flex-direction : column;
+  padding        : 5px;
 }
 
 .sidebar ul li {
@@ -177,19 +156,17 @@ body {
 }
 
 .header {
-  height         : 50px;
-  background     : #303f9f;
-  width          : 100%;
-  display        : flex;
-  align-items    : center;
-  flex-basis     : 100%;
-  color          : #FF4072;
-  padding        : 0 20px;
-  /* Adjust padding as needed */
-  display        : flex;
-  justify-content: space-between;
-  align-items    : center;
-
+  height          : 50px;
+  background      : #303f9f;
+  width           : 100%;
+  display         : flex;
+  align-items     : center;
+  flex-basis      : 100%;
+  color           : #FF4072;
+  padding         : 0 20px; /* Adjust padding as needed */
+  display         : flex;
+  justify-content : space-between;
+  align-items     : center;
 }
 
 .sidebar ul li a.active i {
@@ -290,8 +267,7 @@ body {
     flex-direction : row;
     justify-content: space-between;
     align-items    : center;
-    padding        : 0 10px;
-    /* Adjust padding as needed */
+    padding        : 0 10px; /* Adjust padding as needed */
   }
 
   .header-search {
@@ -313,15 +289,14 @@ body {
   }
 
   .site-title {
-    font-size: 1em;
+    font-size: 1rem;
   }
 
   .profile {
     display    : flex;
     align-items: center;
     gap        : 8px;
-    margin-left: auto;
-    /* Push the profile to the right */
+    margin-left: auto; /* Push the profile to the right */
   }
 
   .user {
@@ -354,88 +329,88 @@ body {
 /* profile menu */
 
 .profile {
-  position: relative;
-  display: flex;
+  position       : relative;
+  display        : flex;
   justify-content: flex-end;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  text-align: end;
+  align-items    : center;
+  gap            : 12px;
+  cursor         : pointer;
+  text-align     : end;
 }
 
 .profile h3 {
-  text-align: end;
-  line-height: 1;
+  text-align   : end;
+  line-height  : 1;
   margin-bottom: 4px;
-  font-weight: 600;
+  font-weight  : 600;
 }
 
 .profile p {
   line-height: 1;
-  font-size: 14px;
-  opacity: .6;
+  font-size  : 14px;
+  opacity    : .6;
 }
 
 .profile .img-box {
-  position: relative;
-  width: 48px;
-  height: 48px;
+  position     : relative;
+  width        : 48px;
+  height       : 48px;
   border-radius: 50%;
-  overflow: hidden;
+  overflow     : hidden;
 }
 
 .profile .img-box img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position  : absolute;
+  top       : 0;
+  left      : 0;
+  width     : 100%;
+  height    : 100%;
   object-fit: cover;
 }
 
 /* menu (the right one) */
 
 .menu {
-  position: absolute;
-  top: calc(100% + 24px);
-  right: 16px;
-  width: 200px;
+  position  : absolute;
+  top       : calc(100% + 24px);
+  right     : 16px;
+  width     : 200px;
   min-height: 100px;
   background: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
-  opacity: 0;
-  transform: translateY(-10px);
+  opacity   : 0;
+  transform : translateY(-10px);
   visibility: hidden;
   transition: 300ms;
-  z-index: 9999;
+  z-index   : 9999;
 }
 
 .menu::before {
-  content: '';
-  position: absolute;
-  top: -10px;
-  right: 14px;
-  width: 20px;
-  height: 20px;
+  content   : '';
+  position  : absolute;
+  top       : -10px;
+  right     : 14px;
+  width     : 20px;
+  height    : 20px;
   background: #fff;
-  transform: rotate(45deg);
-  z-index: -1;
+  transform : rotate(45deg);
+  z-index   : -1;
 }
 
 .menu.active {
-  opacity: 1;
-  transform: translateY(0);
+  opacity   : 1;
+  transform : translateY(0);
   visibility: visible;
 }
 
 /* menu links */
 
 .menu ul {
-  position: relative;
-  display: flex;
+  position      : relative;
+  display       : flex;
   flex-direction: column;
-  z-index: 10;
-  background: #fff;
+  z-index       : 10;
+  background    : #fff;
 }
 
 .menu ul li {
@@ -448,129 +423,359 @@ body {
 
 .menu ul li a {
   text-decoration: none;
-  color: #000;
-  display: flex;
-  align-items: center;
-  padding: 15px 20px;
-  gap: 6px;
+  color          : #000;
+  display        : flex;
+  align-items    : center;
+  padding        : 15px 20px;
+  gap            : 6px;
 }
 
 .menu ul li a i {
-  font-size: 1.2em;
+  font-size: 1.2rem;
 }
+
 /* user settings css end */
 /* custom card */
 .custom-card-border {
-    
-    border: 2px solid #fff; /* Border color is blue */
-    border-radius: 10px; /* Rounded corners */
-    padding: 10px; /* Padding inside the card */
-
+  border        : 2px solid #fff; /* Border color is blue */
+  border-radius: 10px; /* Rounded corners */
+  padding       : 10px; /* Padding inside the card */
 }
 
 .custom-btn {
-  width: fit-content;
+  width : fit-content;
   margin: 10px;
-
 }
+
 .red-asterisk {
-  color: red;
+  color      : red;
   font-weight: bold;
   margin-left: 4px;
-  padding: 2px;
+  padding    : 2px;
 }
 
 /* Define the active background color */
 .nav .nav-link.active {
-    background-color: #007bff; /* Change to your desired color */
-    color: #fff; /* Change text color if needed */
+  background-color: #007bff; /* Change to your desired color */
+  color           : #fff; /* Change text color if needed */
 }
-
 
 /* Login form styles */
 
 .login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display        : flex;
+  flex-direction : column;
+  align-items    : center;
   justify-content: center;
-  height: 100vh;
-  margin-top: 100px; /* Adjust as needed */
-  margin-bottom: 200px; /* Adjust as needed */
+  height         : 100vh;
+  margin-top     : 100px; /* Adjust as needed */
+  margin-bottom  : 200px; /* Adjust as needed */
 }
 
-
 .login-header {
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
+  width        : 100%;
+  text-align   : center;
   margin-bottom: 20px; /* Adjust spacing between header and form */
 }
 
 .login-form {
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  max-width: 400px;
-  width: 100%;
-  color: #39414e !important;
-  font-family: 'Raleway', sans-serif !important;
-  font-size: 16px;
-  line-height: 22px;
-  font-weight: 500;
+  background-color     : rgba(255, 255, 255, 0.8);
+  border-radius        : 8px;
+  box-shadow           : 0px 0px 10px rgba(0, 0, 0, 0.1);
+  padding              : 30px;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  width                : 100%;
+  color                : #39414e !important;
+  font-size            : 1rem; /* Standard font size */
+  line-height          : 22px;
+  font-weight          : 500;
   font-feature-settings: 'pnum'on, 'lnum'on, 'liga'off;
-  transition: all 250ms ease-in-out;
+  transition           : all 250ms ease-in-out;
 }
 
 .login-form input {
-  color: #39414e !important;
-  width: 100%;
-  padding: 12px 16px; /* Adjust padding */
+  color        : #39414e !important;
+  width        : 100%;
+  padding      : 12px 16px; /* Adjust padding */
   border-radius: 8px;
-  box-sizing: border-box;
-  border: 2px solid #c2c5c9; /* Add border */
-  font-family: 'Raleway', sans-serif !important;
-  font-size: 16px;
-  line-height: 22px;
-  font-weight: 500;
-  transition: border-color 0.3s ease; /* Smooth transition for border color */
+  box-sizing   : border-box;
+  border       : 2px solid #c2c5c9; /* Add border */
+  font-size    : 1rem; /* Standard font size */
+  line-height  : 22px;
+  font-weight  : 500;
+  transition   : border-color 0.3s ease; /* Smooth transition for border color */
 }
-
-
 
 .login-form input:focus {
   border-color: #303f9f; /* Change border color on focus */
 }
 
 .btn {
-  padding: 12px 16px; /* Adjust padding */
-  color: #fff;
+  padding         : 12px 16px; /* Adjust padding */
+  color           : #fff;
   background-color: #303f9f; /* Change button background color */
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  font-family: 'Raleway', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
+  border          : none;
+  border-radius   : 8px;
+  cursor          : pointer;
+  width           : 100%;
+  font-family     : 'Raleway', sans-serif;
+  font-size       : 1rem; /* Standard font size */
+  font-weight     : 600;
+  transition      : background-color 0.3s ease;
 }
 
 .btn:hover {
   background-color: #FBB040; /* Change button background color on hover */
-  color: #111;
+  color           : #111;
 }
+
 /* Media query for small devices */
 @media only screen and (max-width: 767px) {
   .login-container {
-    margin-top: 10px; /* Adjust top margin for small devices */
+    margin-top   : 10px; /* Adjust top margin for small devices */
     margin-bottom: 100px; /* Adjust bottom margin for small devices */
   }
-
 }
 
-.error-message{
-  color:red;
+.sign-message {
+  font-size: 14px;
+  color: #333;
+  padding: 10px 5px;
+  margin: 10px 5px;
 }
+
+.sign-message a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.sign-message a:hover {
+  color: #0056b3;
+}
+
 /* End of Login Form Style */
+
+/* step wizard form registration  */
+/*form styles*/
+#msform {
+  text-align: center;
+  position  : relative;
+  margin-top: 30px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Hide all except first fieldset */
+#msform fieldset:not(:first-of-type) {
+  display: none;
+}
+
+#msform input {
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+#msform .action-button {
+  width        : 100px;
+  background   : #303f9f;
+  font-weight  : bold;
+  color        : white;
+  border       : 0 none;
+  border-radius: 25px;
+  cursor       : pointer;
+  padding      : 10px 5px;
+  margin       : 10px 5px;
+  float: inline-end;
+}
+
+#msform .action-button:hover {
+  background-color: #FBB040;
+  color           : #111;
+}
+
+.submit.action-button {
+  display         : inline-block;
+  padding         : 10px 20px;
+  background-color: transparent;
+  color           : white;
+  border          : 2px solid white;
+  border-radius   : 25px;
+  font-size       : 1rem; /* Standard font size */
+  text-decoration : none;
+  transition      : background-color 0.3s, color 0.3s;
+  position        : relative; /* Ensure z-index works */
+  z-index         : 1; /* Ensure button is above overlay */
+}
+
+.submit.action-button:hover,
+.submit.action-button:focus,
+.submit.action-button:active {
+  background-color: white;
+  outline         : none;
+  color           : #303f9f;
+  transform       : translateY(1px);
+}
+
+#msform .action-button-previous {
+  width        : 100px;
+  background   : #C5C5F1;
+  font-weight  : bold;
+  color        : white;
+  border       : 0 none;
+  border-radius: 25px;
+  cursor       : pointer;
+  padding      : 10px 5px;
+  margin       : 10px 5px;
+  float: right;
+}
+
+#msform .action-button-previous:hover,
+#msform .action-button-previous:focus {
+  box-shadow: 0 0 0 2px white, 0 0 0 3px #C5C5F1;
+}
+
+/* Progressbar */
+#progressbar {
+  overflow     : hidden;
+  counter-reset: step; /* CSS counters to number the steps */
+  margin-bottom: 30px;
+  overflow     : hidden;
+  color        : lightgrey
+}
+
+#progressbar li {
+  list-style-type: none;
+  font-size      : 1rem; /* Standard font size */
+  width          : 33.33%;
+  float          : left;
+  position       : relative;
+  letter-spacing : 1px;
+  font-weight    : 400
+}
+
+#progressbar li:before {
+  content          : counter(step);
+  counter-increment: step;
+  width            : 50px;
+  height           : 50px;
+  line-height      : 45px;
+  display          : block;
+  font-size        : 20px;
+  color            : #ffffff;
+  background       : lightgray;
+  border-radius    : 50%;
+  margin           : 0 auto 10px auto;
+  padding          : 2px
+}
+
+#progressbar li:after {
+  content   : '';
+  width     : 100%;
+  height    : 2px;
+  background: lightgray;
+  position  : absolute;
+  left      : -50%;
+  top       : 25px;
+  z-index   : -2; /* Put it behind the numbers */
+}
+
+#progressbar li:first-child:after {
+  content: none; /* Connector not needed before the first step */
+}
+
+#msform {
+  position: relative;
+  z-index : 1; /* Ensure the form appears above the overlay */
+}
+
+#progressbar .active {
+  color: #303f9f
+}
+
+#progressbar li.active:before,
+#progressbar li.active:after {
+  background: #303f9f
+}
+
+#heading {
+  text-transform: uppercase;
+  color         : #303f9f;
+  font-weight   : normal
+}
+
+.message a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Side section styles */
+
+.side-section {
+  background-color: #303f9f;
+  color: white;
+  height: 100vh;
+  margin-right: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.side-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.side-section h1 {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.side-section p {
+  padding-left: 20px;
+  margin-top: 20px;
+}
+
+.side-box {
+  padding-top: 40px;
+}
+
+.form-box{
+  padding-top: 40px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  /* Move side section to the top on smaller screens */
+  .side-section {
+    margin-top: 20px;
+    min-height: 100vh;
+    margin-right: 0;
+    border-radius: 8px;
+    
+  }
+
+  .side-box{
+    margin-top: 50%;
+    padding-top: 80px;
+    padding-bottom: 10%;
+    width: 100%;
+    text-align: center;
+  }
+
+  .side-form{
+    padding-top: -10px;
+  }
+
+  .side-section p {
+    padding: 10px; /* Adjust padding for paragraphs */
+  }
+
+  .side-section h1 {
+    padding-top: 16px; /* Adjust padding for the heading */
+    margin-bottom: 20px; /* Add margin to bottom for better spacing */
+  }
+}
