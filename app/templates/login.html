@@ -5,129 +5,71 @@
 <!-- Top content -->
 <!-- MultiStep Form -->
 <!-- <div class="img-overlay"></div> -->
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12 col-md-6 col-lg-6 side-section">
+<section class="container">
+    <div class="row ">
+        <div class="col-sm-12 col-md-4 col-lg-5 side-section">
             <div class="side-box">
-                <h1>Medem</h1>
+                <div class="login-header">
+                    <img src="static/logos/logo.ico" alt="MedEM">
+                    <h2>Medem</h2>
+                </div>
                 <p>Please enter your details to sign in the agreement and have your own store management software.</p>
                 <p class="message">
                     Not registered?
                     <a href="#" class="register submit action-button">Register now</a>
                 </p>
             </div>
-            
         </div>
-        <div class="col-sm-12 col-md-5 col-lg-5 form-box">
+        <div class="col-sm-12 col-md-5 col-lg-6 form-box">
             <!-- Registration form for new user-->
             <form id="msform" class="register-form hidden">
                 <ul id="progressbar">
                     <li class="active">Personal Details</li>
-                    <li>Social Profiles</li>
-                    <li>Account Setup</li>
+                    <li>Company address</li>
+                    <li>Company Profile</li>
                 </ul>
                 <div class="card custom-card-border">
                     <div class="card-body">
                         <fieldset>
-                            <h2 class="card-title">Account Information</h2>
-                            <input
-                                type="text"
-                                name="fname"
-                                class="form-control"
-                                placeholder="First Name"
-                                required
-                            >
-                            <input
-                                type="text"
-                                name="lname"
-                                class="form-control"
-                                placeholder="Last Name"
-                                required
-                            >
-                            
-                            <input
-                                type="text"
-                                name="phone"
-                                class="form-control"
-                                placeholder="Phone"
-                                required
-                            >
-                            <input
-                                type="button"
-                                name="next"
-                                class="next action-button"
-                                value="Next"
-                            >
+                            <label for="" class="form-label float-start">First name</label>
+                            <input type="text" class="form-control" id="fname" value="" placeholder="Enter your first name" required>
+                            <label for="" class="form-label float-start">Last name</label>
+                            <input type="text" class="form-control" id="lname" value="" placeholder="Enter your last name" required> 
+                            <label for="" class="form-label float-start">Mobile number</label>
+                            <input type="tel" name="phone" class="form-control" placeholder="Mobile number" required>
+                            <label for="" class="form-label float-start">Email address</label>
+                            <input type="email" name="email" class="form-control" placeholder="Email address" required>
+                                
+                            <input type="button" name="next" class="next action-button" value="Next">
+                           
                         </fieldset>
                         <fieldset>
-                            <h2 class="card-title">Company Profile</h2>
-                            <input
-                                type="text"
-                                name="twitter"
-                                class="form-control"
-                                placeholder="Twitter"
-                            >
-                            <input
-                                type="text"
-                                name="facebook"
-                                class="form-control"
-                                placeholder="Facebook"
-                            >
-                            <input
-                                type="text"
-                                name="gplus"
-                                class="form-control"
-                                placeholder="Google Plus"
-                            >
+                            <!-- <h2 class="card-title">Company Profile</h2> -->
+                            <label for="" class="form-label float-start">Country</label>
+                            <input type="text" value="" class="form-control" id="country" placeholder="e.g Ethiopia">
+                            <label for="" class="form-label float-start">State</label>
+                            <input type="text" class="form-control" id="state" placeholder="e.g addis ababa">
+                            <label for="" class="form-label float-start">Sub city or Zone</label>
+                            <input type="text" class="form-control" id="zone" placeholder="e.g addis ketema">
+                            <label for="" class="form-label float-start">Wereda</label>
+                            <input type="text" value="" class="form-control" id="wereda" placeholder="e.g 10">
+                            <label for="" class="form-label float-start">Kebele</label>
+                            <input type="text" class="form-control" id="kebele" placeholder="04">
+                            <label for="" class="form-label float-start">House number</label>
+                            <input type="text" class="form-control" id="house_no" placeholder="e.g 22/140">
 
-                            <input
-                            type="button"
-                            name="next"
-                            class="next action-button"
-                            value="Next"
-                        >
-                            <input
-                                type="button"
-                                name="previous"
-                                class="previous action-button-previous"
-                                value="Previous"
-                            >
+                            <input type="button" name="next" class="next action-button" value="Next">
+                            <input type="button" name="previous" class="previous action-button-previous" value="Previous">
                           
                         </fieldset>
                         <fieldset>
-                            <h2 class="card-title">Create your account</h2>
-                            <input
-                                type="text"
-                                name="email"
-                                class="form-control"
-                                placeholder="Email"
-                                required
-                            >
-                            <input
-                                type="password"
-                                name="pass"
-                                class="form-control"
-                                placeholder="Password"
-                            >
-                            <input
-                                type="password"
-                                name="cpass"
-                                class="form-control"
-                                placeholder="Confirm Password"
-                            >
-                              <input
-                                type="submit"
-                                name="submit"
-                                class="submit action-button"
-                                value="Submit"
-                            >
-                            <input
-                                type="button"
-                                name="previous"
-                                class="previous action-button-previous"
-                                value="Previous"
-                            >
-                          
+                            <!-- <h2 class="card-title">Create your account</h2> -->
+                            <input type="text" name="email" class="form-control" placeholder="Email" required>
+                            <input type="password" name="pass" class="form-control" placeholder="Password">
+                            <input type="password" name="cpass" class="form-control" placeholder="Confirm Password">
+                           
+                            <input type="submit" name="submit" class="submit action-button" value="Submit">
+                            <input type="button" name="previous" class="previous action-button-previous" value="Previous">
                         </fieldset>
                     </div>
                 </div>
@@ -161,32 +103,19 @@
                             {% endwith %}
                     <div class="mb-3">
                         <label for="username" class="form-label">Username or email address</label>
-                        <input
-                            type="email"
-                            class="form-control"
-                            id="username"
-                            name="username"
-                            placeholder="Enter email"
-                            required
-                        >
+                        <input type="email" class="form-control" id="username" name="username" placeholder="Enter email" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input
-                            type="password"
-                            class="form-control"
-                            id="password"
-                            name="password"
-                            placeholder="Password"
-                            required
-                        >
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                     </div>
                     <button class="btn btn-primary hover-orange" type="submit">Sign in</button>
                 </div>
             </form>
         </div>
     </div>
-</div>
+</section>
+
 <!-- /.MultiStep Form -->
 <script>
   // JavaScript to handle multi-step registration form
