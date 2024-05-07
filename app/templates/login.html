@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
-<title>{% block title %}Registration {% endblock title %}</title>
+<title>{% block title %}Sign in to Medem {% endblock title %}</title>
 {% block body %}
 <!-- Top content -->
 <!-- MultiStep Form -->
@@ -31,13 +31,24 @@
                 <div class="card custom-card-border">
                     <div class="card-body">
                         <fieldset>
-                            <label for="" class="form-label float-start">First name</label>
-                            <input type="text" class="form-control" id="fname" value="" placeholder="Enter your first name" required>
-                            <label for="" class="form-label float-start">Last name</label>
-                            <input type="text" class="form-control" id="lname" value="" placeholder="Enter your last name" required> 
-                            <label for="" class="form-label float-start">Mobile number</label>
+                            <label for="" class="form-label float-start">First name 
+                                <span class="red-asterisk">*</span>
+                            </label>
+                            <input type="text" name="fname" class="form-control" id="fname" value="" placeholder="Enter your first name" required>
+                           
+                            <label for="" class="form-label float-start">Last name
+                                <span class="red-asterisk">*</span>
+                            </label>
+                            <input type="text" name="lname" class="form-control" id="lname" value="" placeholder="Enter your last name" required> 
+                            
+                            <label for="" class="form-label float-start">Mobile number
+                                <span class="red-asterisk">*</span>
+                            </label>
                             <input type="tel" name="phone" class="form-control" placeholder="Mobile number" required>
-                            <label for="" class="form-label float-start">Email address</label>
+                            
+                            <label for="" class="form-label float-start">Email address
+                                <span class="red-asterisk">*</span>
+                            </label>
                             <input type="email" name="email" class="form-control" placeholder="Email address" required>
                                 
                             <input type="button" name="next" class="next action-button" value="Next">
@@ -46,17 +57,30 @@
                         <fieldset>
                             <!-- <h2 class="card-title">Company Profile</h2> -->
                             <label for="" class="form-label float-start">Country</label>
-                            <input type="text" value="" class="form-control" id="country" placeholder="e.g Ethiopia">
-                            <label for="" class="form-label float-start">State</label>
-                            <input type="text" class="form-control" id="state" placeholder="e.g addis ababa">
-                            <label for="" class="form-label float-start">Sub city or Zone</label>
-                            <input type="text" class="form-control" id="zone" placeholder="e.g addis ketema">
-                            <label for="" class="form-label float-start">Wereda</label>
-                            <input type="text" value="" class="form-control" id="wereda" placeholder="e.g 10">
+                            <input type="text" value="" name="contry" class="form-control" id="country" placeholder="e.g Ethiopia">
+                            
+                            <label for="" class="form-label float-start">State
+                                <span class="red-asterisk">*</span>
+                            </label>
+                            <input type="text" name="state" class="form-control" id="state" placeholder="e.g addis ababa" required>
+                            
+                            <label for="" class="form-label float-start">Sub city or Zone
+                                <span class="red-asterisk">*</span>
+                            </label>
+                            <input type="text" name="sub_city" class="form-control" id="zone" placeholder="e.g addis ketema" required>
+                            
+                            <label for="" class="form-label float-start">Wereda
+                                <span class="red-asterisk">*</span>
+                            </label>
+                            <input type="text" name="wereda" value="" class="form-control" id="wereda" placeholder="e.g 10" required>
+
                             <label for="" class="form-label float-start">Kebele</label>
-                            <input type="text" class="form-control" id="kebele" placeholder="04">
-                            <label for="" class="form-label float-start">House number</label>
-                            <input type="text" class="form-control" id="house_no" placeholder="e.g 22/140">
+                            <input type="text" name="kebele" class="form-control" id="kebele" placeholder="04">
+
+                            <label for="" class="form-label float-start">House number
+                                <span class="red-asterisk">*</span>
+                            </label>
+                            <input type="text" name="house_no" class="form-control" id="house_no" placeholder="e.g 22/140" required>
 
                             <input type="button" name="next" class="next action-button" value="Next">
                             <input type="button" name="previous" class="previous action-button-previous" value="Previous">
@@ -64,9 +88,20 @@
                         </fieldset>
                         <fieldset>
                             <!-- <h2 class="card-title">Create your account</h2> -->
-                            <input type="text" name="email" class="form-control" placeholder="Email" required>
-                            <input type="password" name="pass" class="form-control" placeholder="Password">
-                            <input type="password" name="cpass" class="form-control" placeholder="Confirm Password">
+                            <label for="company_name" class="form-label float-start">Company name
+                                <span class="red-asterisk">*</span>
+                            </label>
+                            <input type="text" name="company_name" class="form-control" placeholder="Company name" required>
+                            
+                            <label for="logo_name" class="form-label float-start">Company logo
+                                <span class="red-asterisk">*</span>
+                            </label>
+                            <input type="file" name="logo" class="form-control" placeholder="upload logo" accept=".jpg, .jpeg, .png" required>
+                            
+                            <label for="company_name" class="form-label float-start">Company license
+                                <span class="red-asterisk">*</span>
+                            </label>
+                            <input type="file" name="license" class="form-control" placeholder="upload renewed license" accept=".jpg, .jpeg, .png" required>
                            
                             <input type="submit" name="submit" class="submit action-button" value="Submit">
                             <input type="button" name="previous" class="previous action-button-previous" value="Previous">
@@ -102,11 +137,15 @@
                             {% endif %}
                             {% endwith %}
                     <div class="mb-3">
-                        <label for="username" class="form-label">Username or email address</label>
+                        <label for="username" class="form-label">Username or email address
+                            <span class="red-asterisk">*</span>
+                        </label>
                         <input type="email" class="form-control" id="username" name="username" placeholder="Enter email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">Password
+                            <span class="red-asterisk">*</span>
+                        </label>
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                     </div>
                     <button class="btn btn-primary hover-orange" type="submit">Sign in</button>
@@ -171,16 +210,25 @@ document.querySelectorAll(".submit").forEach(submitButton => {
 });
 
 function checkEmptyInputs(fieldset) {
-    let inputs = fieldset.querySelectorAll("input, select, textarea");
+    let inputs = fieldset.querySelectorAll("input[required], select[required], textarea[required]");
+    
     for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].hasAttribute("required") && inputs[i].value.trim() === "") {
-            // If a required input is empty, return false
-            return false;
+        if (inputs[i].value.trim() === "") {
+            // Display error message
+            inputs[i].insertAdjacentHTML('afterend', '<div class="error-message red-asterisk float-end">Please fill the required field!</div>');
+            return false; // Stop checking further inputs
+        } else {
+            // Remove error message if exists
+            let errorMessage = inputs[i].nextElementSibling;
+            if (errorMessage && errorMessage.classList.contains('error-message')) {
+                errorMessage.remove();
+            }
         }
     }
-    // All required inputs are filled
-    return true;
+    return true; // All required inputs are filled
 }
+
+
 //<!-- javascript to handle the login and register form in the same page -->
 document.addEventListener("DOMContentLoaded", function() {
     const registerForm = document.querySelector(".register-form");
@@ -192,12 +240,14 @@ document.addEventListener("DOMContentLoaded", function() {
     // Function to hide the login form and show the register form
     function showRegisterForm() {
         registerForm.classList.remove("hidden");
+        document.title = "Register new user";
         loginForm.classList.add("hidden");
     }
 
     // Function to hide the register form and show the login form
     function showLoginForm() {
         loginForm.classList.remove("hidden");
+        document.title = "Sign in to Medem"; // update the title of each form
         registerForm.classList.add("hidden");
     }
 
@@ -205,5 +255,7 @@ document.addEventListener("DOMContentLoaded", function() {
     registerButton.addEventListener("click", showRegisterForm);
     loginButton.addEventListener("click", showLoginForm);
 });
+
+
 </script>
 {% endblock body %}
