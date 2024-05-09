@@ -7,8 +7,14 @@ auth_bp = Blueprint(
     template_folder='templates',
     static_folder='static'
 )
+user_bp = Blueprint(
+    'user_bp', __name__,
+    template_folder='templates',
+    static_folder='static'
+)
 
 from . import index
 from . import auth
+from . import users
 
 

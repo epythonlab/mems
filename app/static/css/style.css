@@ -813,3 +813,31 @@ body {
 .container{
   height: 100%;
 }
+
+/* css to decorate the table layout */
+/* Set minimum width of table */
+
+.table-container {
+  min-width: 320px;
+}
+/* Default styles for th */
+
+/* Remove white-space: nowrap; from .sortable */
+.sortable {
+  position: relative;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sort-icon {
+   transform: translateY(-50%);
+}
+
+.sort-icon:after {
+  content: '▲▼';
+  color: #999; /* Default color */
+}
+
+.sortable:active .sort-icon:after {
+  color: #303f9f; /* Change this to your desired color */
+}

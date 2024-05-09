@@ -1,13 +1,16 @@
 # Import necessary modules and classes
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
-from app.models.users import User  # Make sure to import your User model
-
-
+from app.models.users import User, Role # Make sure to import your User model
+from app.models.FileUpload import UploadFile
+from flask_security import SQLAlchemyUserDatastore
 from app import db, login_manager
 from . import auth_bp
+# Initialize the SQLAlchemy data store and Flask-Security.
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
+# route to login
 @auth_bp.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'GET':
@@ -57,44 +60,96 @@ def load_user(user_id):
     return None
 
 # print(current_user.get_id())
-
-@auth_bp.route('/register/', methods=['POST', 'GET'])
+@auth_bp.route('/register', methods=['POST', 'GET'])
 def register():
-    return render_template('signup.html')
+    if request.method == 'POST':
+        # Obtain the form values
+        first_name = request.form['fname']
+        last_name = request.form['lname']
+        phone_number = request.form['phone']
+        email = request.form['email']
+        
+        # Randomly generate password for new user and hash the password
+        password = generate_password_hash(generate_random_password(), method='scrypt')
+        country = request.form['country']
+        state = request.form['state']
+        sub_city = request.form['sub_city']
+        wereda = request.form['wereda']
+        kebele = request.form['kebele']
+        house_number = request.form['house_no']
+        company_name = request.form['company_name']
+        logo = UploadFile.save_picture(request.files['logo'])
+        license = UploadFile.save_picture(request.files['license'])
+        
+        # Register the form values to the database table (user)
+        import uuid
+        new_user = User(first_name=first_name, last_name=last_name, phone_number=phone_number,
+                        email=email, password=password, country=country, state=state,
+                        sub_city=sub_city, wereda=wereda, kebele=kebele, house_number=house_number,
+                        company_name=company_name, logo=logo, license=license,
+                        fs_uniquifier=uuid.uuid4(), active=0)
 
-@auth_bp.route('/signup', methods=['POST'])
-def signup():
-    # get form values
-    email = request.form.get('username').strip()
-    fname = request.form.get('fname').strip()
-    lname = request.form.get('lname').strip()
-    password = request.form.get('password').strip()
-    user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
+        # # Assign role to new user
+        # # Create roles if they don't exist
+        # admin_role = Role.query.filter_by(name='owner').first()
+        # if not admin_role:
+        #     admin_role = Role(name='owner', description='Administrator')
+        #     db.session.add(admin_role)
+        #     db.session.commit()
 
-    if user: # if a user is found, we want to redirect back to signup page so user can try again
-        flash('Email address already exist.', 'danger')
-        return redirect(url_for('auth_bp.register'))
+        # # Retrieve the user object from the database using the email address
+        # new_user = User.query.filter_by(email=email).first()
 
-    # create new user with the form data. Hash the password so plaintext version isn't saved.
-    new_user = User(first_name=fname, last_name=lname, email=email, password=generate_password_hash(password, method='sha256'), active=0)
-    import uuid
-    new_user.fs_uniquifier = uuid.uuid4()
-    db.session.add(new_user)
-    db.session.commit()
+        # # Check if the user exists
+        # if new_user:
+        #     try:
+        #         # Add the 'owner' role to the user
+        #         user_datastore.add_role_to_user(new_user, 'owner')
+        #         db.session.commit()  # Commit the changes to the database
+        #     except Exception as e:
+        #         print(f"An error occurred while adding role to user: {str(e)}")
+        #         # Optionally, log the error or handle it in an appropriate way
+        # else:
+        #     print(f"User with email {email} does not exist.")
 
-    # # # generate token for email confirmation
-    # # token = s.dumps(email, salt='email-confirmation')
-    # # send confirmation message
-    # msg = Message('Confirm Email', recipients=[email])
-    # link = url_for('auth_bp.verify_email', token=token, _external=True)
-    # msg.body = 'Your link is {}'.format(link)
-    # #mail.send(msg)
-    # # retrieve user_id and role_id
-    # user_datastore.add_role_to_user(email, 'author')
-    # db.session.commit()
-    # flash('Successfuly registered. The token is {}'.format(token), 'success')
+        # Add new user
+        db.session.add(new_user)
+        # Commit the changes
+        db.session.commit()
+        
+        flash('You are registered successfully.', 'success')
+        return redirect(url_for('auth_bp.login'))
+    return render_template('login.html')  # Render the registration form for GET requests
 
-    return redirect(url_for('auth_bp.login'))
+    
+# check email is already exist
+@auth_bp.route('/check_email', methods=['GET'])
+def check_email():
+    email = request.args.get('email')
+    user = User.query.filter_by(email=email).first()
+    if user:
+        # Email exists
+        return jsonify({'exists': True})
+    else:
+        # Email does not exist
+        return jsonify({'exists': False})
+    
+# function to generate random password for new user
+import random
+import string
+
+def generate_random_password(length=12):
+    # Define the characters to use for generating the password
+    characters = string.ascii_letters + string.digits + string.punctuation
+    
+    # Generate the random password
+    password = ''.join(random.choice(characters) for _ in range(length))
+    
+    return password
+
+# # Example usage:
+# random_password = generate_random_password()
+# print("Random Password:", random_password)
 
 # # confirm email
 # @auth_bp.route('/verify_email/<token>')

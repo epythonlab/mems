@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<title>{% block title %}Home{% endblock title %}</title>
+{% block body %}
+{% include 'header.html' %}
+<!-- Main content -->
+<div class="container-fluid">
+    {% include 'sideheader.html' %}
+    <div class="main">
+        <!-- Container for sidebar content -->
+        {% include 'sidenav.html' %}
+        <div class="page-content">
+            <h1 class="mt-4">User List</h1>
+            <div class="table-responsive">
+                <table id="user-table" class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="sortable" data-column="id">#
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th scope="col" class="sortable" data-column="first_name">First Name
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-column="last_name">Last Name
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-column="email">Email
+                                <span class="sort-icon"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{ user.first_name }}</td>
+                            <td>{{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- add the script files in the body of every html content -->
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock body %}
