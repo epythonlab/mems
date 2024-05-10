@@ -937,4 +937,30 @@ body {
 /* button hover for all buttons */
 .button-hover:hover {
   background-color: #3f51b5; /* A lighter shade of blue */
+  color: #ccc;
 }
+
+/* button status */
+.btn-status.btn-small {
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 10px;
+  color: #303f9f;
+  border: none;
+}
+td:last-child .btn-status {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 0px;
+  margin-bottom: 0px;
+  margin-right: 5px;
+ 
+  
+}
+
+td:last-child .btn-status .fas {
+  line-height: 30px;
+  width: 30px;
+}
+

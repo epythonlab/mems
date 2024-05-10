@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>{% block title %}Home{% endblock title %}</title>
+<title>{% block title %}User List{% endblock title %}</title>
 {% block body %}
 {% include 'header.html' %}
 <!-- Main content -->
@@ -22,7 +22,6 @@
                 </select>
               
                 <label for="maxRows">rows</label>
-              
               </div>
               
             <!-- Filtering section -->
@@ -55,6 +54,20 @@
                                 Email
                                 <span class="sort-icon"></span>
                             </th>
+                            <th class="sortable" data-column="phone">
+                                Phone
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-column="state">
+                                State
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-column="address">
+                                Address
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th>Status </th>
+                            <th>Action</th>  
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -64,6 +77,29 @@
                             <td>{{ user.first_name }}</td>
                             <td>{{ user.last_name }}</td>
                             <td>{{ user.email }}</td>
+                            <td>{{ user.phone_number }}</td>
+                            <td>{{ user.state }} </td>
+                            <td>{{ user.sub_city }}, {{ user.wereda }}, {{ user.kebele }}, {{ user.house_number }} </td>
+                            <td>
+                                {% if user.active == 1 %}
+                                <!-- Tick mark icon for completed status -->
+                                <i class="btn-status fas fa-check text-success" title="approved" style="font-weight: bold;"></i>
+                                {% else %}
+                                <!-- Cross mark icon for not approved status -->
+                                <i class="fas fa-times text-danger" title="not approved" style="font-weight: bold;"></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <!-- Buttons for view and edit -->
+                                <!-- Icons for view and edit -->
+                                <button class="btn-status btn-small button-hover" title="View" onclick="viewUser({{user.id}})">
+                                    <i class="fas fa-eye"></i> <!-- Font Awesome icon for view -->
+                                </button>
+                                <button class="btn-status btn-small button-hover" title="Edit" onclick="editUser({{ user.id }})">
+                                    <i class="fas fa-edit"></i> <!-- Font Awesome icon for edit -->
+                                </button>
+                                
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

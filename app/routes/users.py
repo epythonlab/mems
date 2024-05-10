@@ -21,8 +21,8 @@ def users():
 
     # Fetch users from the database
     if filter_email:
-        users = User.query.filter(User.email.like(f'%{filter_email}%')).paginate(page=page, per_page=per_page, error_out=False)
+        users = User.query.filter(User.email.like(f'%{filter_email}%')).order_by(User.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
     else:
-        users = User.query.paginate(page=page, per_page=per_page, error_out=False)
+        users = User.query.order_by(User.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
 
     return render_template('users/users.html', users=users, rows_per_page=per_page)
