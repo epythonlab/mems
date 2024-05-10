@@ -862,19 +862,19 @@ body {
 
 
 .pagination a.current {
-  background-color: #007bff;
+  background-color: #303f9f;
   color: #fff;
-  border-color: #007bff;
+  border-color: #303f9f;
 }
 
 .pagination a:hover {
-  background-color: #007bff;
+  background-color: #303f9f;
   color: #fff;
-  border-color: #007bff;
+  border-color: #303f9f;
 }
 .pagination a.current:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
+  background-color: #303f9f;
+  border-color: #303f9f;
 }
 
 .pagination a.disabled {
@@ -928,11 +928,13 @@ body {
     cursor: pointer;
 }
 
-/* Hover effect for button */
-.filter-section button:hover {
-    background-color: #FBB040;
-    color: #111;
+/* Styling for the input field when focused */
+.filter-section input:focus {
+  outline: none;
+  border-color: #303f9f; /* Change to desired color */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Optional: Add a subtle shadow */
 }
-.filter-section input:focus{
-  border-color: #303f9f;
+/* button hover for all buttons */
+.button-hover:hover {
+  background-color: #3f51b5; /* A lighter shade of blue */
 }
