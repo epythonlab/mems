@@ -44,6 +44,27 @@ function sortTable(column, sortOrder) {
   rows.forEach(row => tbody.appendChild(row));
 }
 
+// JS for pagination from database
+function updateRowsPerPage() {
+  var selectedRowsPerPage = document.getElementById("maxRows").value;
+  var currentUrl = window.location.href;
+  var newUrl;
+
+  // Check if the URL already contains 'state' parameter
+  if (currentUrl.includes('state=')) {
+      // Update the 'state' parameter value in the URL
+      newUrl = currentUrl.replace(/state=\d+/, 'state=' + selectedRowsPerPage);
+  } else {
+      // Append 'state' parameter to the URL
+      var separator = currentUrl.includes('?') ? '&' : '?';
+      newUrl = currentUrl + separator + 'state=' + selectedRowsPerPage;
+  }
+
+  // Navigate to the new URL
+  window.location.href = newUrl;
+}
+
+// Apply filters when input changes
 
 
 // Function to validate password and enable/disable submit button

@@ -198,10 +198,11 @@ body {
   width     : 100%;
   flex      : 1;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .page-content h1 {
-  font-size  : 20px;
+  font-size  : 30px;
   font-weight: 400;
   color      : #333;
 }
@@ -840,4 +841,98 @@ body {
 
 .sortable:active .sort-icon:after {
   color: #303f9f; /* Change this to your desired color */
+}
+
+/* css styles for pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination a {
+  padding: 8px 12px;
+  margin: 0 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+
+.pagination a.current {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pagination a:hover {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+.pagination a.current:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.pagination a.disabled {
+  pointer-events:none;
+  opacity: 0.5;
+}
+
+
+@media screen and (max-width: 768px) {
+  .pagination {
+    flex-direction: row;
+    align-items: center;
+    padding-top: 16px;
+  }
+}
+
+/* Custom styling for select menu */
+.select-wrapper {
+  display: flex;
+  align-items: center;
+  max-width: 20%;
+}
+.select-wrapper label{
+  padding: 10px;
+}
+@media screen and (max-width:768px) {
+  .select-wrapper{
+    max-width: 65%;
+    
+  }
+}
+.select-wrapper, .filter-section {
+  margin-bottom: 10px; /* Adjust as needed */
+}
+.filter-section label {
+    margin-right: 10px;
+}
+
+.filter-section input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.filter-section button {
+    padding: 8px 15px;
+    background-color: #303f9f;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Hover effect for button */
+.filter-section button:hover {
+    background-color: #FBB040;
+    color: #111;
+}
+.filter-section input:focus{
+  border-color: #303f9f;
 }
