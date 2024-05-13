@@ -963,4 +963,10 @@ td:last-child .btn-status .fas {
   line-height: 30px;
   width: 30px;
 }
+@media screen and (max-width:768px) {
+  .filter-section button{
+    margin-top:10px;
+  }
+  
+}
 

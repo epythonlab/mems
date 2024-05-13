@@ -5,23 +5,25 @@ from . import index_bp
 from app.models.users import User
 from app.models.FileUpload import UploadFile
 from app import db
+import os
 
 @index_bp.route('/')
 @login_required
 def index():
     return render_template('index.html')
 
-# @index_bp.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'POST':
-#         username = request.form['username']
-#         password = request.form['password']
-#         if username in users and users[username] == password:
-#             # In a real application, you'd probably set a session variable here
-#             return redirect(url_for('dashboard'))
-#         else:
-#             return render_template('login.html', message='Invalid username or password')
-#     return render_template('login.html', message='')
+@index_bp.route('/view_error_log')
+@login_required
+def view_error_log():
+     # Define the absolute path to the error.log file
+    error_log_path = 'error.log'  # Update with the actual absolute path to your error.log file
+    
+    # Read the contents of the error.log file
+    with open(error_log_path, 'r') as file:
+        error_log_contents = file.read()
+    
+    # Pass the contents to the template for rendering
+    return render_template('error_log.html', error_log_contents=error_log_contents)
 
 @index_bp.route('/profile')
 def profile():

@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash
 from flask_login import LoginManager
 
 
+
 # Initialize SQLAlchemy
 db = SQLAlchemy()
 # Initialize LoginManager
@@ -25,7 +26,8 @@ def create_app():
     # Set up logging configuration
     logging.basicConfig(level=logging.ERROR, filename='error.log',
                         filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
-
+    # Ensure that exceptions during logging are propagated
+    logging.getLogger().propagate = True
     # init login_manager
     login_manager.init_app(app)
     login_manager.login_view = 'auth_bp.login'
