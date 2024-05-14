@@ -7,13 +7,15 @@
 }
 
 body {
-  background-color : #F4F4F4;
+  background-color : #FAFAFC;
   display          : flex;
   justify-content  : center; /* Horizontally center content */
   align-items      : center; /* Vertically center content */
   height           : 100vh;
 }
-
+.box{
+  background-color: #E4E6FD;
+}
 /* Custom CSS for Material Style Navigation Drawer */
 .nav-drawer {
   height          : 100%;
@@ -31,18 +33,18 @@ body {
 .nav-drawer a {
   padding         : 10px 15px;
   text-decoration: none;
-  font-size      : 1.25rem; /* Standard font size */
-  color          : #000;
+  font-size      : 1.5rem; /* Standard font size */
+  color          : #111;
   display        : block;
   transition     : 0.3s;
 }
 
 .nav-drawer a:hover {
-  background-color: #f2f2f2;
+  background-color: #fff;
 }
 
 .navbar {
-  background: #303f9f;
+  background: #fff;
 }
 
 .drawer-open {
@@ -75,10 +77,6 @@ body {
   outline: none; /* Remove outline */
 }
 
-/* 2. icomoon (assuming you're using it for icons) */
-.icon {
-  font-family: 'icomoon'; /* Add additional icon-specific styles here */
-}
 
 /* End of header styles */
 
@@ -129,7 +127,7 @@ body {
 }
 
 .sidebar ul li a {
-  color          : #000;
+  color          : #111;
   text-decoration: none;
   display        : flex;
   align-items    : center;
@@ -140,12 +138,13 @@ body {
 
 .sidebar ul li a.active,
 .sidebar ul li a:hover {
-  background: #e8ecef;
+  background: #303f9f;
+  color: #fff;
 }
 
 .sidebar ul li span {
   margin-left: 16px;
-  font-size  : 16px;
+  font-size  : 18px;
   font-weight: 100;
 }
 
@@ -157,20 +156,21 @@ body {
 
 .header {
   height          : 50px;
-  background      : #303f9f;
+  background      : #fff;
   width           : 100%;
   display         : flex;
   align-items     : center;
   flex-basis      : 100%;
-  color           : #FF4072;
+  color           : #303f9f;
   padding         : 0 20px; /* Adjust padding as needed */
   display         : flex;
   justify-content : space-between;
   align-items     : center;
 }
 
-.sidebar ul li a.active i {
-  color: #303f9e;
+.sidebar ul li a.active i,
+.sidebar ul li a:hover i {
+  color: #fff;
 }
 
 .site-logo {
@@ -182,11 +182,11 @@ body {
 }
 
 .site-logo path {
-  fill: #fff;
+  fill: #303f9f;
 }
 
 .site-title {
-  color         : #fff;
+  color         : #111;
   font-size     : 24px;
   letter-spacing: 1px;
   font-weight   : 400;
@@ -204,10 +204,10 @@ body {
 .page-content h1 {
   font-size  : 30px;
   font-weight: 400;
-  color      : #333;
+  color      : #111;
 }
 
-.header-search {
+.header-menu {
   height     : 100%;
   align-items: center;
   display    : flex;
@@ -216,7 +216,7 @@ body {
   flex       : 1;
 }
 
-.header-search .button-menu {
+.header-menu .button-menu {
   width       : 28px;
   height      : 28px;
   margin-right: 15px;
@@ -233,7 +233,7 @@ body {
   transition : width 0.5s ease;
 }
 
-.header-search input[type="search"] {
+.header-menu input[type="search"] {
   height     : 100%;
   width      : 300px;
   padding    : 10px 20px;
@@ -245,21 +245,21 @@ body {
   color      : #fff;
 }
 
-.header-search input[type="search"]:focus {
+.header-menu input[type="search"]:focus {
   outline: none;
 }
 
-.header-search input[type="search"]::placeholder {
+.header-menu input[type="search"]::placeholder {
   color: #ccc;
 }
 
-.header-search .button-menu:focus {
+.header-menu .button-menu:focus {
   outline: none;
   border : none;
 }
 
-.header-search .button-menu svg path {
-  fill: #fff;
+.header-menu .button-menu svg path {
+  fill: #303f9f;
 }
 
 /* Responsive Adjustments */
@@ -271,7 +271,7 @@ body {
     padding        : 0 10px; /* Adjust padding as needed */
   }
 
-  .header-search {
+  .header-menu {
     margin-left: -10px;
   }
 
@@ -290,7 +290,7 @@ body {
   }
 
   .site-title {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 
   .profile {
@@ -336,7 +336,7 @@ body {
   align-items    : center;
   gap            : 12px;
   cursor         : pointer;
-  text-align     : end;
+  text-align     : start;
 }
 
 .profile h3 {
@@ -424,7 +424,7 @@ body {
 
 .menu ul li a {
   text-decoration: none;
-  color          : #000;
+  color          : #111;
   display        : flex;
   align-items    : center;
   padding        : 15px 20px;
@@ -432,7 +432,7 @@ body {
 }
 
 .menu ul li a i {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
 }
 
 /* user settings css end */
@@ -440,7 +440,8 @@ body {
 .custom-card-border {
   border        : 2px solid #fff; /* Border color is blue */
   border-radius: 10px; /* Rounded corners */
-  /* padding       : 10px; Padding inside the card */
+  padding       : 10px; 
+  margin-bottom: 2%;
 }
 
 .custom-btn {
@@ -454,10 +455,13 @@ body {
   margin-left: 4px;
   padding    : 2px;
 }
-
+.error-message{
+  padding:5px;
+  color:red;
+}
 /* Define the active background color */
 .nav .nav-link.active {
-  background-color: #007bff; /* Change to your desired color */
+  background-color: #303f9f; /* Change to your desired color */
   color           : #fff; /* Change text color if needed */
 }
 
@@ -488,7 +492,7 @@ body {
   padding-top: 10px;
   width                : 100%;
   color                : #39414e !important;
-  font-size            : 1rem; /* Standard font size */
+  font-size            : 1.2rem; /* Standard font size */
   line-height          : 22px;
   font-weight          : 500;
   font-feature-settings: 'pnum'on, 'lnum'on, 'liga'off;
@@ -502,7 +506,7 @@ body {
   border-radius: 8px;
   box-sizing   : border-box;
   border       : 2px solid #c2c5c9; /* Add border */
-  font-size    : 1rem; /* Standard font size */
+  font-size    : 1.2rem; /* Standard font size */
   line-height  : 22px;
   font-weight  : 500;
   transition   : border-color 0.3s ease; /* Smooth transition for border color */
@@ -612,8 +616,8 @@ body {
 }
 
 #msform .action-button:hover {
-  background-color: #FBB040;
-  color           : #111;
+  background-color: #303f9f;
+  color           : #ccc;
 }
 
 .submit.action-button {
@@ -813,7 +817,9 @@ body {
 
 .container{
   height: 100%;
+ 
 }
+
 
 /* css to decorate the table layout */
 /* Set minimum width of table */
@@ -899,6 +905,7 @@ body {
 }
 .select-wrapper label{
   padding: 10px;
+  padding-left: 0%;
 }
 @media screen and (max-width:768px) {
   .select-wrapper{
@@ -969,4 +976,32 @@ td:last-child .btn-status .fas {
   }
   
 }
+/* page details of */
+.overlay {
+  position: fixed;
+  top: 0;
+  right:0; /* Initially off-screen to the right */
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: right 0.5s ease; /* Transition property for animation */
+}
 
+.overlay-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 0;
+  text-align: center;
+  width: 100%; /* Adjust as needed */
+  max-width: 100%; /* Adjust as needed */
+  height: 100vh;
+  margin-left: 20%;
+}
+
+button {
+  cursor: pointer;
+}

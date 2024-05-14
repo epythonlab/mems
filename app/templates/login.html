@@ -52,7 +52,7 @@
                             <input type="email" id="emailInput" name="email" class="form-control" placeholder="Email address" required>
                             <div id="emailError" style="color: red;"></div>
 
-                            <input type="button" id="next" name="next" class="next action-button" value="Next">
+                            <input type="button" id="next" name="next" class="next action-button button-hover" value="Next">
                            
                         </fieldset>
                         <fieldset>
@@ -83,7 +83,7 @@
                             </label>
                             <input type="text" name="house_no" class="form-control" id="house_no" placeholder="e.g 22/140" required>
 
-                            <input type="button" name="next" class="next action-button" value="Next">
+                            <input type="button" name="next" class="next action-button button-hover" value="Next">
                             <input type="button" name="previous" class="previous action-button-previous" value="Previous">
                           
                         </fieldset>
@@ -104,7 +104,7 @@
                             </label>
                             <input type="file" name="license" class="form-control" placeholder="upload renewed license" accept=".jpg, .jpeg, .png" required>
                            
-                            <input type="submit" name="submit" class="submit action-button" value="Submit">
+                            <input type="submit" name="submit" class="submit action-button button-hover" value="Submit">
                             <input type="button" name="previous" class="previous action-button-previous" value="Previous">
                         </fieldset>
                     </div>
@@ -149,7 +149,7 @@
                         </label>
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                     </div>
-                    <button class="btn btn-primary hover-orange" type="submit">Sign in</button>
+                    <button class="btn btn-primary button-hover" type="submit">Sign in</button>
                 </div>
             </form>
         </div>
@@ -308,5 +308,5 @@ function validateEmail(emailInputId, emailErrorId, nextButtonId) {
 </script>
 
 <!-- add the script files in the body of every html content -->
-<!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
+
 {% endblock body %}

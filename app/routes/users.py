@@ -26,3 +26,13 @@ def users():
         users = User.query.order_by(User.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
 
     return render_template('users/users.html', users=users, rows_per_page=per_page)
+
+@user_bp.route('/user_detail', methods=['GET'])
+def user_detail():
+    row_id = request.args.get('id') # Retrieve the ID from the query parameter
+    # Use the ID to fetch details from your database or any other source
+    # For example:
+    # user_details = fetch_user_details_from_database(row_id)
+    # return render_template('user_detail.html', user_details=user_details)
+    # Here, 'user_detail.html' is a template file containing the details of the user
+    return render_template('users/user_detail.html', row_id=row_id)
