@@ -1,0 +1,53 @@
+<div class="stat-row">
+    <!-- First stat box -->
+    <div class="stat-box">
+        <div class="stat-content">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i> <!-- Example icon -->
+            </div>
+            <div class="stat-info">
+                <div class="stat-number" id="total-users">...</div>
+                <div class="stat-text">Total Users</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Second stat box -->
+    <div class="stat-box">
+        <div class="stat-content">
+            <div class="stat-icon">
+                <i class="fas fa-chart-line"></i> <!-- Example icon -->
+            </div>
+            <div class="stat-info">
+                <div class="stat-number" id="active-users">...</div>
+                <div class="stat-text">Active Users</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Third stat box -->
+    <div class="stat-box">
+        <div class="stat-content">
+            <div class="stat-icon">
+                <i class="fas fa-user-alt-slash"></i>
+            </div>
+            <div class="stat-info">
+                <div class="stat-number" id="inactive-users">...</div>
+                <div class="stat-text">Inactive Users</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    fetch('/stats')
+    .then(response => response.json())
+    .then(data => {
+        // Update stat boxes with fetched data
+        document.getElementById('total-users').innerText = data.total_users ;
+        document.getElementById('active-users').innerText = data.active_users;
+        document.getElementById('inactive-users').innerText = data.inactive_users;
+    })
+    .catch(error => console.error('Error fetching data:', error));
+
+</script>

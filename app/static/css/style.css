@@ -13,9 +13,7 @@ body {
   align-items      : center; /* Vertically center content */
   height           : 100vh;
 }
-.box{
-  background-color: #E4E6FD;
-}
+
 /* Custom CSS for Material Style Navigation Drawer */
 .nav-drawer {
   height          : 100%;
@@ -108,6 +106,8 @@ body {
   overflow    : hidden;
   transition  : width 0.5s ease;
   margin-left : 17px;
+  position: relative;
+  padding-left: 10px;
 }
 
 .container-fluid.nav-closed .sidebar,
@@ -127,7 +127,7 @@ body {
 }
 
 .sidebar ul li a {
-  color          : #111;
+  color          : #333;
   text-decoration: none;
   display        : flex;
   align-items    : center;
@@ -138,7 +138,7 @@ body {
 
 .sidebar ul li a.active,
 .sidebar ul li a:hover {
-  background: #303f9f;
+  background: #1F419B;
   color: #fff;
 }
 
@@ -149,23 +149,55 @@ body {
 }
 
 .sidebar ul li i {
-  font-size  : 18px;
-  color      : #111;
+  font-size  : 20px;
+  color      : #333;
   font-weight: normal;
 }
 
+
+.bottom-links {
+  position: absolute;
+  bottom: 50px;
+  width       : 220px;
+}
+
+.bottom-links hr {
+  margin: 0;
+  border: none;
+  background-color: #333;
+  height: 1px;
+  margin-right: 20px;
+}
+
+.bottom-links a {
+  text-decoration: none;
+  color: #333;
+  margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+  .bottom-links {
+    height: auto; /* Reset height for smaller screens */
+    margin-top: 0;
+  }
+}
+
+
+
 .header {
-  height          : 50px;
-  background      : #fff;
+  height          : 60px;
+  background      : #FAFAFC;
   width           : 100%;
   display         : flex;
   align-items     : center;
   flex-basis      : 100%;
-  color           : #303f9f;
+  color           : #1F419B;
   padding         : 0 20px; /* Adjust padding as needed */
   display         : flex;
   justify-content : space-between;
   align-items     : center;
+  border-bottom: 2px solid rgba(250, 250, 252, 0.5); /* Adjust opacity as needed */
+  
 }
 
 .sidebar ul li a.active i,
@@ -182,7 +214,7 @@ body {
 }
 
 .site-logo path {
-  fill: #303f9f;
+  fill: #1F419B;
 }
 
 .site-title {
@@ -223,8 +255,12 @@ body {
   background  : none;
   border      : 0;
   cursor      : pointer;
+  color: #1F419B;
 }
-
+.greeting {
+  /* Add styles for the greeting message */
+  color: #1F419B;
+}
 .header-logo {
   display    : flex;
   align-items: center;
@@ -259,7 +295,7 @@ body {
 }
 
 .header-menu .button-menu svg path {
-  fill: #303f9f;
+  fill: #1F419B;
 }
 
 /* Responsive Adjustments */
@@ -301,7 +337,7 @@ body {
   }
 
   .user {
-    margin-right: 8px;
+    margin-right: 10px;
   }
 
   .user h3 {
@@ -354,10 +390,11 @@ body {
 
 .profile .img-box {
   position     : relative;
-  width        : 48px;
-  height       : 48px;
+  width        : 38px;
+  height       : 38px;
   border-radius: 50%;
   overflow     : hidden;
+  margin-right: 10px;
 }
 
 .profile .img-box img {
@@ -368,6 +405,20 @@ body {
   height    : 100%;
   object-fit: cover;
 }
+.clock{
+  color: #500041;
+  font-size: 16px;
+  font-weight: bold;
+}
+.welcome-title {
+  font-size: 24px; /* Adjust the font size as needed */
+}
+
+.welcome-title span {
+  font-weight: bold; /* Make the user's name bold */
+  color: #1F419B; /* Change the color of the user's name */
+  margin-left: 5px; /* Add some spacing between the text and the emoji */
+}
 
 /* menu (the right one) */
 
@@ -376,7 +427,7 @@ body {
   top       : calc(100% + 24px);
   right     : 16px;
   width     : 200px;
-  min-height: 100px;
+  bottom: 20px;
   background: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
   opacity   : 0;
@@ -384,6 +435,7 @@ body {
   visibility: hidden;
   transition: 300ms;
   z-index   : 9999;
+  margin-bottom: -20px;
 }
 
 .menu::before {
@@ -412,22 +464,25 @@ body {
   flex-direction: column;
   z-index       : 10;
   background    : #fff;
+ 
 }
 
 .menu ul li {
   list-style: none;
+  margin-left: -30px;
 }
 
-.menu ul li:hover {
-  background: #eee;
+.menu ul li a:hover {
+  background: #1F419B;
+  color: #ccc;
 }
 
 .menu ul li a {
   text-decoration: none;
   color          : #111;
   display        : flex;
-  align-items    : center;
-  padding        : 15px 20px;
+  align-items    : start;
+  padding        : 15px 20px 10px;
   gap            : 6px;
 }
 
@@ -461,7 +516,7 @@ body {
 }
 /* Define the active background color */
 .nav .nav-link.active {
-  background-color: #303f9f; /* Change to your desired color */
+  background-color: #1F419B; /* Change to your desired color */
   color           : #fff; /* Change text color if needed */
 }
 
@@ -513,13 +568,13 @@ body {
 }
 
 .login-form input:focus {
-  border-color: #303f9f; /* Change border color on focus */
+  border-color: #1F419B; /* Change border color on focus */
 }
 
 .btn {
   padding         : 12px 16px; /* Adjust padding */
   color           : #fff;
-  background-color: #303f9f; /* Change button background color */
+  background-color: #1F419B; /* Change button background color */
   border          : none;
   border-radius   : 8px;
   cursor          : pointer;
@@ -598,13 +653,13 @@ body {
   transition   : border-color 0.3s ease; /* Smooth transition for border color */
 }
 #msform input:focus {
-  border-color: #303f9f; /* Change border color on focus */
+  border-color: #1F419B; /* Change border color on focus */
 }
 
 /* Buttons */
 #msform .action-button {
   width        : 100px;
-  background   : #303f9f;
+  background   : #1F419B;
   font-weight  : bold;
   color        : white;
   border       : 0 none;
@@ -616,7 +671,7 @@ body {
 }
 
 #msform .action-button:hover {
-  background-color: #303f9f;
+  background-color: #1F419B;
   color           : #ccc;
 }
 
@@ -639,7 +694,7 @@ body {
 .submit.action-button:active {
   background-color: white;
   outline         : none;
-  color           : #303f9f;
+  color           : #1F419B;
   transform       : translateY(1px);
 }
 
@@ -711,17 +766,17 @@ body {
 }
 
 #progressbar .active {
-  color: #303f9f
+  color: #00AB4F
 }
 
 #progressbar li.active:before,
 #progressbar li.active:after {
-  background: #303f9f
+  background: #00AB4F
 }
 
 #heading {
   text-transform: uppercase;
-  color         : #303f9f;
+  color         : #00AB4F;
   font-weight   : bold
 }
 
@@ -735,7 +790,7 @@ body {
 /* Side section styles */
 
 .side-section {
-  background-color: #303f9f;
+  background-color: #500041;
   color: white;
   height: 100vh;
   margin-right: 20px;
@@ -827,6 +882,9 @@ body {
 .table-container {
   min-width: 320px;
 }
+.table-container tbody{
+  font-size: 14px;
+}
 /* Default styles for th */
 
 /* Remove white-space: nowrap; from .sortable */
@@ -846,7 +904,7 @@ body {
 }
 
 .sortable:active .sort-icon:after {
-  color: #303f9f; /* Change this to your desired color */
+  color: #1F419B; /* Change this to your desired color */
 }
 
 /* css styles for pagination */
@@ -868,19 +926,19 @@ body {
 
 
 .pagination a.current {
-  background-color: #303f9f;
+  background-color: #1F419B;
   color: #fff;
-  border-color: #303f9f;
+  border-color: #1F419B;
 }
 
 .pagination a:hover {
-  background-color: #303f9f;
+  background-color: #1F419B;
   color: #fff;
-  border-color: #303f9f;
+  border-color: #1F419B;
 }
 .pagination a.current:hover {
-  background-color: #303f9f;
-  border-color: #303f9f;
+  background-color: #1F419B;
+  border-color: #1F419B;
 }
 
 .pagination a.disabled {
@@ -928,7 +986,7 @@ body {
 
 .filter-section button {
     padding: 8px 15px;
-    background-color: #303f9f;
+    background-color: #1F419B;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -938,7 +996,7 @@ body {
 /* Styling for the input field when focused */
 .filter-section input:focus {
   outline: none;
-  border-color: #303f9f; /* Change to desired color */
+  border-color: #1F419B; /* Change to desired color */
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Optional: Add a subtle shadow */
 }
 /* button hover for all buttons */
@@ -952,7 +1010,7 @@ body {
   height: 30px;
   line-height: 30px;
   padding: 0px 10px;
-  color: #303f9f;
+  color: #1F419B;
   border: none;
 }
 td:last-child .btn-status {
@@ -962,7 +1020,6 @@ td:last-child .btn-status {
   padding: 0px;
   margin-bottom: 0px;
   margin-right: 5px;
- 
   
 }
 
@@ -1002,6 +1059,73 @@ td:last-child .btn-status .fas {
   margin-left: 20%;
 }
 
-button {
-  cursor: pointer;
+/* Styles for the stat box */
+.stat-row {
+  display: flex; /* Display items in a row */
+  justify-content: space-around; /* Distribute items evenly along the main axis */
+  margin-top: 20px; /* Add margin above the row */
+  gap: 10px;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+}
+.stat-box {
+  flex: 1;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  background-color: #E4E6FD;
+  margin-bottom: 10px;
+  width: calc(33.33% - 40px); /* Set initial width for large screens */
+}
+.stat-content {
+  display: flex;
+  align-items: center;
+}
+
+.stat-info {
+  margin-left: 20px; /* Add spacing between icon and text */
+}
+/* Styles for the icon */
+/* Styles for the icon */
+.stat-icon {
+  font-size: 24px;
+  color: #1F419B; /* Example color for total users icon */
+}
+
+/* Styles for the second icon */
+.stat-box:nth-child(2) .stat-icon {
+  color: #2ecc71; /* Example color for new users icon */
+}
+
+/* Styles for the third icon */
+.stat-box:nth-child(3) .stat-icon {
+  color: #f39c12; /* Example color for revenue icon */
+}
+/* Styles for the statistical number */
+.stat-number {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Styles for the text below the number */
+.stat-text {
+  font-size: 14px;
+  color: #666;
+}
+/* display rows to columns in small devices */
+/* Media query for small screens */
+@media (max-width: 768px) {
+  .stat-box {
+      width: calc(50% - 40px); /* Set width for medium screens */
+  }
+}
+
+/* Media query for extra small screens */
+@media (max-width: 576px) {
+  .stat-box {
+      width: calc(100% - 40px); /* Set width for small screens */
+  }
 }

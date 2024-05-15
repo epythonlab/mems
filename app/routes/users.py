@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login.utils import login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import user_bp
@@ -36,3 +36,22 @@ def user_detail():
     # return render_template('user_detail.html', user_details=user_details)
     # Here, 'user_detail.html' is a template file containing the details of the user
     return render_template('users/user_detail.html', row_id=row_id)
+
+# get user stats
+@user_bp.route('/stats')
+def get_stats():
+    # Query user data and count users based on status
+    # Count users with status 1
+    active_users = User.query.filter_by(active=1).count()
+    # Count users with status 0
+    inactive_users = User.query.filter_by(active=0).count()
+
+    # Create a dictionary with the fetched statistics
+    stats = {
+        "total_users": active_users + inactive_users ,
+        "active_users": active_users,
+        "inactive_users": inactive_users
+    }
+
+    # Return the statistics as JSON
+    return jsonify(stats)
