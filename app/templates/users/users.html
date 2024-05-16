@@ -39,11 +39,9 @@
                     </form>
                     <!-- Add more filter inputs as needed -->
                 </div>
-                
-            
             </div>
            
-            <div class="card custom-card-border table-responsive">
+            <div class="card custom-card-border table-responsive mb-1">
                 <table id="user-table" class="table table-hover">
                     <thead>
                         <tr>
@@ -113,32 +111,31 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            </div> <!-- end of table responsive div-->
 
-            </div>
+            <!--start Pagination -->
+            <!-- Pagination links -->
+            <div class="pagination mb-3">
+                {% if users.has_prev %}
+                <a href="{{ url_for('user_bp.users', page=users.prev_num) }}">&laquo;</a>
+                {% endif %}
             
-       <!--start Pagination -->
-       <!-- Pagination links -->
-       <div class="pagination mb-3">
-        {% if users.has_prev %}
-        <a href="{{ url_for('user_bp.users', page=users.prev_num) }}" class="current">&laquo;</a>
-        {% endif %}
-
-        {% for num in users.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
-            {% if num %}
-                {% if users.page == num %}
-            <strong>{{ num }}</strong>
-            {% else %}
-            <a href="{{ url_for('user_bp.users', page=num) }}" class="current">{{ num }}</a>
-            {% endif %}
-            {% else %}
-                ...
-            {% endif %}
-        {% endfor %}
-
-        {% if users.has_next %}
-            <a href="{{ url_for('user_bp.users', page=users.next_num) }}" class="next">&raquo;</a>
-        {% endif %}
-        </div>
+                {% for num in users.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                    {% if num %}
+                        {% if users.page == num %}
+                            <a href="{{ url_for('user_bp.users', page=num) }}" class="current">{{ num }}</a>
+                        {% else %}
+                            <a href="{{ url_for('user_bp.users', page=num) }}">{{ num }}</a>
+                        {% endif %}
+                    {% else %}
+                        <span class="ellipsis">...</span>
+                    {% endif %}
+                {% endfor %}
+            
+                {% if users.has_next %}
+                    <a href="{{ url_for('user_bp.users', page=users.next_num) }}">&raquo;</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

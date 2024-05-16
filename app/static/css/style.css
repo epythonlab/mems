@@ -406,7 +406,7 @@ body {
   object-fit: cover;
 }
 .clock{
-  color: #500041;
+  color: #00AB4F;
   font-size: 16px;
   font-weight: bold;
 }
@@ -493,7 +493,7 @@ body {
 /* user settings css end */
 /* custom card */
 .custom-card-border {
-  border        : 2px solid #fff; /* Border color is blue */
+  border        : 5px solid #fff; /* Border color is blue */
   border-radius: 10px; /* Rounded corners */
   padding       : 10px; 
   margin-bottom: 2%;
@@ -766,17 +766,17 @@ body {
 }
 
 #progressbar .active {
-  color: #00AB4F
+  color: #500041
 }
 
 #progressbar li.active:before,
 #progressbar li.active:after {
-  background: #00AB4F
+  background: #500041
 }
 
 #heading {
   text-transform: uppercase;
-  color         : #00AB4F;
+  color         : #500041;
   font-weight   : bold
 }
 
@@ -908,50 +908,52 @@ body {
 }
 
 /* css styles for pagination */
+/* Pagination styles */
 .pagination {
+  list-style: none;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
+  margin-top: 0;
+
 }
 
 .pagination a {
-  padding: 8px 12px;
-  margin: 0 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 50%;
   text-decoration: none;
+  color: #1F419B;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Style for active page */
+.pagination strong {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Style for active page */
+.pagination .current{
+  background-color: #00AB4F;
   color: #333;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  border-radius: 50%;
+
 }
-
-
-.pagination a.current {
-  background-color: #1F419B;
-  color: #fff;
-  border-color: #1F419B;
-}
-
+/* Hover effect for non-selected page numbers */
 .pagination a:hover {
-  background-color: #1F419B;
-  color: #fff;
-  border-color: #1F419B;
+  background-color: #E4E6FD;
 }
-.pagination a.current:hover {
-  background-color: #1F419B;
-  border-color: #1F419B;
+.pagination a:not(.current):hover {
+  background-color: #f0f0f0;
 }
-
-.pagination a.disabled {
-  pointer-events:none;
-  opacity: 0.5;
-}
-
 
 @media screen and (max-width: 768px) {
   .pagination {
     flex-direction: row;
     align-items: center;
-    padding-top: 16px;
   }
 }
 

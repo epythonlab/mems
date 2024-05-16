@@ -64,3 +64,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // Navigate to the new URL
     window.location.href = newUrl;
   }
+
+  
