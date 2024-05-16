@@ -45,12 +45,13 @@ document.addEventListener('DOMContentLoaded', function() {
     rows.forEach(row => tbody.appendChild(row));
   }
   
-  // JS for pagination from database
-  function updateRowsPerPage() {
+// JS for pagination from database
+  
+function updateRowsPerPage() {
     var selectedRowsPerPage = document.getElementById("maxRows").value;
     var currentUrl = window.location.href;
     var newUrl;
-  
+
     // Check if the URL already contains 'state' parameter
     if (currentUrl.includes('state=')) {
         // Update the 'state' parameter value in the URL
@@ -60,9 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var separator = currentUrl.includes('?') ? '&' : '?';
         newUrl = currentUrl + separator + 'state=' + selectedRowsPerPage;
     }
-  
+
     // Navigate to the new URL
     window.location.href = newUrl;
-  }
-
-  
+}
