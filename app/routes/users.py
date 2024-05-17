@@ -11,7 +11,7 @@ from app.models.FileUpload import UploadFile
 @login_required
 def users():
     # Get the selected number of rows per page from the dropdown menu
-    per_page = int(request.args.get('state', 5))  # Default to 10 rows per page if not selected
+    per_page = int(request.args.get('rows_per_page', 5))  # Default to 10 rows per page if not selected
 
     # Get the current page number from the query parameters
     page = request.args.get('page', 1, type=int)
