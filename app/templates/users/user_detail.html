@@ -1,29 +1,92 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Popup Page</title>
-   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
- 
-  <!-- <link rel="stylesheet" href="popup.css"> -->
-</head> 
-<body>
-    <div class="overlay-container">
-        <form id="detail">
-            <h2>Overlay Form</h2>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value="{{row_id}}" required>
-            <br>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <br>
-            <button type="submit">Submit</button>
-        </form>
-        <button id="close-form-btn">Close Form</button>
-    </div>
-    <!-- add the script files in the body of every html content -->
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Details</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <!-- <link rel="stylesheet" href="popup.css"> -->
+    </head>
+    <body>
+        <div class="overlay-container" id="overlay" >
+            <a href="#" class="close-button" id="close-form-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="detail-header">
+                {% if user.logo %}
+                <img src="{{url_for('static', filename='images/'+ user.logo)}}" alt="Company Logo" class="company-logo">
+                {% endif %}
+                <h1 class="company-name">{{user.company_name}}</h1>
+            </div>
+            <div class="content">
+                <div class="details">
+                    <hr style="margin-right: 20px;">
+                    <p>
+                        <strong>Name:</strong>
+                        {% if user.first_name %}
+                        {{ user.first_name }}
+                    {% endif %}
+                    {% if user.last_name %}
+                        {% if user.first_name %} {% endif %}
+                        {{ user.last_name }}
+                    {% endif %}
+                    </p>
+                    <p>
+                        <strong>Email:</strong>
+                        {{user.email}}
+                    </p>
+                    <p>
+                        <strong>Tel:</strong>
+                        {{user.phone_number}}
+                    </p>
+                    <p>
+                        <strong>Address:</strong>
+                        {% if user.state %}
+                        {{ user.state }}
+                    {% endif %}
+                    {% if user.sub_city %}
+                        {% if user.state %}, {% endif %}
+                        {{ user.sub_city }}
+                    {% endif %}
+                    {% if user.wereda %}
+                        {% if user.state or user.sub_city %}, {% endif %}
+                        {{ user.wereda }}
+                    {% endif %}
+                    {% if user.house_number %}
+                        {% if user.state or user.sub_city or user.wereda %}, {% endif %}
+                        {{ user.house_number }}
+                    {% endif %}
+                    </p>
+                    <div class="buttons">
+                        {% if user.active == 1 %}
+                        <button id="approve-button" class="approve-button" disabled>Approved</button>
+                        <button id="disapprove-button" class="disapprove-button">Disapprove</button>
+                        {% else %}
+                        <button class="approve-button">Approve</button>
+                        <button class="disapprove-button" disabled>Disapproved</button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="image">
+                    {% if user.license %}
+                    <div class="caption">Company Trade License</div>
+                    <a href="{{url_for('static', filename='images/'+ user.license)}}" target="_blank">
+                        <img id="zoomable-image" src="{{url_for('static', filename='images/'+ user.license)}}" alt="Item Image">
+                    </a>
+                   
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- add the script files in the body of every html content -->
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <script>
+            function closeOverlay(event) {
+                event.preventDefault(); // Prevent default anchor behavior
+                var overlay = document.getElementById('overlay');
+                overlay.style.display = 'none';
+            }
+            
+        </script>
+    </body>
 </html>

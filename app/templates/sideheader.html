@@ -13,6 +13,8 @@
         <div class="greeting" id="greeting">
             <!-- Greeting message will be displayed here -->
         </div>
+       
+            <input type="search"  placeholder="Search something..."> 
     </div>
         
     <div class="profile">
@@ -21,7 +23,12 @@
             <!-- <h5>Welcome back, {{current_user.first_name}}!</h5> -->
         </div>
         <div class="img-box">
+            {% if current_user.logo %}
+            <img src="{{url_for('static', filename='images/'+ current_user.logo)}}" alt="some user image">
+            {% else %}
             <img src="https://i.postimg.cc/BvNYhMHS/user-img.jpg" alt="some user image">
+            {% endif %}
+            
         </div>
         <div class="menu">
             <ul>
