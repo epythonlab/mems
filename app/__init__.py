@@ -7,12 +7,10 @@ from werkzeug.security import generate_password_hash
 from flask_login import LoginManager
 
 
-
 # Initialize SQLAlchemy
 db = SQLAlchemy()
 # Initialize LoginManager
 login_manager = LoginManager()
-
 
 def create_app():
     app = Flask(__name__)
@@ -38,10 +36,12 @@ def create_app():
     from app.routes import index_bp
     from app.routes import auth_bp
     from app.routes import user_bp
+    from app.routes import role_bp
     # Register blueprints
     app.register_blueprint(index_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(role_bp)
     
 
     # Create database tables within application context
@@ -80,4 +80,6 @@ def create_app():
             print(error_msg)
             print("Make sure your MySQL server is running and the connection details are correct.")
             raise
+    # Assign user_datastore to the Flask app object
+    app.user_datastore = user_datastore
     return app

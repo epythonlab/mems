@@ -7,6 +7,7 @@ from app.models.FileUpload import UploadFile
 from flask_security import SQLAlchemyUserDatastore
 from app import db, login_manager
 from . import auth_bp
+from app.utils import generate_random_password
 # Initialize the SQLAlchemy data store and Flask-Security.
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
@@ -36,15 +37,6 @@ def login():
         return redirect(url_for('index_bp.index'))
 
 
-# # Define your logout route
-# @auth_bp.route('/logout')
-# @login_required  # Protect this route, only logged-in users can access it
-# def logout():
-#     logout_user()  # Log out the user
-#     return redirect(url_for('auth_bp.login'))  # Redirect to the login page
-
-# # ... Define other routes like register, signup, change_password, etc.
-
 # Protect unauthorized access
 @auth_bp.route('/unauthorized')
 def unauthorized():
@@ -70,7 +62,9 @@ def register():
         email = request.form['email']
         
         # Randomly generate password for new user and hash the password
-        password = generate_password_hash(generate_random_password(), method='scrypt')
+        password = generate_random_password()
+            
+        password = generate_password_hash(password, method='scrypt')
         country = request.form['country']
         state = request.form['state']
         sub_city = request.form['sub_city']
@@ -134,22 +128,6 @@ def check_email():
         # Email does not exist
         return jsonify({'exists': False})
     
-# function to generate random password for new user
-import random
-import string
-
-def generate_random_password(length=12):
-    # Define the characters to use for generating the password
-    characters = string.ascii_letters + string.digits + string.punctuation
-    
-    # Generate the random password
-    password = ''.join(random.choice(characters) for _ in range(length))
-    
-    return password
-
-# # Example usage:
-# random_password = generate_random_password()
-# print("Random Password:", random_password)
 
 # # confirm email
 # @auth_bp.route('/verify_email/<token>')

@@ -12,9 +12,11 @@ user_bp = Blueprint(
     template_folder='templates',
     static_folder='static'
 )
+role_bp = Blueprint('role_bp', __name__)
 
 from . import index
 from . import auth
 from . import users
+from . import role_routes
 
 

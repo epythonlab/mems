@@ -58,15 +58,21 @@
                     {% endif %}
                     </p>
                     <div class="buttons">
-                        {% if user.active == 1 %}
-                        <button id="approve-button" class="approve-button" disabled>Approved</button>
-                        <button id="disapprove-button" class="disapprove-button">Disapprove</button>
-                        {% else %}
-                        <button class="approve-button">Approve</button>
-                        <button class="disapprove-button" disabled>Disapproved</button>
-                        {% endif %}
+                        <form id="status-form" action="{{ url_for('user_bp.update_user_status') }}" method="POST">
+                            <input type="hidden" name="id" value="{{ user.id }}">
+                            
+                           
+                            {% if user.active == 1 %}
+                            <input type="hidden" name="action" value="disapprove">
+                            <button type="button" class="approve-button" disabled>Approved</button>
+                            <button type="submit" class="disapprove-button" >Disapprove</button>
+                            {% else %}
+                            <input type="hidden"  name="action" value="approve">
+                            <button type="submit" class="approve-button" >Approve</button>
+                            <button type="button" class="disapprove-button" disabled>Disapproved</button>
+                            {% endif %}
+                        </form>
                     </div>
-                </div>
                 <div class="image">
                     {% if user.license %}
                     <div class="caption">Company Trade License</div>
@@ -78,15 +84,14 @@
                 </div>
             </div>
         </div>
+        <script>
+            function submitForm(action) {
+                document.getElementById('action-input').value = action;
+                document.getElementById('status-form').submit();
+            }
+</script>
         <!-- add the script files in the body of every html content -->
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-        <script>
-            function closeOverlay(event) {
-                event.preventDefault(); // Prevent default anchor behavior
-                var overlay = document.getElementById('overlay');
-                overlay.style.display = 'none';
-            }
-            
-        </script>
+        
     </body>
 </html>
