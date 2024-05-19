@@ -1,11 +1,13 @@
 from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login.utils import login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import or_
+
 from . import user_bp
 from app.models.users import User
 from app.models.FileUpload import UploadFile
 
-# route to users bp
+
 # Route to users bp
 @user_bp.route('/users')
 @login_required
@@ -52,3 +54,27 @@ def get_stats():
 
     # Return the statistics as JSON
     return jsonify(stats)
+
+@user_bp.route('/search-suggestions')
+def search_suggestions():
+    query = request.args.get('q', '').lower()
+    if not query:
+        return jsonify([])
+    # Query User table
+    users = User.query.filter(or_(
+        User.first_name.ilike(f'%{query}%'),
+        User.last_name.ilike(f'%{query}%'),
+        User.email.ilike(f'%{query}%')
+    )).all()
+    
+    results = []
+
+    # Format the results
+    for user in users:
+        results.append({
+            'name': f'{user.first_name} {user.last_name}',
+            'description': user.email,
+            'category': 'User'
+        })
+        
+    return jsonify(results)
