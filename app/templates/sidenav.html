@@ -30,18 +30,20 @@
                 <span>Notifications</span>
             </a>
         </li>
-        <li>
-            <a href="/users" class="nav-link">
-                <i class="material-icons">group</i>
-                <span>Users</span>
-            </a>
-        </li>
-        <li>
-            <a href="/roles" class="nav-link">
-                <i class="material-icons">group</i>
-                <span>Roles</span>
-            </a>
-        </li>
+        {% if current_user.has_role('root') or current_user.has_role('admin') %}
+            <li>
+                <a href="/users" class="nav-link">
+                    <i class="material-icons">group</i>
+                    <span>Users</span>
+                </a>
+            </li>
+            <li>
+                <a href="/roles" class="nav-link">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Roles</span>
+                </a>
+            </li>
+        {% endif %}
     </ul>
     <ul class="bottom-links">
         <li>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>{% block title %}User List{% endblock title %}</title>
+<title>{% block title %}Users Management{% endblock title %}</title>
 {% block body %}
 {% include 'header.html' %}
 <!-- Main content -->
@@ -8,7 +8,7 @@
     <div class="main">
         <!-- Container for sidebar content -->
         {% include 'sidenav.html' %}
-        <div class="page-content">
+        <div class="page-content container">
             <!-- include the search bar -->
             <div class="header2">
                 <h2 class="welcome-title">Welcome back! <span>{{current_user.first_name}} 🎉</span></h2>
@@ -23,7 +23,19 @@
                     </form>
                 </div> 
             </div>
-            
+
+            <!-- Add a flash message that displays a wrong old password message -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
             <!-- include user stats here -->
             {% include 'users/user_stat.html' %}
             

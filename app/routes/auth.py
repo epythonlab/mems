@@ -25,8 +25,12 @@ def login():
             flash("Sorry! Incorrect email or password!", 'danger')
             return redirect(url_for('auth_bp.login'))
         elif not check_password_hash(user.password, password):
-            flash("Sorry! Password is incorrect or Your account is disabled.", 'danger')
+            flash("Sorry! Password is incorrect!.", 'danger')
             return redirect(url_for('auth_bp.login'))
+        elif not user.roles:
+            flash("Sorry! Your account is not activated. Get help?", 'danger')
+            return redirect(url_for('auth_bp.login'))
+            
 
         login_user(user)  # Log in the user
         # Debugging messages

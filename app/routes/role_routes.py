@@ -1,46 +1,54 @@
 # app/routes/role_routes.py
 from flask import Blueprint, request, redirect, url_for, flash, render_template
-from flask_login import login_required
-from flask_security import roles_required
+from flask_login import login_required, current_user
+
 from app.models.users import User, Role
+from app.utils import roles_required
 from app import db
 from . import role_bp
 
 @role_bp.route('/roles')
 @login_required
-@roles_required('admin')
 def list_roles():
     roles = Role.query.all()
-    return render_template('users/roles.html', roles=roles)
+    users = User.query.filter(User.id != current_user.id).all() # exclude the current user
+    is_permitted = any(role.name in ['admin', 'root'] for role in current_user.roles)
+    return render_template('users/roles.html', roles=roles, users=users, is_permitted=is_permitted)
 
 @role_bp.route('/add_role', methods=['POST'])
 @login_required
-@roles_required('admin')
 def add_role():
+    if not any(role.name == 'root' for role in current_user.roles):
+        flash('You do not have permission to add roles.', 'danger')
+        return redirect(url_for('role_bp.list_roles'))
+    
     role_name = request.form.get('role_name')
     description = request.form.get('description')
 
-    if Role.query.filter_by(name=role_name).first():
-        flash('Role already exists', 'error')
-    else:
+    if role_name:
         new_role = Role(name=role_name, description=description)
         db.session.add(new_role)
         db.session.commit()
-        flash('Role added successfully', 'success')
+        flash('Role added successfully!', 'success')
+    else:
+        flash('Role name is required.', 'danger')
 
     return redirect(url_for('role_bp.list_roles'))
 
 @role_bp.route('/delete_role/<int:role_id>', methods=['POST'])
 @login_required
-@roles_required('admin')
 def delete_role(role_id):
+    if not any(role.name == 'root' for role in current_user.roles):
+        flash('You do not have permission to delete roles.', 'danger')
+        return redirect(url_for('role_bp.list_roles'))
+
     role = Role.query.get(role_id)
     if role:
         db.session.delete(role)
         db.session.commit()
-        flash('Role deleted successfully', 'success')
+        flash('Role deleted successfully!', 'success')
     else:
-        flash('Role not found', 'error')
+        flash('Role not found.', 'danger')
 
     return redirect(url_for('role_bp.list_roles'))
 

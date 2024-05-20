@@ -1,6 +1,6 @@
 <!-- templates/roles.html -->
 <!DOCTYPE html>
-<title>{% block title %}User List{% endblock title %}</title>
+<title>{% block title %}Roles Management{% endblock title %}</title>
 {% block body %}
 {% include 'header.html' %}
 <!-- Main content -->
@@ -14,11 +14,25 @@
             <h2 class="welcome-title">Welcome back!
                 <span>{{current_user.first_name}} 🎉</span>
             </h2>
+            <!-- Add a flash message that displays a wrong old password message -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
             <div class="container mt-5">
                 <h1 class="text-start">Role Management</h1>
                 <div class="tabs">
                     <button class="tab tablinks active" onclick="openTab(event, 'list-roles')">List Roles</button>
-                    <button class="tab tablinks" onclick="openTab(event, 'add-role')">Add Role</button>
+                    {% if is_permitted %}
+                        <button class="tab tablinks" onclick="openTab(event, 'add-role')">Add Role</button>
+                    {% endif %}
                     <button class="tab tablinks" onclick="openTab(event, 'assign-role')">Assign Role</button>
                     <button class="tab tablinks" onclick="openTab(event, 'remove-role')">Remove Role</button>
                 </div>
@@ -41,9 +55,9 @@
                                 <td>{{ role.name }}</td>
                                 <td>{{ role.description }}</td>
                                 <td>
-
                                     <form action="{{ url_for('role_bp.delete_role', role_id=role.id) }}" method="POST" class="d-inline">
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="submit" class="btn-danger btn-sm" style="width:50px;" title="Delete"> 
+                                            <i class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </td>
                             </tr>
@@ -55,42 +69,68 @@
                     <h2>Add Role</h2>
                     <form action="{{ url_for('role_bp.add_role') }}" method="POST">
                         <div class="form-group">
-                            <label for="role_name">Role Name:</label>
+                            <label for="role_name">Name:</label>
                             <input type="text" class="form-control" id="role_name" name="role_name" required>
                         </div>
                         <div class="form-group">
                             <label for="description">Description:</label>
                             <input type="text" class="form-control" id="description" name="description">
                         </div>
-                        <button type="submit" class="btn btn-primary">Add Role</button>
+                        <button type="submit" class="btn btn-primary btn-sm button-hover">Add Role</button>
                     </form>
                 </div>
                 <div id="assign-role" class="tabcontent mt-3" style="display: none;">
                     <h2>Assign Role</h2>
                     <form action="{{ url_for('role_bp.assign_role') }}" method="POST">
                         <div class="form-group">
-                            <label for="user_id">User ID:</label>
-                            <input type="text" class="form-control" id="user_id" name="user_id" required>
+                            <label for="user_id">User:</label>
+                            <select id="user" name="user_id" class="form-select" required>
+                                {% for user in users %} 
+                                    {% if not user.roles and user.active %} {# Check if user has no roles assigned #}
+                                        <option value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }} - {{ user.email }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="role">Role:</label>
-                            <input type="text" class="form-control" id="role" name="role" required>
+                            <select id="role" name="role" class="form-select" required>
+                                {% if current_user.has_role('rootS') %}
+                                    {% for role in roles %}
+                                        <option value="{{ role.name }}" >{{ role.name }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                                <option value="user" >user</option>
+                            </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Assign Role</button>
+                        <button type="submit" class="btn btn-primary btn-sm button-hover">Assign Role</button>
                     </form>
                 </div>
                 <div id="remove-role" class="tabcontent mt-3" style="display: none;">
                     <h2>Remove Role</h2>
                     <form action="{{ url_for('role_bp.remove_role') }}" method="POST">
                         <div class="form-group">
-                            <label for="user_id">User ID:</label>
-                            <input type="text" class="form-control" id="user_id" name="user_id" required>
+                            <label for="user_id">User:</label>
+                            <select id="user" name="user_id" class="form-select" required>
+                                {% for user in users %}
+                                    {% if user.roles %} {# Check if user has roles assigned #}
+                                        <option value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }} - {{ user.email }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="role">Role:</label>
-                            <input type="text" class="form-control" id="role" name="role" required>
+                            <select id="role" name="role" class="form-select" required>
+                                {% if current_user.has_role('rootS') %}
+                                    {% for role in roles %}
+                                        <option value="{{ role.name }}" >{{ role.name }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                                <option value="user" >user</option>
+                            </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Remove Role</button>
+                        <button type="submit" class="btn btn-primary btn-sm button-hover">Remove Role</button>
                     </form>
                 </div>
             </div>

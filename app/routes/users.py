@@ -118,12 +118,6 @@ def update_user_status():
                 print(password)
             elif action == 'disapprove':
                 user.active = False
-
-            role = Role.query.filter_by(name='owner').first()
-            if role:
-                # Clear existing roles and assign the new role
-                user.roles.clear()
-                user.roles.append(role)
         
             db.session.commit()
             flash('User status and role updated successfully', 'success')
