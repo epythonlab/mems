@@ -2,8 +2,9 @@
 from flask import Blueprint, request, redirect, url_for, flash, render_template
 from flask_login import login_required, current_user
 
-from app.models.users import User, Role
-from app.utils import roles_required
+from app.models.users import User, Role, roles_users
+
+
 from app import db
 from . import role_bp
 
@@ -11,7 +12,22 @@ from . import role_bp
 @login_required
 def list_roles():
     roles = Role.query.all()
-    users = User.query.filter(User.id != current_user.id).all() # exclude the current user
+    # Fetch 'admin' and 'root' role IDs
+    admin_role = Role.query.filter_by(name='admin').first()
+    root_role = Role.query.filter_by(name='root').first()
+    
+   # Base query excluding users with 'admin' or 'root' roles for 'admin' users and only 'root' roles for 'root' users
+    if current_user.has_role('admin'):
+        excluded_roles = [admin_role.id, root_role.id]
+    else:
+        excluded_roles = [root_role.id]
+
+    subquery = db.session.query(roles_users.c.user_id).filter(
+        roles_users.c.role_id.in_(excluded_roles)
+    ).subquery()
+
+    users = User.query.filter(~User.id.in_(subquery))
+        
     is_permitted = any(role.name in ['admin', 'root'] for role in current_user.roles)
     return render_template('users/roles.html', roles=roles, users=users, is_permitted=is_permitted)
 
@@ -54,8 +70,11 @@ def delete_role(role_id):
 
 @role_bp.route('/modify_role', methods=['POST'])
 @login_required
-@roles_required('admin')
 def modify_role():
+    if not any(role.name == 'root' for role in current_user.roles):
+        flash('You do not have permission to assign roles.', 'danger')
+        return redirect(url_for('role_bp.list_roles'))
+    
     role_id = request.form.get('role_id')
     new_name = request.form.get('new_name')
     new_description = request.form.get('new_description')
@@ -73,8 +92,11 @@ def modify_role():
 
 @role_bp.route('/assign_role', methods=['POST'])
 @login_required
-@roles_required('admin')
 def assign_role():
+    if not any(role.name in ['admin', 'root'] for role in current_user.roles):
+        flash('You do not have permission to assign roles.', 'danger')
+        return redirect(url_for('role_bp.list_roles'))
+    
     user_id = request.form.get('user_id')
     role_name = request.form.get('role')
 
@@ -99,8 +121,11 @@ def assign_role():
 
 @role_bp.route('/remove_role', methods=['POST'])
 @login_required
-@roles_required('admin')
 def remove_role():
+    if not any(role.name in ['root', 'admin'] for role in current_user.roles):
+        flash('You do not have permission to remove roles.', 'danger')
+        return redirect(url_for('role_bp.list_roles'))
+    
     user_id = request.form.get('user_id')
     role_name = request.form.get('role')
 

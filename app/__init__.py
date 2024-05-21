@@ -54,16 +54,16 @@ def create_app():
             # Create roles if they don't exist
             user_datastore = SQLAlchemyUserDatastore(db, User, Role)
             security = Security(app, user_datastore)
-            admin_role = Role.query.filter_by(name='admin').first()
-            if not admin_role:
-                admin_role = Role(name='admin', description='Administrator')
-                db.session.add(admin_role)
+            root_role = Role.query.filter_by(name='root').first()
+            if not root_role:
+                root_role = Role(name='root', description='Super administrator')
+                db.session.add(root_role)
 
             # Create a default admin user if no users exist
-            if not User.query.filter(User.roles.contains(admin_role)).first():
+            if not User.query.filter(User.roles.contains(root_role)).first():
                 default_admin = User(
-                    email='admin@admin.com', password=generate_password_hash('admin'), active=True)
-                default_admin.roles.append(admin_role)
+                    email='root@superuser.com', password=generate_password_hash('root'), active=True)
+                default_admin.roles.append(root_role)
                 import uuid
                 default_admin.fs_uniquifier = uuid.uuid4()
                 db.session.add(default_admin)
@@ -80,6 +80,5 @@ def create_app():
             print(error_msg)
             print("Make sure your MySQL server is running and the connection details are correct.")
             raise
-    # Assign user_datastore to the Flask app object
-    app.user_datastore = user_datastore
+    
     return app
