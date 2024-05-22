@@ -40,14 +40,14 @@ def add_role():
     
     role_name = request.form.get('role_name')
     description = request.form.get('description')
-
-    if role_name:
+    role = Role.query.filter_by(name=role_name).first()
+    if not role:
         new_role = Role(name=role_name, description=description)
         db.session.add(new_role)
         db.session.commit()
         flash('Role added successfully!', 'success')
     else:
-        flash('Role name is required.', 'danger')
+        flash(f'Duplicate entry {role_name}.', 'danger')
 
     return redirect(url_for('role_bp.list_roles'))
 

@@ -25,10 +25,4 @@ def view_error_log():
     # Pass the contents to the template for rendering
     return render_template('error_log.html', error_log_contents=error_log_contents)
 
-@index_bp.route('/profile')
-def profile():
-    # In a real application, you'd probably use session variables to check if the user is logged in
-    # retreive the current user profile based on the current login id
-    user = User.query.filter_by(id=current_user.id).first()
-    
-    return render_template('users/profile.html', user = user)
+

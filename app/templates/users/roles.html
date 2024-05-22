@@ -95,12 +95,14 @@
                         <div class="form-group">
                             <label for="role">Role:</label>
                             <select id="role" name="role" class="form-select" required>
-                                {% if current_user.has_role('rootS') %}
+                                {% if current_user.has_role('root') %}
                                     {% for role in roles %}
                                         <option value="{{ role.name }}" >{{ role.name }}</option>
                                     {% endfor %}
+                                
+                                {% else %}
+                                    <option value="user" >user</option>
                                 {% endif %}
-                                <option value="user" >user</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary btn-sm button-hover">Assign Role</button>
@@ -122,12 +124,14 @@
                         <div class="form-group">
                             <label for="role">Role:</label>
                             <select id="role" name="role" class="form-select" required>
-                                {% if current_user.has_role('rootS') %}
+                                {% if current_user.has_role('root') %}
                                     {% for role in roles %}
                                         <option value="{{ role.name }}" >{{ role.name }}</option>
                                     {% endfor %}
+                                
+                                {% else %}
+                                    <option value="user" >user</option>
                                 {% endif %}
-                                <option value="user" >user</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary btn-sm button-hover">Remove Role</button>

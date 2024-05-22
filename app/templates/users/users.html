@@ -41,16 +41,16 @@
             
             <div class="card custom-card-border">
                 <h1 class="mt-3">Users List</h1>
-                <!-- Add User Button -->
-                {% if current_user.has_role('root') %}
-                   
-                    <div class="d-flex justify-content-end float-end mb-3">
-                        <button type="button" class="btn btn-primary button-hover" style="width:8rem;" onclick="openModal('addUserModal')">
-                            Add User
+                <div class="position-relative">
+                  
+                   {% if current_user.has_role('root') %}
+                    <!-- Add User Button -->
+                        <button type="button" class="btn btn-secondary btn-circle btn-add-user" onclick="openModal('addUserModal')">
+                            <i class="fas fa-plus"></i>
                         </button>
-                    </div>
-                {% endif %}
-                
+                      {% endif %}
+                </div>
+
                 <div class="select-wrapper selection-filter">
                     <label for="maxRows">Showing</label>
                     <select class="form-select" name="rows_per_page" id="maxRows" onchange="updateRowsPerPage()">

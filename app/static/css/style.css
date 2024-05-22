@@ -247,6 +247,7 @@ body {
   flex      : 1;
   overflow-x: hidden;
   overflow-y: auto;
+  margin-left: 20px;
 }
 
 .page-content h1 {
@@ -433,6 +434,7 @@ body {
 @media screen and (max-width: 991px) {
   .page-content {
     width: 100vw;
+    margin-left: 0;
   }
 }
 
@@ -579,9 +581,9 @@ body {
 /* user settings css end */
 /* custom card */
 .custom-card-border {
-  border       : 5px solid #fefefe;
-  /* Border color is blue */
   border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  /* Border color is blue */
   /* Rounded corners */
   padding      : 10px;
   margin-bottom: 2%;
@@ -671,8 +673,13 @@ body {
   border-color: #1F419B;
   /* Change border color on focus */
 }
-
-.btn {
+.btn-secondary{
+  background-color: #00AB4F;
+}
+.btn-secondary:hover{
+background-color: #2ecc71;
+}
+.btn-primary {
   padding         : 12px 16px;
   /* Adjust padding */
   color           : #fff;
@@ -1002,7 +1009,22 @@ body {
   height: 100%;
 
 }
-
+ /* css layout for form input */
+ .edit-icon {
+  font-size: 1.2em;
+}
+.read-only-input {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  cursor: default;
+  
+}
+.read-only-input:focus {
+  outline: none;
+}
 
 /* css to decorate the table layout */
 /* Set minimum width of table */
@@ -1562,4 +1584,28 @@ td:last-child .btn-status .fas {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+/* Circular Button Styles */
+.btn-circle {
+  width: 40px;
+  height: 40px;
+  padding: 6px 0;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 24px;
+  line-height: 1.42857;
+}
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 50%;
+}
+.btn-add-user {
+  position: absolute;
+  top: 15px;
+  right: 15px;
 }
