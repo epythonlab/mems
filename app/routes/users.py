@@ -2,8 +2,8 @@ from flask import render_template, request, redirect, url_for, flash, jsonify, c
 from flask_login.utils import login_required, current_user
 from flask_security import Security, SQLAlchemyUserDatastore, roles_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import or_, select
-from sqlalchemy.orm import aliased
+from sqlalchemy import or_
+import uuid
 
 from . import user_bp
 from app import db
@@ -156,3 +156,25 @@ def update_user_status():
         flash('You are not authorized to access this page.', 'danger')
         redirect(url_for('auth_bp.login'))
 
+@user_bp.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    if request.method == 'POST':
+        password = generate_password_hash(request.form['password'])
+        email = request.form['email']
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        
+        new_user = User(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            password=password,
+            fs_uniquifier=uuid.uuid4(),
+            active=0
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        flash('User added successfully!', 'success')
+        return redirect(url_for('user_bp.users'))
+    
+    return render_template('users/users.html')

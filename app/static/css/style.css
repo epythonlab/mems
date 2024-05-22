@@ -579,7 +579,7 @@ body {
 /* user settings css end */
 /* custom card */
 .custom-card-border {
-  border       : 5px solid #fff;
+  border       : 5px solid #fefefe;
   /* Border color is blue */
   border-radius: 10px;
   /* Rounded corners */
@@ -634,7 +634,7 @@ body {
 }
 
 .login-form {
-  background-color     : rgba(255, 255, 255, 0.8);
+  background-color     : #fefefe;
   border-radius        : 8px;
   box-shadow           : 0px 0px 10px rgba(0, 0, 0, 0.1);
   padding              : 30px;
@@ -689,11 +689,6 @@ body {
   transition      : background-color 0.3s ease;
 }
 
-.btn:hover {
-  background-color: #FBB040;
-  /* Change button background color on hover */
-  color           : #111;
-}
 
 /* Media query for small devices */
 @media only screen and (max-width: 767px) {
@@ -706,7 +701,7 @@ body {
 }
 
 .sign-message {
-  font-size: 14px;
+  font-size: 20px;
   color    : #333;
   padding  : 10px 5px;
   margin   : 10px 5px;
@@ -730,6 +725,7 @@ body {
   text-align: center;
   position  : relative;
   margin-top: 30px;
+  margin-bottom: 10px;
   width     : 100%;
   z-index   : 1;
   /* Ensure the form appears above the overlay */
@@ -952,6 +948,7 @@ body {
 .form-box {
   padding-top: 40px;
   margin-left: 50%;
+  
   /* Adjust this value based on the width of your sidebar */
 }
 
@@ -1510,9 +1507,10 @@ td:last-child .btn-status .fas {
 }
 
 .tab.active {
-  background-color: #1F419B;
-  border-bottom: 2px solid #1F419B;
-  color:#ccc
+  color: #1F419B;
+  border-bottom: 3px solid #1F419B;
+  font-weight: bold;
+ 
 }
 
 /* CSS for tab content */
@@ -1521,6 +1519,7 @@ td:last-child .btn-status .fas {
   padding: 20px;
   border-top: none;
   border-radius: 0 0 5px 5px;
+  background-color: #fefefe;
 }
 
 .tabcontent.active {
@@ -1532,3 +1531,35 @@ td:last-child .btn-status .fas {
   margin-bottom: 15px;
 }
 
+/* css modal layout */
+/* Custom Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 80%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 1% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+}
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
