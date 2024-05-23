@@ -586,7 +586,7 @@ body {
   /* Border color is blue */
   /* Rounded corners */
   padding      : 10px;
-  margin-bottom: 2%;
+  margin-bottom: 20px;
 }
 
 .custom-btn {
@@ -606,14 +606,70 @@ body {
   color  : red;
 }
 
-/* Define the active background color */
-.nav .nav-link.active {
-  background-color: #1F419B;
-  /* Change to your desired color */
-  color           : #fff;
-  /* Change text color if needed */
+
+/* Basic styling for the nav */
+.nav {
+  list-style-type: none;
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  justify-content: flex-start;
+  overflow: hidden;
+  margin-bottom: 10px;
 }
 
+/* Style for each tab item */
+.nav-item {
+  margin-right: 10px; /* Optional: Add spacing between items */
+}
+
+//* Style for each tab item */
+.nav-item {
+  margin-right: 10px; /* Optional: Add spacing between items */
+}
+
+/* Style for the links */
+.nav-link {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: center;
+  padding: 10px 20px; /* Adjust padding as needed */
+  text-decoration: none;
+  color: #555;
+  transition: all 0.3s ease;
+}
+
+/* Style for the icons */
+.nav-link i {
+  margin-right: 5px; /* Add spacing between icon and text */
+}
+
+/* Hover effect */
+.nav-link:hover {
+  background-color: #ccc;
+  color: #111;
+}
+
+/* Active tab style */
+.nav-link.active {
+  border-bottom: 3px solid #1F419B;
+  font-weight: bold;
+  color: #1F419B;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .nav {
+    flex-wrap: wrap; /* Allow wrapping to next line if necessary */
+  }
+  .nav-item {
+    flex: 1; /* Ensure items are evenly spaced */
+    margin-right: 5px; /* Adjust spacing between items */
+  }
+  .nav-link {
+    padding: 5px 5px; /* Adjust padding for smaller screens */
+  }
+}
 /* Login form styles */
 
 .login-container {
@@ -1011,16 +1067,28 @@ background-color: #2ecc71;
 }
  /* css layout for form input */
  .edit-icon {
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.2em;
+  color: #00AB4F;
 }
+.edit-icon:hover{
+  background-color: #e0e0e0;
+}
+
 .read-only-input {
   border: none;
-  background-color: transparent;
+  background-color: #fff;
   padding: 0;
   margin: 0;
   box-shadow: none;
   cursor: default;
-  
+ 
 }
 .read-only-input:focus {
   outline: none;

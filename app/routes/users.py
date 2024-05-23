@@ -187,29 +187,41 @@ def profile():
     # user = User.query.filter_by(id=current_user.id).first()
     
     return render_template('users/profile.html', user = current_user)
+
 @user_bp.route('/update_profile', methods=['GET', 'POST'])
 @login_required  # Ensure the user is logged in
 def update_profile():
-    
-    if request.method == 'POST':
+    section = request.form['section']
+    try:
         
-        current_user.first_name = request.form['fname']
-        current_user.last_name = request.form['lname']
-        current_user.email = request.form['email']
-        current_user.country = request.form['country']
-        current_user.state = request.form['state']
-        current_user.sub_city = request.form['zone']
-        current_user.wereda = request.form['wereda']
-        current_user.kebele = request.form['kebele']
-        current_user.house_number = request.form['house_no']
-        current_user.phone_number = request.form['phone']
-
-        try:
-            db.session.commit()
+        if section == 'profile':
+            
+            # Update user basic profile information
+            current_user.first_name = request.form['first_name']
+            current_user.last_name = request.form['last_name']
+            current_user.email = request.form['email']
+            current_user.phone_number = request.form['phone']
+            
             flash('Your profile has been updated.', 'success')
-            return redirect(url_for('user_bp.profile'))
-        except:
-            db.session.rollback()
-            flash('An error occurred while updating your profile. Please try again.', 'danger')
+            
+        elif section == 'address':
+             
+            # Update user address information
+            
+            current_user.country = request.form['country']
+            current_user.state = request.form['state']
+            current_user.sub_city = request.form['zone']
+            current_user.wereda = request.form['wereda']
+            current_user.kebele = request.form['kebele']
+            current_user.house_number = request.form['house_no']
+            
+            flash('Your address has been updated.', 'success')
+        
+        # Commit changes to the database
+        db.session.commit()
+                 
+            
+    except Exception as e:
+        flash(str(e), 'danger')
 
-    return render_template('users/profile.html')
+    return redirect(url_for('user_bp.profile'))

@@ -4,44 +4,61 @@
 {% include 'header.html' %}
 <!-- Main content -->
 <div class="container-fluid">
-    {% include 'sideheader.html' %} <!-- include the header of the page -->
+    {% include 'sideheader.html' %}
+    <!-- include the header of the page -->
     <div class="main">
         <!-- Container for sidebar content -->
-        {% include 'sidenav.html' %} <!-- include the side navigation -->
+        {% include 'sidenav.html' %}
+        <!-- include the side navigation -->
         <div class="page-content">
-            {% include 'users/settings.html' %} <!-- include the settings -->
-            
-            <div class="card custom-card-border mt-1 mb-5">
+            {% include 'users/settings.html' %}
+            <!-- include the settings -->
+            <!-- Basic Profile Section -->
+            <div class="card custom-card-border mt-1 mb-3">
+                <!-- Add a flash message that displays a wrong old password message -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="mb-0" id="p_text">
-                            Your profile
+                        <h5 class="mb-0">
+                            <span class="red-asterisk">*</span>
+                            Basic Profile
                         </h5>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" title="edit profile" id="editButton" onclick="enableEdit()">
-                            <i class="fas fa-pencil edit-icon"></i>
+                        <button type="button" class="btn edit-icon" id="editButtonBasic" onclick="enableEdit('basic')">
+                            <i class="fas fa-pencil"></i>
                         </button>
                     </div>
-                    <form id="profileForm" action="/update_profile" method="post" >
+                    <form id="basicForm" action="{{ url_for('user_bp.update_profile') }}" method="POST">
+                        <input type="hidden" name="section" value="profile">
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <label for="name" class="form-label">First Name</label>
+                                <label for="first_name" class="form-label">First Name</label>
                                 <input
                                     type="text"
                                     class="form-control read-only-input"
-                                    id="name"
+                                    id="first_name"
+                                    name="first_name"
                                     value="{{ user.first_name }}"
-                                    name="fname"
                                     placeholder="Enter your first name"
                                     readonly
                                 >
                             </div>
                             <div class="col-md-6 form-group">
-                                <label for="lname" class="form-label">Last Name</label>
+                                <label for="last_name" class="form-label">Last Name</label>
                                 <input
                                     type="text"
                                     class="form-control read-only-input"
-                                    id="lname"
-                                    name="lname"
+                                    id="last_name"
+                                    name="last_name"
                                     value="{{ user.last_name }}"
                                     placeholder="Enter your last name"
                                     readonly
@@ -53,14 +70,59 @@
                                     type="email"
                                     class="form-control read-only-input"
                                     id="email"
-                                    value="{{ user.email }}"
                                     name="email"
+                                    value="{{ user.email }}"
                                     placeholder="Enter your email"
                                     readonly
                                 >
                             </div>
                             <div class="col-md-6 form-group">
-                                <label for="country" class="form-label">Country
+                                <label for="phone" class="form-label">
+                                    Phone/Mobile Number
+                                    <span class="red-asterisk">*</span>
+                                </label>
+                                <input
+                                    type="tel"
+                                    class="form-control read-only-input"
+                                    id="phone"
+                                    name="phone"
+                                    value="{{ user.phone_number }}"
+                                    placeholder="eg. 09xxxxxxxx"
+                                    readonly
+                                >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary btn-sm button-hover"
+                                    id="saveButtonBasic"
+                                    style="display:none;"
+                                >Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Address Section -->
+            <div class="card custom-card-border mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">
+                            <span class="red-asterisk">*</span>
+                            Address
+                        </h5>
+                        <button type="button" class="btn edit-icon" id="editButtonAddress" onclick="enableEdit('address')">
+                            <i class="fas fa-pencil"></i>
+                        </button>
+                    </div>
+                    <form id="addressForm" action="{{ url_for('user_bp.update_profile') }}" method="POST">
+                        <input type="hidden" name="section" value="address">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="country" class="form-label">
+                                    Country
                                     <span class="red-asterisk">*</span>
                                 </label>
                                 <input
@@ -68,36 +130,37 @@
                                     value="{{ user.country }}"
                                     class="form-control read-only-input"
                                     id="country"
-                                    value="{{ user.country }}"
                                     name="country"
                                     placeholder="eg. Ethiopia"
                                     readonly
                                 >
                             </div>
                             <div class="col-md-6 form-group">
-                                <label for="state" class="form-label">State
+                                <label for="state" class="form-label">
+                                    State
                                     <span class="red-asterisk">*</span>
                                 </label>
                                 <input
                                     type="text"
                                     class="form-control read-only-input"
                                     id="state"
-                                    value="{{ user.state }}"
                                     name="state"
+                                    value="{{ user.state }}"
                                     placeholder="eg. Addis Ababa"
                                     readonly
                                 >
                             </div>
                             <div class="col-md-6 form-group">
-                                <label for="zone" class="form-label">Sub City/Zone
+                                <label for="zone" class="form-label">
+                                    Sub City/Zone
                                     <span class="red-asterisk">*</span>
                                 </label>
                                 <input
                                     type="text"
                                     class="form-control read-only-input"
                                     id="zone"
-                                    value="{{ user.sub_city }}"
                                     name="zone"
+                                    value="{{ user.sub_city }}"
                                     placeholder="eg. Addis Ketema"
                                     readonly
                                 >
@@ -109,7 +172,6 @@
                                     value="{{ user.wereda }}"
                                     class="form-control read-only-input"
                                     id="wereda"
-                                    value="{{ user.wereda }}"
                                     name="wereda"
                                     placeholder="eg. 20"
                                     readonly
@@ -121,8 +183,8 @@
                                     type="text"
                                     class="form-control read-only-input"
                                     id="kebele"
-                                    value="{{ user.kebele }}"
                                     name="kebele"
+                                    value="{{ user.kebele }}"
                                     placeholder="eg. 05"
                                     readonly
                                 >
@@ -133,30 +195,21 @@
                                     type="text"
                                     class="form-control read-only-input"
                                     id="house_no"
-                                    value="{{ user.house_number }}"
                                     name="house_no"
+                                    value="{{ user.house_number }}"
                                     placeholder="eg. 20/220"
-                                    readonly
-                                >
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label for="phone" class="form-label">Phone/Mobile Number
-                                    <span class="red-asterisk">*</span>
-                                </label>
-                                <input
-                                    type="tel"
-                                    class="form-control read-only-input"
-                                    id="phone"
-                                    value="{{ user.phone_number }}"
-                                    name="phone"
-                                    placeholder="eg. 09xxxxxxxx"
                                     readonly
                                 >
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary btn-sm button-hover" id="saveButton" style="display:none;">Save</button>
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary btn-sm button-hover"
+                                    id="saveButtonAddress"
+                                    style="display:none;"
+                                >Save</button>
                             </div>
                         </div>
                     </form>
@@ -168,20 +221,25 @@
 <!-- add the script files in the body of every html content -->
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock body %}
+<!-- JavaScript to enable form editing -->
 <script>
-    function enableEdit() {
-        // Get all input fields within the form
-        const inputs = document.querySelectorAll('#profileForm input');
+    function enableEdit(section) {
+        // Get the input fields within the specified section
+        const inputs = document.querySelectorAll(`#${section}Form input`);
+        
 
-        // Enable all input fields
+        // Enable all input fields in the section
         inputs.forEach(input => {
             input.removeAttribute('readonly');
             input.classList.remove('read-only-input');
         });
 
-        // Show the save button and hide the edit button
-        document.getElementById('editButton').style.display = 'none';
-        document.getElementById('saveButton').style.display = 'block';
-        document.getElementById('p_text').innerHTML = '<span class="red-asterisk">*</span>Update your profile';
+        // Show the save button and hide the edit button in the section
+        document.getElementById(`saveButton${capitalizeFirstLetter(section)}`).style.display = 'block';
+        document.getElementById(`editButton${capitalizeFirstLetter(section)}`).style.display = 'none';
+    }
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 </script>
