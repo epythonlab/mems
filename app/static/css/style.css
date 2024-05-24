@@ -740,12 +740,36 @@ background-color: #2ecc71;
   background   : #1F419B;
   font-weight  : bold;
   color        : white;
-  border       : 0 none;
+  border       : none;
   border-radius: 25px;
   cursor       : pointer;
   padding      : 10px 5px;
   margin       : 10px 5px;
   float        : inline-end;
+  
+}
+
+.btn-cancel {
+  width        : 100px;
+  font-weight  : bold;
+  color        : #1F419B;
+  border       : none;
+  outline: none;
+  box-shadow: none;
+  cursor       : pointer;
+  padding      : 10px 5px;
+  margin       : 10px 5px;
+  float        : inline-end;
+}
+.btn-cancel:hover{
+  color: #4e66a8;
+  text-decoration: underline;
+  border: none;
+  
+}
+.btn:focus, .btn-primary:focus, .btn-cancel:focus {
+  outline: none; /* Prevents the default outline */
+  box-shadow: none; /* Removes any box shadow that might be used for focus */
 }
 
 
@@ -1063,7 +1087,7 @@ background-color: #2ecc71;
 }
  /* css layout for form input */
  .edit-icon {
-  border: none;
+  border: 1px solid;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -1561,7 +1585,10 @@ td:last-child .btn-status .fas {
   box-sizing: border-box;
 }
 
-
+.form-group input:focus{
+  border-color: #1F419B;
+  outline: none;
+}
 
 .inline-form {
   display: inline;
@@ -1702,11 +1729,26 @@ td:last-child .btn-status .fas {
   font-weight: bold;
   margin-bottom: 5px;
 }
+.company-section .btn-row{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+form input:focus{
+  border-color: #1F419B;
+}
 @media screen and (max-width:768px) {
   .company{
     flex-direction: column;
   }
   .company-section, .preview-section {
     width: 100%;
+  }
+  .company-section .btn-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .company-section .btn-row button {
+    flex: 1 1 auto;
   }
 }

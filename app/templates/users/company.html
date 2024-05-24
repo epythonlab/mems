@@ -46,13 +46,9 @@
                                 <input type="file" id="companyLogo" class="form-control read-only-input" name="logo" accept="image/*" readonly>
                                 <label for="lable-form">Company Trade License(Copy)</label>
                                 <input type="file" id="license" class="form-control read-only-input" name="license"  accept="image/*" readonly>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn btn-primary btn-sm button-hover" id="saveButtonCompany" style="display:none;">Update</button>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn btn-primary btn-sm button-hover" id="cancelButtonCompany" style="display:none;">Update</button>
-                                    </div>
+                                <div class="btn-row">
+                                    <button type="submit" class="btn btn-primary button-hover" id="saveButtonCompany" style="display:none;">Update</button>
+                                    <button type="button" class="btn btn-cancel" id="cancelButtonCompany" style="display:none;" onclick="cancelForm('company')">Cancel</button>
                                 </div>
                             </form>
                         </div>
