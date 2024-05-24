@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Details</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <!-- <link rel="stylesheet" href="popup.css"> -->
+
     </head>
     <body>
         <div class="overlay-container" id="overlay" >
@@ -19,69 +19,74 @@
                 <h1 class="company-name">{{user.company_name}}</h1>
             </div>
             <div class="content">
-                <div class="details">
-                    <hr style="margin-right: 20px;">
-                    <p>
-                        <strong>Name:</strong>
-                        {% if user.first_name %}
-                        {{ user.first_name }}
-                    {% endif %}
-                    {% if user.last_name %}
-                        {% if user.first_name %} {% endif %}
-                        {{ user.last_name }}
-                    {% endif %}
-                    </p>
-                    <p>
-                        <strong>Email:</strong>
-                        {{user.email}}
-                    </p>
-                    <p>
-                        <strong>Tel:</strong>
-                        {{user.phone_number}}
-                    </p>
-                    <p>
-                        <strong>Address:</strong>
-                        {% if user.state %}
-                        {{ user.state }}
-                    {% endif %}
-                    {% if user.sub_city %}
-                        {% if user.state %}, {% endif %}
-                        {{ user.sub_city }}
-                    {% endif %}
-                    {% if user.wereda %}
-                        {% if user.state or user.sub_city %}, {% endif %}
-                        {{ user.wereda }}
-                    {% endif %}
-                    {% if user.house_number %}
-                        {% if user.state or user.sub_city or user.wereda %}, {% endif %}
-                        {{ user.house_number }}
-                    {% endif %}
-                    </p>
-                    <div class="buttons">
-                        <form id="status-form" action="{{ url_for('user_bp.update_user_status') }}" method="POST">
-                            <input type="hidden" name="id" value="{{ user.id }}">
+                <div class="company">
+                    <div class="company-section">
+                        <hr style="margin-right: 20px;">
+                        <p>
+                            <strong>Name:</strong>
+                            {% if user.first_name %}
+                            {{ user.first_name }}
+                        {% endif %}
+                        {% if user.last_name %}
+                            {% if user.first_name %} {% endif %}
+                            {{ user.last_name }}
+                        {% endif %}
+                        </p>
+                        <p>
+                            <strong>Email:</strong>
+                            {{user.email}}
+                        </p>
+                        <p>
+                            <strong>Tel:</strong>
+                            {{user.phone_number}}
+                        </p>
+                        <p>
+                            <strong>Address:</strong>
+                            {% if user.state %}
+                            {{ user.state }}
+                        {% endif %}
+                        {% if user.sub_city %}
+                            {% if user.state %}, {% endif %}
+                            {{ user.sub_city }}
+                        {% endif %}
+                        {% if user.wereda %}
+                            {% if user.state or user.sub_city %}, {% endif %}
+                            {{ user.wereda }}
+                        {% endif %}
+                        {% if user.house_number %}
+                            {% if user.state or user.sub_city or user.wereda %}, {% endif %}
+                            {{ user.house_number }}
+                        {% endif %}
+                        </p>
+                            <div class="buttons">
+                                <form id="status-form" action="{{ url_for('user_bp.update_user_status') }}" method="POST">
+                                    <input type="hidden" name="id" value="{{ user.id }}">
+                                    
+                                    {% if user.active == 1 %}
+                                        <input type="hidden" name="action" value="disapprove">
+                                        <button type="button" class="approve-button" disabled>Approved</button>
+                                        <button type="submit" class="disapprove-button" >Disapprove</button>
+                                    {% else %}
+                                        <input type="hidden"  name="action" value="approve">
+                                        <button type="submit" class="approve-button" >Approve</button>
+                                        <button type="button" class="disapprove-button" disabled>Disapproved</button>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="preview_section">
+                            <h4>Company Trade License Preview</h4>
+                            <div class="image">
+                                {% if user.license %}
+                                <div class="caption">Company Trade License</div>
+                                <a href="{{url_for('static', filename='images/'+ user.license)}}" target="_blank">
+                                    <img id="zoomable-image" src="{{url_for('static', filename='images/'+ user.license)}}" alt="Item Image">
+                                </a>
                             
-                           
-                            {% if user.active == 1 %}
-                            <input type="hidden" name="action" value="disapprove">
-                            <button type="button" class="approve-button" disabled>Approved</button>
-                            <button type="submit" class="disapprove-button" >Disapprove</button>
-                            {% else %}
-                            <input type="hidden"  name="action" value="approve">
-                            <button type="submit" class="approve-button" >Approve</button>
-                            <button type="button" class="disapprove-button" disabled>Disapproved</button>
-                            {% endif %}
-                        </form>
-                    </div>
-                <div class="image">
-                    {% if user.license %}
-                    <div class="caption">Company Trade License</div>
-                    <a href="{{url_for('static', filename='images/'+ user.license)}}" target="_blank">
-                        <img id="zoomable-image" src="{{url_for('static', filename='images/'+ user.license)}}" alt="Item Image">
-                    </a>
-                   
-                    {% endif %}
-                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>  
             </div>
         </div>
         <script>

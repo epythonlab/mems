@@ -225,3 +225,29 @@ def update_profile():
         flash(str(e), 'danger')
 
     return redirect(url_for('user_bp.profile'))
+
+@user_bp.route('/company', methods=['GET', 'POST'])
+@login_required
+def company():
+    return render_template('users/company.html', company=current_user)
+
+@user_bp.route('/update_company', methods=['POST', 'GET'])
+@login_required
+def update_company():
+    # update company info
+    current_user.company_name = request.form['company_name']
+    if request.files['logo']:
+        
+        current_user.logo = UploadFile.save_picture(request.files['logo'])
+    if request.files['license']:
+        
+        current_user.license = UploadFile.save_picture(request.files['license'])
+    try:
+        # commit changes to the database
+        db.session.commit()
+        flash('Company info updated successfully.', 'success')
+    except Exception as e:
+        flash(f'{str(e)}', 'danger')
+    
+    return redirect(url_for('user_bp.company'))
+        

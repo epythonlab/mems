@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<title>{% block title %}Company Profile{% endblock title %}</title>
+{% block body %}
+{% include 'header.html' %}
+<!-- Main content -->
+<div class="container-fluid">
+    {% include 'sideheader.html' %}
+    <!-- include the header of the page -->
+    <div class="main">
+        <!-- Container for sidebar content -->
+        {% include 'sidenav.html' %}
+        <!-- include the side navigation -->
+        <div class="page-content">
+            {% include 'users/settings.html' %}
+            <!-- include the settings -->
+            <!-- Company Profile -->
+            <div class="card custom-card-border mt-1 mb-3">
+                <!-- Add a flash message that displays a wrong old password message -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">
+                            <span class="red-asterisk">*</span>
+                            Update Company Info
+                        </h5>
+                        <button type="button" class="btn edit-icon" id="editButtonCompany" onclick="enableEdit('company')">
+                            <i class="fas fa-pencil"></i>
+                        </button>
+                    </div>
+                    <div class="company">
+                        <div class="company-section">
+                            
+                            <form id="companyForm" action="{{ url_for('user_bp.update_company') }}" method="POST" enctype="multipart/form-data">
+                                <input type="text" id="companyName" class="form-control read-only-input" name="company_name" value="{{company.company_name}}" placeholder="Company Name" readonly>
+                                <label for="form-label">Company Logo</label>
+                                <input type="file" id="companyLogo" class="form-control read-only-input" name="logo" accept="image/*" readonly>
+                                <label for="lable-form">Company Trade License(Copy)</label>
+                                <input type="file" id="license" class="form-control read-only-input" name="license"  accept="image/*" readonly>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn btn-primary btn-sm button-hover" id="saveButtonCompany" style="display:none;">Update</button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn btn-primary btn-sm button-hover" id="cancelButtonCompany" style="display:none;">Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="preview-section">
+                            <h4>Company Trade License Preview</h4>
+                            <div id="namePreview">{{company.company_name}}</div>
+                            {% if company.license %}
+                                <img id="licensePreview" src="{{url_for('static', filename='images/'+ company.license)}}">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- add the script files in the body of every html content -->
+<script src="{{ url_for('static', filename='js/form_editor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock body %}
+
