@@ -230,11 +230,11 @@ body {
 }
 
 .site-logo path {
-  fill: #1F419B;
+  fill: #00AB4F;
 }
 
 .site-title {
-  color         : #111;
+  color         : #1F419B;
   font-size     : 24px;
   letter-spacing: 1px;
   font-weight   : 400;
@@ -273,12 +273,14 @@ body {
   background  : none;
   border      : 0;
   cursor      : pointer;
-  color       : #1F419B;
+  color       : #00AB4F;
 }
 
 .greeting {
   /* Add styles for the greeting message */
-  color: #1F419B;
+  color: #00AB4F;
+  font-weight: 200;
+  font-size: 18px;
 
 }
 
@@ -298,7 +300,7 @@ body {
   color: #333;
   width: 100%;
   border-radius: 10px; /* Oval shape */
-  border: none;
+  border: 1px solid #00AB4F;
   font-size: 1rem;
   line-height: 22px;
   font-weight: 500;
@@ -307,6 +309,7 @@ body {
 }
 
 .search-menu input[type="search"]:focus {
+  border-color: #00AB4F;
   outline: none;
 }
 
@@ -321,7 +324,7 @@ body {
 }
 
 .header-menu .button-menu svg path {
-  fill: #1F419B;
+  fill: #00AB4F;
 }
 .header2{
   display: flex;
@@ -583,10 +586,12 @@ body {
 .custom-card-border {
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  /* Border color is blue */
-  /* Rounded corners */
   padding      : 10px;
   margin-bottom: 20px;
+}
+.custom-card-border form input:focus {
+  outline: none; /* Prevents the default outline */
+  box-shadow: none; /* Removes any box shadow that might be used for focus */
 }
 
 .custom-btn {
@@ -672,18 +677,6 @@ body {
 }
 /* Login form styles */
 
-.login-container {
-  display        : flex;
-  flex-direction : column;
-  align-items    : center;
-  justify-content: center;
-  height         : 100vh;
-  margin-top     : 100px;
-  /* Adjust as needed */
-  margin-bottom  : 200px;
-  /* Adjust as needed */
-}
-
 .login-header {
   width        : 100%;
   text-align   : center;
@@ -692,11 +685,9 @@ body {
 }
 
 .login-form {
-  background-color     : #fefefe;
-  border-radius        : 8px;
-  box-shadow           : 0px 0px 10px rgba(0, 0, 0, 0.1);
   padding              : 30px;
   margin-bottom        : 20px;
+  margin-top: 30px;
   padding-top          : 10px;
   width                : 100%;
   color                : #39414e !important;
@@ -729,14 +720,9 @@ body {
   border-color: #1F419B;
   /* Change border color on focus */
 }
-.btn-secondary{
-  background-color: #00AB4F;
-}
-.btn-secondary:hover{
-background-color: #2ecc71;
-}
+
 .btn-primary {
-  width        : 100px;
+  width        : 110px;
   background   : #1F419B;
   font-weight  : bold;
   color        : white;
@@ -746,6 +732,7 @@ background-color: #2ecc71;
   padding      : 10px 5px;
   margin       : 10px 5px;
   float        : inline-end;
+  text-align: center;
   
 }
 
@@ -770,17 +757,6 @@ background-color: #2ecc71;
 .btn:focus, .btn-primary:focus, .btn-cancel:focus {
   outline: none; /* Prevents the default outline */
   box-shadow: none; /* Removes any box shadow that might be used for focus */
-}
-
-
-/* Media query for small devices */
-@media only screen and (max-width: 767px) {
-  .login-container {
-    margin-top   : 10px;
-    /* Adjust top margin for small devices */
-    margin-bottom: 100px;
-    /* Adjust bottom margin for small devices */
-  }
 }
 
 .sign-message {
@@ -1631,6 +1607,7 @@ td:last-child .btn-status .fas {
   display: none;
   padding: 20px;
   border-top: none;
+  height: 100%;
   border-radius: 0 0 5px 5px;
   background-color: #fefefe;
 }
@@ -1686,14 +1663,12 @@ td:last-child .btn-status .fas {
   text-align: center;
   font-size: 24px;
   line-height: 1.42857;
+  background-color: #00AB4F;
+  color: #fff;
 }
-.btn-circle.btn-lg {
-  width: 50px;
-  height: 50px;
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.33;
-  border-radius: 50%;
+.btn-circle:hover {
+ background-color: #2ecc71;
+ color: #ccc;
 }
 .btn-add-user {
   position: absolute;
@@ -1708,6 +1683,10 @@ td:last-child .btn-status .fas {
   background-color: #fff;
 
 }
+.company-section form input:focus{
+  border-color: #1F419B;
+  outline: none;
+}
 .company-section, .preview-section {
   width: 48%;
 }
@@ -1716,7 +1695,7 @@ td:last-child .btn-status .fas {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ddd;
+
 }
 
 .preview-section img {
@@ -1734,9 +1713,7 @@ td:last-child .btn-status .fas {
   flex-direction: row;
   margin-bottom: 10px;
 }
-form input:focus{
-  border-color: #1F419B;
-}
+
 @media screen and (max-width:768px) {
   .company{
     flex-direction: column;
