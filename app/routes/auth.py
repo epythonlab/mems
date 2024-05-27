@@ -1,11 +1,12 @@
 # Import necessary modules and classes
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
+from flask import g, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.models.users import User, Role # Make sure to import your User model
 from app.models.FileUpload import UploadFile
 from flask_security import SQLAlchemyUserDatastore
 from app import db, login_manager
+from app.log_user import log_user_activity, log_action
 from . import auth_bp
 from app.utils import generate_random_password
 # Initialize the SQLAlchemy data store and Flask-Security.
@@ -13,6 +14,7 @@ user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
 # route to login
 @auth_bp.route('/login', methods=['POST', 'GET'])
+@log_user_activity('login')
 def login():
     if request.method == 'GET':
         return render_template('login.html')
@@ -40,15 +42,21 @@ def login():
         # Redirect to the index page or any other desired page
         return redirect(url_for('index_bp.index'))
 
-
+# Handle unauthorized_handdler
 # Protect unauthorized access
-@auth_bp.route('/unauthorized')
+@login_manager.unauthorized_handler
+@log_user_activity('unauthorized access')
 def unauthorized():
-    flash("Login to access this page.")
+    """Redirect unauthorized users to Login page."""
+    flash("Login to access this page.11")
     return redirect(url_for('auth_bp.login'))
 
-# # Load user for Flask-Login
-
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    if current_user.is_authenticated:
+        log_action(current_user.id, 'unauthorized access')
+    return jsonify({"message": "Unauthorized access"}), 403
+#  Load user for Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
     if user_id is not None:
@@ -86,30 +94,6 @@ def register():
                         sub_city=sub_city, wereda=wereda, kebele=kebele, house_number=house_number,
                         company_name=company_name, logo=logo, license=license,
                         fs_uniquifier=uuid.uuid4(), active=0)
-
-        # # Assign role to new user
-        # # Create roles if they don't exist
-        # admin_role = Role.query.filter_by(name='owner').first()
-        # if not admin_role:
-        #     admin_role = Role(name='owner', description='Administrator')
-        #     db.session.add(admin_role)
-        #     db.session.commit()
-
-        # # Retrieve the user object from the database using the email address
-        # new_user = User.query.filter_by(email=email).first()
-
-        # # Check if the user exists
-        # if new_user:
-        #     try:
-        #         # Add the 'owner' role to the user
-        #         user_datastore.add_role_to_user(new_user, 'owner')
-        #         db.session.commit()  # Commit the changes to the database
-        #     except Exception as e:
-        #         print(f"An error occurred while adding role to user: {str(e)}")
-        #         # Optionally, log the error or handle it in an appropriate way
-        # else:
-        #     print(f"User with email {email} does not exist.")
-
         # Add new user
         db.session.add(new_user)
         # Commit the changes
@@ -149,28 +133,24 @@ def check_email():
 """Logout- redirect to login page"""
 @auth_bp.route('/logout')
 @login_required
+@log_user_activity('logout')
 def logout():
+    log_action(current_user.id, 'logout') # log the current user logout activity
     logout_user()
     return redirect(url_for('auth_bp.login'))
 
-# """Handle unauthorized_handdler"""
-# @login_manager.unauthorized_handler
-# def unauthorized():
-#     """Redirect unauthorized users to Login page."""
-#     flash("Login to access this page.")
-#     return redirect(url_for('auth_bp.login'))
 
 """Change an existing user's password."""
-
 @auth_bp.route('/change_password')
 @login_required
 def change_password():
     
-    # update the password
+    # route to update the password
     return render_template('users/change_password.html')
 
 @auth_bp.route('/update_password', methods=['POST', 'GET'])
 @login_required
+@log_user_activity('updating password')
 def update_password():
     try:
         if request.method == 'POST':
