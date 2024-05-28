@@ -8,6 +8,8 @@ import uuid
 from . import user_bp
 from app import db
 from app.models.users import User, Role, roles_users
+from app.models.userlog import UserLog
+
 from app.models.FileUpload import UploadFile
 from app.utils import generate_random_password
 
@@ -250,4 +252,24 @@ def update_company():
         flash(f'{str(e)}', 'danger')
     
     return redirect(url_for('user_bp.company'))
+
+# route to userLog activity page and list out the activities
+@user_bp.route('/user_log', methods=['GET'])
+def user_log():
+    if not any(role.name in ['root', 'admin'] for role in current_user.roles):
+        flash('You do not have permission to manage users.', 'danger')
+        return redirect(url_for('index_bp.index'))
+    
+    # Get the selected number of rows per page from the dropdown menu
+    per_page = int(request.args.get('rows_per_page', 5))  # Default to 5 rows per page if not selected
+
+    # Get the current page number from the query parameters
+    page = request.args.get('page', 1, type=int)
+
+    user_logs = (db.session.query(UserLog, User)
+                 .join(User, UserLog.user_id == User.id)
+                 .order_by(UserLog.id.desc())
+                 .paginate(page=page, per_page=per_page, error_out=False))
+    
+    return render_template('/users/user_log.html', user_logs=user_logs, rows_per_page = per_page)
         

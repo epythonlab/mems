@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<title>{% block title %}Users activity log{% endblock title %}</title>
+{% block body %}
+{% include 'header.html' %}
+<!-- Main content -->
+<div class="container-fluid">
+    {% include 'sideheader.html' %}
+    <div class="main">
+        <!-- Container for sidebar content -->
+        {% include 'sidenav.html' %}
+        <div class="page-content">
+            <!-- include the search bar -->
+            <div class="header2">
+                <h2 class="welcome-title">Welcome back! <span>{{current_user.first_name}} 🎉</span></h2>
+                <div class="search-menu">
+                    <form id="search-form" action="{{ url_for('user_bp.user_log') }}" method="GET">
+                        <div class="search-wrapper">
+                            <i class="material-icons search-icon">search</i>
+                            <input type="search" class="search-input" id="search" name="email" placeholder="Search..." autocomplete="off">
+                            
+                            <ul id="suggestions" class="suggestions"></ul>
+                        </div>
+                    </form>
+                </div> 
+            </div>
+
+            <!-- Add a flash message that displays a wrong old password message -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show mt-3" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- include user stats here -->
+            {% include 'users/user_stat.html' %}
+            
+            <div class="card custom-card-border">
+                <h1 class="mt-3">Users List</h1>
+                <div class="position-relative">
+                  
+                   {% if current_user.has_role('root') %}
+                    <!-- Add User Button -->
+                        <button type="button" class="btn btn-circle btn-add-user" onclick="openModal('addUserModal')">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                      {% endif %}
+                </div>
+
+                <div class="select-wrapper selection-filter">
+                    <label for="maxRows">Showing</label>
+                    <select class="form-select" name="rows_per_page" id="maxRows" onchange="updateRowsPerPage()">
+                        <option value="5000">all</option>
+                        <option value="5" {% if rows_per_page == 5 %}selected{% endif %}>5</option>
+                        <option value="10" {% if rows_per_page == 10 %}selected{% endif %}>10</option>
+                        <option value="25" {% if rows_per_page == 25 %}selected{% endif %}>25</option>
+                        <option value="50" {% if rows_per_page == 50 %}selected{% endif %}>50</option>
+                        <option value="100" {% if rows_per_page == 100 %}selected{% endif %}>100</option>
+                    </select>
+                    <label for="maxRows" style="padding-left:10px;">rows</label>
+                </div>
+                  
+                <!-- Filtering section 
+                <div class="filter-section">
+                     <form action="{{ url_for('user_bp.users') }}" method="GET">
+                        <label for="filterEmail">Filter by Email:</label>
+                        <input type="text" id="filterEmail" class="input" name="email">
+                        <button type="submit" class="button-hover">Apply Filter</button>
+                    </form> -->
+                    <!-- Add more filter inputs as needed 
+                </div> -->
+            </div>
+           
+            <div class="card custom-card-border table-responsive mb-1">
+                <table id="user-table" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="sortable" data-column="id">
+                                #
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th scope="col" class="sortable" data-column="first_name">
+                                User
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th scope="col" class="sortable" data-column="first_name">
+                                IP
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-column="last_name">
+                                Device
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-column="email">
+                                OS
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-column="state">
+                                User activity
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th class="sortable" data-column="address">
+                                Time
+                                <span class="sort-icon"></span>
+                            </th>
+                            <th>Status </th>
+                            <th>Action</th>  
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        {% for log, user in user_logs.items %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ log.user_ip }}</td>
+                            <td>{{ log.device_type }}</td>
+                            <td>{{ log.device_os }}</td>
+                            <td>{{ log.action }}</td>
+                            <td>{{ log.timestamp }}</td>
+                            
+                            <td>
+                                <!-- Buttons for view and edit -->
+                                <!-- Icons for view and edit -->
+                                <button class="btn-status btn-small button-hover open-detail-btn" data-row-id="{{log.id}}" title="View" >
+                                    <i class="fas fa-eye"></i> <!-- Font Awesome icon for view -->
+                                </button>
+                                <button class="btn-status btn-small button-hover" title="Edit" onclick="editUser({{ log.id }})">
+                                    <i class="fas fa-edit"></i> <!-- Font Awesome icon for edit -->
+                                </button>
+                                
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> <!-- end of table responsive div-->
+            
+            <!-- Pagination links -->
+            <div class="pagination mb-3">
+                <div class="rows_count" id="rowCount"></div>
+            
+                {% if user_logs.has_prev %}
+                <a href="{{ url_for('user_bp.user_log', page=user_logs.prev_num, rows_per_page=rows_per_page) }}">&laquo;</a>
+                {% endif %}
+            
+                {% for num in user_logs.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                    {% if num %}
+                        {% if user_logs.page == num %}
+                            <a href="{{ url_for('user_bp.user_log', page=num, rows_per_page=rows_per_page) }}" class="current">{{ num }}</a>
+                        {% else %}
+                            <a href="{{ url_for('user_bp.user_log', page=num, rows_per_page=rows_per_page) }}">{{ num }}</a>
+                        {% endif %}
+                    {% else %}
+                        <span class="ellipsis">...</span>
+                    {% endif %}
+                {% endfor %}
+            
+                {% if user_logs.has_next %}
+                    <a href="{{ url_for('user_bp.user_log', page=user_logs.next_num, rows_per_page=rows_per_page) }}">&raquo;</a>
+                {% endif %}
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div id="addUserModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('addUserModal')">&times;</span>
+        <!-- Modal content -->
+        <form method="POST" action="{{ url_for('user_bp.add_user') }}">
+            <!-- Form fields -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+              </div>
+              <div class="modal-body">
+                
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                  <label for="first_name" class="form-label">First Name</label>
+                  <input type="text" class="form-control" id="first_name" name="first_name" required>
+                </div>
+                <div class="mb-3">
+                  <label for="last_name" class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="last_name" name="last_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary button-hover">Add User</button>
+              </div>
+           
+        </form>
+    </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<!-- add the script files in the body of every html content -->
+<script src="{{ url_for('static', filename='js/table.js') }}"></script>
+<script src="{{ url_for('static', filename='js/page_overlay.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock body %}
+<script>
+    // Open modal function
+    function openModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "block";
+    }
+
+    // Close modal function
+    function closeModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "none";
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        var modals = document.getElementsByClassName('modal');
+        for (var i = 0; i < modals.length; i++) {
+            var modal = modals[i];
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+</script>
