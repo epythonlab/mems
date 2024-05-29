@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Log Details</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <div class="overlay-container" id="overlay">
+            <a href="/user_log" class="close-button" id="close-form-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="detail-header">
+                {% if user.logo %}
+                <img src="{{url_for('static', filename='images/'+ user.logo)}}" alt="Company Logo" class="company-logo">
+                {% endif %}
+                <h1 class="company-name">{{user.company_name}}</h1>
+            </div>
+            <div class="content">
+                <div class="company">
+                    <div class="row">
+                        <hr style="margin-right: 20px;">
+                        <p>
+                            <strong>User Email:</strong>
+                            {{user.email}}
+                        </p>
+                        <p>
+                            <strong>User IP address:</strong>
+                            {{log.user_ip}}
+                        </p>
+                        <p>
+                            <strong>Device Type:</strong>
+                            {{log.device_type}}
+                        </p>
+                        <p>
+                            <strong>Operating System:</strong>
+                            {{log.device_os}}
+                        </p>
+                        <p>
+                            <strong>User action:</strong>
+                            {{log.action}}
+                        </p>
+                        <p>
+                            <strong>User action type:</strong>
+                            {{log.action_type}}
+                        </p>
+                        <p>
+                            <strong>Description:</strong>
+                            {{log.description}}
+                        </p>
+                        <p>
+                            <strong>Time:</strong>
+                            {{log.timestamp}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- add the script files in the body of every html content -->
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </body>
+</html>

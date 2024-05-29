@@ -2,7 +2,8 @@ document.querySelectorAll('.open-detail-btn').forEach(function(button) {
   button.addEventListener('click', function() {
       var rowId = this.getAttribute('data-row-id'); // Get the ID from the button's data attribute
       document.getElementById('overlay').style.display = 'flex';
-      loadForm(rowId); // Pass the ID to the loadForm function
+      var pageUrl = this.getAttribute('data-page-url'); // Get the page URL from the button's data attribute
+      loadForm(pageUrl, rowId); // Pass the ID to the loadForm function
   });
 });
 
@@ -17,8 +18,8 @@ document.getElementById('close-form-btn').addEventListener('click', function(eve
   closeForm();
 });
 
-function loadForm(rowId) {
-  fetch('/user_detail?id=' + rowId) // Pass the ID as a query parameter
+function loadForm(pageUrl, rowId) {
+  fetch(pageUrl + '?id=' + rowId) // Pass the ID as a query parameter
   .then(response => response.text())
   .then(html => {
       document.getElementById('overlay').innerHTML = html;

@@ -272,4 +272,17 @@ def user_log():
                  .paginate(page=page, per_page=per_page, error_out=False))
     
     return render_template('/users/user_log.html', user_logs=user_logs, rows_per_page = per_page)
+
+@user_bp.route('/log_detail', methods=['GET'])
+def log_detail():
+    if any(role.name in ['admin', 'root'] for role in current_user.roles):
         
+        row_id = request.args.get('id') # Retrieve the ID from the query parameter
+        # Use the ID to fetch details from your database or any other source
+        # user_logs = UserLog.query.filter_by(id = row_id).first()
+        user_logs = db.session.query(UserLog, User).join(User, UserLog.user_id == User.id).filter(UserLog.id==row_id).first()
+        user_log, user=user_logs
+        return render_template('users/log_detail.html',log = user_log, user=user )
+    else:
+        flash('You are not authorized to access this page.', 'danger')
+        return redirect(url_for('auth_bp.login'))
