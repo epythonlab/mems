@@ -7,6 +7,7 @@ class UserLog(db.Model):
     user_ip = db.Column(db.String(200))
     device_type = db.Column(db.String(100))
     device_os = db.Column(db.String(100))
+    browser_type = db.Column(db.String(100))
     action = db.Column(db.String(200))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -18,11 +19,12 @@ class UserLog(db.Model):
     # Relationship to the User model
     user = db.relationship('User', backref=db.backref('logs', lazy=True))
 
-    def __init__(self, user_id, user_ip, device_type, device_os, action, action_type, description, additional_data=None):
+    def __init__(self, user_id, user_ip, device_type, device_os, browser_type, action, action_type, description, additional_data=None):
         self.user_id = user_id
         self.user_ip = user_ip
         self.device_type = device_type
         self.device_os = device_os
+        self.browser_type = browser_type
         self.action = action
         self.action_type = action_type
         self.description = description

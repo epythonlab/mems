@@ -13,39 +13,12 @@
                 User Analytics
                 <span>📊</span>
             </h2>
-            <div class="card custom-card-border">
-                <div class="card-body">
-                    <h5 class="card-title">Active Users Over Time</h5>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Active Users</th>
-                                </tr>
-                            </thead>
-                            <tbody id="activeUsersTable">
-                                <!-- Active users data will be dynamically populated here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="card custom-card-border">
-                <div class="card-body">
-                    <h5 class="card-title">Most Common Actions</h5>
-                    <div class="chart-container">
-                        <div id="actionChart"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row mt-2">
-                <h5> Users activity by graph</h5>
+            <div class="row">
                 <div class="col-md-6">
                     <div class="card custom-card-border">
                         <div class="card-body">
-                            <div class="log-filters">
+                            <h5 class="card-title">User Activity Over the Selected Period</h5>
+                            <div class="log-filters mt-5">
                                 <span>Select Date Range</span>
                                 <div class="form-group">
                                     <label for="start-date">Start Date:</label>
@@ -70,7 +43,47 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-6">
+                    <div class="card custom-card-border">
+                        <div class="card-body">
+                            <h5 class="card-title">Most Common Actions</h5>
+                            <div class="chart-container" id="actionChart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card custom-card-border">
+                        <div class="card-body">
+                            <h5 class="card-title">Active Users Over Time</h5>
+                            <div class="chart-container" id="activeUsersChart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card custom-card-border">
+                        <div class="card-body">
+                            <h5 class="card-title">User Retention Rate</h5>
+                            <div class="table-responsive">
+                                <table id="retentionTable" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="th-wrap">Previous Week</th>
+                                            <th>Current Week</th>
+                                            <th>Retention Rate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data will be populated by JavaScript --></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
                     <div class="card custom-card-border">
                         <div class="card-body">
                             <h5 class="card-title">Device Usage</h5>
@@ -78,11 +91,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card custom-card-border">
                         <div class="card-body">
                             <h5 class="card-title">OS Usage</h5>
                             <div id="osUsageChart" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card custom-card-border">
+                        <div class="card-body">
+                            <h5 class="card-title">Browser Usage</h5>
+                            <div id="browserUsageChart" class="chart-container"></div>
                         </div>
                     </div>
                 </div>
@@ -104,11 +125,14 @@
         updateUserActivity();
         loadDeviceUsage();
         loadOsUsage();
+        loadBrowserUsage();
 
         window.addEventListener('resize', function() {
             Plotly.Plots.resize('userActivityChart');
             Plotly.Plots.resize('deviceUsageChart');
             Plotly.Plots.resize('osUsageChart');
+            Plotly.Plots.resize('actionChart');
+            Plotly.Plots.resize('browserUsageChart');
         });
     });
 
@@ -128,16 +152,16 @@
                 };
 
                 const layout = {
-                    title: 'User Activity Over the Selected Period',
                     xaxis: {
                         title: 'Date'
                     },
                     yaxis:{
-                        title: 'No of activities'
+                        title: 'No of activities',
+                        beginAtZero: true
                     },
                     legend: {
                         orientation: 'h',
-                        y: -0.3,
+                        y: -0.2,
                         xanchor: 'center',
                         yanchor: 'top',
                         x: 0.5
@@ -244,6 +268,47 @@
             .catch(error => console.error('Error fetching OS usage data:', error));
     }
     
+    function loadBrowserUsage() {
+        fetch('/api/browser-usage')
+            .then(response => response.json())
+            .then(data => {
+                const colors = ['#1F419B', '#4e66a8', '#0056b3', '#500041', '#00AB4F', '#FF5733', '#FFC300', '#900C3F', '#FFC3A0', '#6050DC']; // Custom colors
+                const trace = {
+                    labels: data.labels,
+                    values: data.values,
+                    type: 'pie',
+                    hole: 0.4,
+                    marker: {colors: colors} // Custom colors
+                };
+    
+                const layout = {
+                   // title: 'Browser Usage',
+                    margin: {
+                        l: 0,
+                        r: 0,
+                        t: 50,
+                        b: 50
+                    },
+                    showlegend: true,
+                    legend: {
+                        orientation: 'h',
+                        y: -0.2,
+                        xanchor: 'center',
+                        yanchor: 'top',
+                        x: 0.5
+                    },
+                    responsive: true
+                };
+    
+                Plotly.newPlot('browserUsageChart', [trace], layout);
+    
+                window.onresize = () => {
+                    Plotly.Plots.resize('browserUsageChart');
+                };
+            })
+            .catch(error => console.error('Error fetching browser usage data:', error));
+    }
+    
     
     function loadActionSummary() {
         fetch('/api/action_summary')
@@ -259,7 +324,7 @@
 
                 const layout = {
                     margin: {
-                        l: 0,
+                        l: 35,
                         r: 0,
                         t: 50,
                         b: 50
@@ -286,4 +351,71 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadActionSummary);
+
+    function loadActiveUsers() {
+        fetch('/api/active_users_daily')
+            .then(response => response.json())
+            .then(data => {
+                const trace = {
+                    x: data.dates,
+                    y: data.active_users,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    marker: {color: '#1F419B'}
+                };
+
+                const layout = {
+                    margin: {
+                        l: 50,
+                        r: 50,
+                        t: 50,
+                        b: 50
+                    },
+                    xaxis: {
+                        title: 'Date'
+                    },
+                    yaxis: {
+                        title: 'Active Users'
+                    },
+                    responsive: true
+                };
+
+                Plotly.newPlot('activeUsersChart', [trace], layout);
+
+                window.onresize = () => {
+                    Plotly.Plots.resize('activeUsersChart');
+                };
+            })
+            .catch(error => console.error('Error fetching active users data:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', loadActiveUsers);
+
+   function loadRetentionRate() {
+            fetch('/api/user_retention')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#retentionTable tbody');
+                    tableBody.innerHTML = '';  // Clear existing table data
+
+                    data.forEach(record => {
+                        const row = document.createElement('tr');
+                        const cellPreviousWeek = document.createElement('td');
+                        const cellCurrentWeek = document.createElement('td');
+                        const cellRetentionRate = document.createElement('td');
+
+                        cellPreviousWeek.textContent = record.previous_week;
+                        cellCurrentWeek.textContent = record.current_week;
+                        cellRetentionRate.textContent = (record.retention_rate * 100).toFixed(2) + '%';
+
+                        row.appendChild(cellPreviousWeek);
+                        row.appendChild(cellCurrentWeek);
+                        row.appendChild(cellRetentionRate);
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching retention rate data:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', loadRetentionRate);
 </script>

@@ -60,41 +60,21 @@ def os_usage_data():
     })
 
 
-@analytic_bp.route('/api/active-users')
-def api_active_users():
-    try:
-        active_users_data = track_active_users()
-        users = [{'date': str(daily.date), 'active_users': daily.active_users} for daily in active_users_data]
-        return jsonify({'active_users_data': users})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+@analytic_bp.route('/api/browser-usage')
+def browser_usage_data():
+    data = db.session.query(
+        UserLog.browser_type,
+        func.count(UserLog.id).label('count')
+    ).group_by(UserLog.browser_type).all()
 
-def track_active_users():
-    # Count unique active users per day
-    active_users_daily = db.session.query(
-        func.date(UserLog.timestamp).label('date'),
-        func.count(func.distinct(UserLog.user_id)).label('active_users')
-    ).group_by(func.date(UserLog.timestamp)).order_by(func.date(UserLog.timestamp)).all()
+    labels = [d.browser_type for d in data]
+    values = [d.count for d in data]
 
-    return active_users_daily
+    return jsonify({
+        'labels': labels,
+        'values': values
+    })
 
-@analytic_bp.route('/api/most-common-actions')
-def api_most_common_actions():
-    try:
-        most_common_actions = determine_most_common_actions()
-        actions = [{'action': action.action, 'count': action.action_count} for action in most_common_actions]
-        return jsonify({'most_common_actions': actions})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-def determine_most_common_actions():
-    # Count each action type
-    most_common_actions = db.session.query(
-        UserLog.action,
-        func.count(UserLog.id).label('action_count')
-    ).group_by(UserLog.action).order_by(func.count(UserLog.id).desc()).all()
-    
-    return most_common_actions
 
 @analytic_bp.route('/api/action_summary')
 def api_action_summary():
@@ -109,9 +89,57 @@ def api_action_summary():
 
     return jsonify(results)
 
+@analytic_bp.route('/api/active_users_daily')
+def active_users_daily():
+    active_users_daily = db.session.query(
+        func.date(UserLog.timestamp).label('date'),
+        func.count(func.distinct(UserLog.user_id)).label('active_users')
+    ).group_by(func.date(UserLog.timestamp)).order_by(func.date(UserLog.timestamp)).all()
+
+    results = {"dates": [str(record.date) for record in active_users_daily],
+               "active_users": [record.active_users for record in active_users_daily]}
+
+    return jsonify(results)
+
+@analytic_bp.route('/api/user_retention')
+def user_retention():
+    retention_data = []
+    for current_week in range(20, 24):  # Example weeks
+        previous_week = current_week - 1
+
+        current_week_users = db.session.query(
+            UserLog.user_id
+        ).filter(extract('week', UserLog.timestamp) == current_week).distinct().subquery()
+
+        previous_week_users = db.session.query(
+            UserLog.user_id
+        ).filter(extract('week', UserLog.timestamp) == previous_week).distinct().subquery()
+
+        retained_users_count = db.session.query(
+            func.count(current_week_users.c.user_id)
+        ).filter(current_week_users.c.user_id.in_(
+            db.session.query(previous_week_users.c.user_id)
+        )).scalar()
+
+        previous_week_users_count = db.session.query(
+            func.count(previous_week_users.c.user_id)
+        ).scalar()
+
+        if previous_week_users_count == 0:
+            retention_rate = 0
+        else:
+            retention_rate = retained_users_count / previous_week_users_count
+
+        retention_data.append({
+            "current_week": current_week,
+            "previous_week": previous_week,
+            "retention_rate": retention_rate
+        })
+
+    return jsonify(retention_data)
+
 # Route to render the analytics page
 @analytic_bp.route('/analytics')
 def analytics():
-       
        
     return render_template('analytics/log_analytic.html')

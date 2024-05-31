@@ -86,7 +86,6 @@ body {
   /* Remove outline */
 }
 
-
 /* End of header styles */
 
 /* New addition for main content */
@@ -165,7 +164,12 @@ body {
   color      : #333;
   font-weight: normal;
 }
-
+@media  screen and (max-width:768pc) {
+  .sidebar ul li span{
+    font-weight: 500;
+  }
+  
+}
 
 .bottom-links {
   position: absolute;
@@ -194,8 +198,6 @@ body {
     margin-top: 0;
   }
 }
-
-
 
 .header {
   height         : 60px;
@@ -279,7 +281,7 @@ body {
 .greeting {
   /* Add styles for the greeting message */
   color      : #00AB4F;
-  font-weight: 200;
+  font-weight: 500;
   font-size  : 18px;
 
 }
@@ -1786,15 +1788,15 @@ td:last-child .btn-status .fas {
   }
 }
 
-/* css style to layout the user activity chart */
+/* css style to layout the user analytics chart */
 
 .log-filters {
   position     : absolute;
-  top          : 1px;
-  left         : 1px;
+  top          : 3px;
+  left         : 12px;
   z-index      : 10;
   background   : rgba(255, 255, 255, 0.9);
-  padding      : 5px;
+  padding      : 10px;
   border-radius: none;
   color        : #500041;
   transition   : all 0.3s ease;
@@ -1829,26 +1831,9 @@ td:last-child .btn-status .fas {
 .log-filters .form-group {
   margin-bottom: 10px;
 }
+.table-container {
+  width: 100%;
+  margin: 0 auto;
+  overflow-x: auto;
+}
 
-
-.stat-card {
-  text-align: center;
-  padding: 20px;
-  margin: 10px;
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-.stat-value {
-  font-size: 2em;
-  font-weight: bold;
-}
-.stat-label {
-  font-size: 1.2em;
-  color: #666;
-}
-canvas {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-}
