@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<title>{% block title %}Dashboard{% endblock title %}</title>
+{% block body %}
+{% include 'header.html' %}
+<!-- Main content -->
+<div class="container-fluid">
+    {% include 'sideheader.html' %}
+    <div class="main">
+        <!-- Container for sidebar content -->
+        {% include 'sidenav.html' %}
+        <div class="page-content">
+            <h2 class="welcome-title">
+                User Analytics
+                <span>📊</span>
+            </h2>
+            <div class="card custom-card-border">
+                <div class="card-body">
+                    <h5 class="card-title">Active Users Over Time</h5>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Active Users</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activeUsersTable">
+                                <!-- Active users data will be dynamically populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card custom-card-border">
+                <div class="card-body">
+                    <h5 class="card-title">Most Common Actions</h5>
+                    <div class="chart-container">
+                        <div id="actionChart"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-2">
+                <h5> Users activity by graph</h5>
+                <div class="col-md-6">
+                    <div class="card custom-card-border">
+                        <div class="card-body">
+                            <div class="log-filters">
+                                <span>Select Date Range</span>
+                                <div class="form-group">
+                                    <label for="start-date">Start Date:</label>
+                                    <input
+                                        type="date"
+                                        id="start-date"
+                                        class="form-control"
+                                        onchange="updateUserActivity()"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label for="end-date">End Date:</label>
+                                    <input
+                                        type="date"
+                                        id="end-date"
+                                        class="form-control"
+                                        onchange="updateUserActivity()"
+                                    >
+                                </div>
+                            </div>
+                            <div id="userActivityChart" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card custom-card-border">
+                        <div class="card-body">
+                            <h5 class="card-title">Device Usage</h5>
+                            <div id="deviceUsageChart" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card custom-card-border">
+                        <div class="card-body">
+                            <h5 class="card-title">OS Usage</h5>
+                            <div id="osUsageChart" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set default dates
+        const currentDate = new Date();
+        const pastDate = new Date();
+        pastDate.setDate(currentDate.getDate() - 7);
+
+        document.getElementById('start-date').value = pastDate.toISOString().split('T')[0];
+        document.getElementById('end-date').value = currentDate.toISOString().split('T')[0];
+
+        updateUserActivity();
+        loadDeviceUsage();
+        loadOsUsage();
+
+        window.addEventListener('resize', function() {
+            Plotly.Plots.resize('userActivityChart');
+            Plotly.Plots.resize('deviceUsageChart');
+            Plotly.Plots.resize('osUsageChart');
+        });
+    });
+
+    function updateUserActivity() {
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+
+        fetch(`/api/user-activity?start_date=${startDate}&end_date=${endDate}`)
+            .then(response => response.json())
+            .then(data => {
+                const trace = {
+                    x: data.labels,
+                    y: data.values,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    marker: {color: '#1F419B'}
+                };
+
+                const layout = {
+                    title: 'User Activity Over the Selected Period',
+                    xaxis: {
+                        title: 'Date'
+                    },
+                    yaxis:{
+                        title: 'No of activities'
+                    },
+                    legend: {
+                        orientation: 'h',
+                        y: -0.3,
+                        xanchor: 'center',
+                        yanchor: 'top',
+                        x: 0.5
+                    },
+                    margin: {
+                        l: 35, // Adjusted to ensure proper padding
+                        r: 10,
+                        t: 50, // Adjusted to ensure proper padding
+                        b: 50 // Adjusted to give space for the horizontal legend
+                    },
+                    responsive: true
+                };
+
+                Plotly.newPlot('userActivityChart', [trace], layout);
+
+                // Ensure the chart resizes correctly
+                window.onresize = () => {
+                    Plotly.Plots.resize('userActivityChart');
+                };
+            })
+            .catch(error => console.error('Error fetching user activity data:', error));
+    }
+
+    function loadDeviceUsage() {
+        fetch('/api/device-usage')
+            .then(response => response.json())
+            .then(data => {
+                const colors = ['#1F419B', '#4e66a8', '#0056b3', '#500041', '#00AB4F', '#FF5733', '#FFC300', '#900C3F', '#FFC3A0', '#6050DC']; // Custom colors
+                const trace = {
+                    labels: data.labels,
+                    values: data.values,
+                    type: 'pie',
+                    hole: 0.4,
+                    marker: {colors: colors} // Custom colors
+                };
+    
+                const layout = {
+                   // title: 'Device Usage',
+                    margin: {
+                        l: 0,
+                        r: 0,
+                        t: 50,
+                        b: 50
+                    },
+                    showlegend: true,
+                    legend: {
+                        orientation: 'h',
+                        y: -0.2,
+                        xanchor: 'center',
+                        yanchor: 'top',
+                        x: 0.5
+                    },
+                    responsive: true
+                };
+    
+                Plotly.newPlot('deviceUsageChart', [trace], layout);
+    
+                window.onresize = () => {
+                    Plotly.Plots.resize('deviceUsageChart');
+                };
+            })
+            .catch(error => console.error('Error fetching device usage data:', error));
+    }
+    
+    function loadOsUsage() {
+        fetch('/api/os-usage')
+            .then(response => response.json())
+            .then(data => {
+                const colors = ['#1F419B', '#4e66a8', '#0056b3', '#500041', '#00AB4F', '#FF5733', '#FFC300', '#900C3F', '#FFC3A0', '#6050DC']; // Custom colors
+                const trace = {
+                    labels: data.labels,
+                    values: data.values,
+                    type: 'pie',
+                    hole: 0.4,
+                    marker: {colors: colors} // Custom colors
+                
+                };
+    
+                const layout = {
+                    //title: 'OS Usage',
+                    margin: {
+                        l: 0,
+                        r: 0,
+                        t: 50,
+                        b: 50
+                    },
+                    showlegend: true,
+                    legend: {
+                        orientation: 'h',
+                        y: -0.2,
+                        xanchor: 'center',
+                        yanchor: 'top',
+                        x: 0.5
+                    },
+                    responsive: true
+                };
+    
+                Plotly.newPlot('osUsageChart', [trace], layout);
+    
+                window.onresize = () => {
+                    Plotly.Plots.resize('osUsageChart');
+                };
+            })
+            .catch(error => console.error('Error fetching OS usage data:', error));
+    }
+    
+    
+    function loadActionSummary() {
+        fetch('/api/action_summary')
+            .then(response => response.json())
+            .then(data => {
+                const colors = ['#1F419B', '#4e66a8', '#0056b3', '#500041', '#00AB4F']; // Custom colors
+                const trace = {
+                    x: data.labels,
+                    y: data.values,
+                    type: 'bar',
+                    marker: {color: colors}
+                };
+
+                const layout = {
+                    margin: {
+                        l: 0,
+                        r: 0,
+                        t: 50,
+                        b: 50
+                    },
+                    showlegend: false,
+                    responsive: true,
+                    xaxis: {
+                        title: 'Action'
+                    },
+                    yaxis: {
+                        title: 'Count',
+                        beginAtZero: true
+                    }
+                };
+
+                Plotly.newPlot('actionChart', [trace], layout);
+
+                window.onresize = () => {
+                    Plotly.Plots.resize('actionChart');
+                };
+
+            })
+            .catch(error => console.error('Error fetching action summary data:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', loadActionSummary);
+</script>

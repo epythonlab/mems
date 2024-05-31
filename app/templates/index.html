@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>{% block title %}Home{% endblock title %}</title>
+<title>{% block title %}Dashboard{% endblock title %}</title>
 {% block body %}
 {% include 'header.html' %}
 <!-- Main content -->
@@ -12,7 +12,15 @@
             <h2 class="welcome-title">Welcome back! <span>{{current_user.first_name}} 🎉</span></h2>
 
             <!-- include user stats here -->
-            {% include 'users/user_stat.html' %}
+            <div class="row">
+                <div class="col-md-8">
+                    {% include 'users/user_stat.html' %}
+                </div>
+                <div class=" col-md-4">
+                    {% include 'analytics/log_analytic.html' %}
+                </div>
+            </div>
+            
             <!-- <div class="header-search">
                 <input type="search" placeholder="Search Documentation...">
             </div> -->
