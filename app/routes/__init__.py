@@ -15,10 +15,14 @@ user_bp = Blueprint(
 role_bp = Blueprint('role_bp', __name__)
 analytic_bp = Blueprint('analytic_bp', __name__)
 
+inventory_bp = Blueprint("inventory_bp", __name__)
+
+
 from . import index
 from . import auth
 from . import users
 from . import role_routes
 from . import analytics
+from . import inventory_routes
 
 

@@ -1,0 +1,30 @@
+<!-- edit_item_form.html -->
+<form id="editItemForm" method="post" action="{{ url_for('inventory_bp.update_inventory_item') }}">
+    <input type="hidden" name="item_id" value="{{ item.id }}">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" name="name" id="name" value="{{ item.name }}" required>
+    </div>
+    <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="number" class="form-control" name="quantity" id="quantity" value="{{ item.quantity }}" required>
+    </div>
+    <div class="form-group">
+        <label for="reorder_point">Reorder Point</label>
+        <input type="number" class="form-control" name="reorder_point" id="reorder_point" value="{{ item.reorder_point }}" required>
+    </div>
+    <div class="form-group">
+        <label for="expiry_date">Expiry Date</label>
+        <input type="date" class="form-control" name="expiry_date" id="expiry_date" value="{{ item.expiry_date }}" required>
+    </div>
+    <div class="form-group">
+        <label for="category">Category</label>
+        <input type="text" class="form-control" name="category" id="category" value="{{ item.category }}" required>
+    </div>
+    <div class="form-group">
+        <label for="manufacturer">Manufacturer</label>
+        <input type="text" class="form-control" name="manufacturer" id="manufacturer" value="{{ item.manufacturer }}" required>
+    </div>
+    <!-- Add more form fields for other item attributes -->
+    <button type="submit" class="btn btn-primary button-hover">Update Item</button>
+</form>

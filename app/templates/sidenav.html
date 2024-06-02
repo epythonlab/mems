@@ -7,16 +7,59 @@
             </a>
         </li>
         <li>
-            <a href="#" class="nav-link">
-                <i class="material-icons">insert_drive_file</i>
-                <span>Form Elements</span>
+            <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-target="inventorySubmenu">
+                <i class="fas fa-archive"></i> <!-- Icon for "Inventory" -->
+                <span>Inventory</span>
             </a>
+            <ul class="list-unstyled" id="inventorySubmenu" style="display: none;">
+                <li>
+                    <a href="/add_modal" class="nav-link">
+                        <i class="fas fa-plus"></i> <!-- Icon for "Add Item" -->
+                        <span>Add Item</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/inventory" class="nav-link">
+                        <i class="fas fa-list"></i> <!-- Icon for "List Items" -->
+                        <span>List Items</span>
+                    </a>
+                </li>
+            </ul>
         </li>
         <li>
-            <a href="/analytics" class="nav-link">
-                <i class="material-icons">bar_chart</i>
-                <span>Charts</span>
+            <a href="javascript:void(0)" class="nav-link dropdown-toggle arrow" data-target="userManagementSubmenu">
+                <i class="fas fa-user"></i>
+                <span>User Management</span>
+               
             </a>
+            <ul class="list-unstyled" id="userManagementSubmenu" style="display: none;">
+                <li>
+                    <a href="/analytics" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span>User Analytics</span>
+                    </a>
+                </li>
+                {% if current_user.has_role('root') or current_user.has_role('admin') %}
+                <li>
+                    <a href="/users" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/user_log" class="nav-link">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Users Log</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/roles" class="nav-link">
+                        <i class="fas fa-lock"></i>
+                        <span>Roles</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
         </li>
         <li>
             <a href="#" class="nav-link">
@@ -26,30 +69,10 @@
         </li>
         <li>
             <a href="#" class="nav-link">
-                <i class="material-icons">notifications</i>
+                <i class="fas fa-notification"></i>
                 <span>Notifications</span>
             </a>
         </li>
-        {% if current_user.has_role('root') or current_user.has_role('admin') %}
-            <li>
-                <a href="/users" class="nav-link">
-                    <i class="material-icons">group</i>
-                    <span>Users</span>
-                </a>
-            </li>
-            <li>
-                <a href="/roles" class="nav-link">
-                    <i class="fas fa-plus-circle"></i>
-                    <span>Roles</span>
-                </a>
-            </li>
-            <li>
-                <a href="/user_log" class="nav-link">
-                    <i class="fas fa-plus-circle"></i>
-                    <span>Users Log</span>
-                </a>
-            </li>
-        {% endif %}
     </ul>
     <ul class="bottom-links">
         <li>
@@ -67,3 +90,36 @@
         </li>
     </ul>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var dropdownToggles = document.querySelectorAll(".dropdown-toggle");
+    
+        dropdownToggles.forEach(function(toggle) {
+            toggle.addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent default link behavior
+                event.stopPropagation(); // Prevent event bubbling
+                
+                var targetId = toggle.getAttribute("data-target");
+                var submenu = document.getElementById(targetId);
+    
+                // Toggle submenu visibility
+                if (submenu.style.display === "none" || submenu.style.display === "") {
+                    submenu.style.display = "block";
+                    toggle.classList.add("rotated"); // Add rotated class
+                } else {
+                    submenu.style.display = "none";
+                    toggle.classList.remove("rotated"); // Remove rotated class
+                }
+            });
+    
+            // Ensure submenu remains hidden initially
+            var targetId = toggle.getAttribute("data-target");
+            var submenu = document.getElementById(targetId);
+            if (submenu) {
+                submenu.style.display = "none";
+            }
+        });
+    });
+    
+    
+</script>

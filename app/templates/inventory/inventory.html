@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<title>{% block title %}Inventory Management{% endblock title %}</title>
+{% block body %}
+{% include 'header.html' %}
+<!-- Main content -->
+<div class="container-fluid">
+    {% include 'sideheader.html' %}
+    <div class="main">
+        <!-- Container for sidebar content -->
+        {% include 'sidenav.html' %}
+        <div class="page-content">
+            <!-- include the search bar -->
+            <div class="header2">
+                <h2 class="welcome-title">Inventory Management 🎉</h2>
+                <div class="search-menu">
+                    <form id="search-form" action="{{ url_for('user_bp.users') }}" method="GET">
+                        <div class="search-wrapper">
+                            <i class="material-icons search-icon">search</i>
+                            <input type="search" class="search-input" id="search" name="email" placeholder="Search items..." autocomplete="off">
+                            
+                            <ul id="suggestions" class="suggestions"></ul>
+                        </div>
+                    </form>
+                </div> 
+            </div>
+          
+            <!-- Add a flash message that displays a wrong old password message -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show mt-3" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="mb-5 float-left">
+                <button class="btn btn-primary button-hover mb-3" onclick="openModal('addModal', 'add')">Add New Item</button>
+            </div>
+            <div class="card custom-card-border table-responsive mt-3">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                                <th>Reorder Point</th>
+                                <th>Expiry Date</th>
+                                <th>Category</th>
+                                <th>Manufacturer</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in inventory %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.reorder_point }}</td>
+                                <td>{{ item.expiry_date }}</td>
+                                <td>{{ item.category }}</td>
+                                <td>{{ item.manufacturer }}</td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm" onclick="openModal('editModal', 'edit', '{{ item.id }}')">Edit</button>
+                                    <form action="{{ url_for('inventory_bp.delete_inventory_item', item_id=item.id) }}" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn-danger btn-sm"  onclick="confirmDelete({{ item.id }})">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Item Modal -->
+<div id="addModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Item</h5>
+                <button type="button" class="btn-close" onclick="closeModal('addModal')" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="addModalContent">
+                <!-- Content will be loaded here via JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Item Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Item</h5>
+                <button type="button" class="btn-close" onclick="closeModal('editModal')" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="editModalContent">
+                <!-- Content will be loaded here via JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+     // Open modal function
+    function openModal(modalId, type, itemId = null) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "block";
+        var endpoint;
+        if (type === 'add') {
+            endpoint = '{{ url_for("inventory_bp.add_modal") }}';
+        } else if (type === 'edit' && itemId !== null) { // Check if itemId is not null or empty
+            endpoint = '{{ url_for("inventory_bp.edit_modal", item_id="") }}' + itemId; // Include itemId here
+        }
+        fetch(endpoint)
+            .then(response => response.text())
+            .then(html => {
+                if (modalId === 'addModal') {
+                    document.getElementById('addModalContent').innerHTML = html;
+                } else if (modalId === 'editModal') {
+                    document.getElementById('editModalContent').innerHTML = html;
+                }
+            })
+            .catch(error => console.error('Error loading modal content:', error));
+    }
+
+    // Close modal function
+    function closeModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "none";
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        var modals = document.getElementsByClassName('modal');
+        for (var i = 0; i < modals.length; i++) {
+            var modal = modals[i];
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+
+    function confirmDelete(itemId) {
+        if (confirm('Are you sure you want to delete this item?')) {
+            // If user confirms, redirect to delete route
+            window.location.href = '/deleteInventoryItem/' + itemId;
+        } else {
+            // If user cancels, do nothing
+            event.preventDefault();
+        }
+    }
+</script>
+{% endblock body %}
