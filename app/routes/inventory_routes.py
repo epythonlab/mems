@@ -1,6 +1,6 @@
-from flask import request, render_template, url_for, redirect, flash
+from flask import request, render_template, url_for, redirect, flash, jsonify
 from flask_security import login_required
-from app.models.inventory import InventoryItem
+from app.models.inventory import Product, Batch, Category
 from . import inventory_bp
 from datetime import datetime
 from app import db
@@ -8,56 +8,121 @@ from app import db
 @inventory_bp.route('/inventory')
 @login_required
 def inventory_list():
-    inventory = InventoryItem.query.all()
-    return render_template('inventory/inventory.html', inventory=inventory)
+    categories = Category.query.all()
+    products = Product.query.all()
+    return render_template('inventory/inventory.html', products=products, categories=categories)
 
-@inventory_bp.route('/addInventoryItem', methods=['GET', 'POST'])
+@inventory_bp.route('/add_product', methods=['GET', 'POST'])
 @login_required
-def add_inventory_item():
+def add_product():
     if request.method == 'POST':
-        try:
-            new_item = InventoryItem(
-                name=request.form['name'],
-                quantity=int(request.form['quantity']),
-                reorder_point=int(request.form['reorder_point']),
-                expiry_date=datetime.strptime(request.form['expiry_date'], '%Y-%m-%d'),
-                category=request.form['category'],
-                manufacturer=request.form['manufacturer']
-            )
-            db.session.add(new_item)
-            db.session.commit()
-            flash('Item added successfully!', 'success')
-            return redirect(url_for('inventory_bp.inventory_list'))
-        except Exception as e:
-            flash('Failed to add item: ' + str(e), 'error')
-            return redirect(url_for('inventory_bp.add_inventory_item'))
-    return render_template('inventory/add_item.html')
+        name = request.form['name']
+        category_id = request.form['category_id']
+        vendor = request.form['vendor']
 
-@inventory_bp.route('/updateInventoryItem', methods=['POST'])
+        product = Product(name=name, category_id=category_id, vendor=vendor)
+        db.session.add(product)
+        db.session.commit()
+
+        return redirect(url_for('inventory_bp.inventory_list'))
+    
+    categories = Category.query.all()
+    return render_template('inventory/add_product.html', categories=categories)
+
+@inventory_bp.route('/manage_batch/<int:product_id>', methods=['GET', 'POST'])
 @login_required
-def update_inventory_item():
-    if request.method == 'POST':
-        try:
-            item_id = request.form['item_id']
-            item = InventoryItem.query.get_or_404(item_id)
-            item.name = request.form['name']
-            item.quantity = int(request.form['quantity'])
-            item.reorder_point = int(request.form['reorder_point'])
-            item.expiry_date = datetime.strptime(request.form['expiry_date'], '%Y-%m-%d')
-            item.category = request.form['category']
-            item.manufacturer = request.form['manufacturer']
-            db.session.commit()
-            flash('Item updated successfully!', 'success')
-            return redirect(url_for('inventory_bp.inventory_list'))
-        except Exception as e:
-            flash('Failed to update item: ' + str(e), 'error')
-            return redirect(url_for('inventory_bp.inventory_list'))
+def manage_batch(product_id):
+    
+    product = Product.query.get_or_404(product_id)
 
-@inventory_bp.route('/deleteInventoryItem/<int:item_id>', methods=['POST'])
+    if request.method == 'POST':
+        batch_number = request.form['batchNumber']
+        expiration_date = request.form['expirationDate']
+        quantity = request.form['quantity']
+
+        # Check if batch already exists for the product
+        existing_batch = Batch.query.filter_by(product_id=product_id, batch_number=batch_number).first()
+
+        # Check if the batch number is already associated with another product
+        batch_associated_with_another_product = Batch.query.filter_by(batch_number=batch_number).filter(Batch.product_id != product_id).first()
+
+        if batch_associated_with_another_product:
+            flash(f'Batch number "{batch_number}" is already associated with another product', 'danger')
+            return redirect(url_for("inventory_bp.inventory_list"))
+
+        if existing_batch:
+            # Update existing batch
+            existing_batch.expiration_date = expiration_date
+            existing_batch.quantity = quantity
+            existing_batch.updated_at = datetime.utcnow()
+            flash_msg = f'Batch updated successfully to {product.name}'
+        else:
+            # Add new batch
+            new_batch = Batch(batch_number=batch_number, 
+                              expiration_date=expiration_date, 
+                              quantity=quantity, 
+                              product_id=product_id,
+                              created_at = datetime.utcnow())
+            db.session.add(new_batch)
+            flash_msg = f'Batch added successfully to {product.name}'
+            
+        # update stock level of the product based on batch and quantity
+        product.update_stock()
+        db.session.commit()
+        flash(flash_msg, 'success')
+        
+    return redirect(url_for("inventory_bp.inventory_list"))
+
+@inventory_bp.route('/manage_batches/<product_id>', methods=['GET', 'POST'])
+@login_required
+def manage_batches(product_id):
+    product = Product.query.get_or_404(product_id)
+    if request.method == 'POST':
+        # Logic to manage batches (e.g., update batch details)
+        return redirect(url_for('inventory_bp.manage_batches', product_id=product_id))
+    return render_template('inventory/manage_batches.html', product=product)
+
+@inventory_bp.route('/add_category', methods=['GET', 'POST'])
+@login_required
+def add_category():
+    if request.method == 'POST':
+        category_names = request.form.getlist('name[]')
+        for name in category_names:
+            if name:  # Ensure the name is not empty
+                category = Category(name=name)
+                db.session.add(category)
+        db.session.commit()
+        flash("Categories added successfully.", 'success')
+        return redirect(url_for('inventory_bp.inventory_list'))
+    
+    return render_template('inventory/add_category.html')
+
+@inventory_bp.route('/update_product/<int:product_id>', methods=['POST'])
+@login_required
+def update_product(product_id):
+    product = Product.query.get_or_404(product_id)
+
+    product.name = request.form['name']
+    product.category_id = request.form['category_id']
+    product.vendor = request.form['vendor']
+
+    # You can add more fields to update if needed
+
+    try:
+        db.session.commit()
+        flash('Product updated successfully', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error updating product: {str(e)}', 'danger')
+
+    return redirect(url_for('inventory_bp.inventory_list'))
+
+
+@inventory_bp.route('/deleteProduct/<int:item_id>', methods=['POST'])
 @login_required
 def delete_inventory_item(item_id):
     try:
-        item = InventoryItem.query.get_or_404(item_id)
+        item = Product.query.get_or_404(item_id)
         db.session.delete(item)
         db.session.commit()
         flash('Item deleted successfully!', 'success')
@@ -68,10 +133,11 @@ def delete_inventory_item(item_id):
 @inventory_bp.route('/add_modal')
 @login_required
 def add_modal():
-    return render_template('inventory/add_item.html')
+    return render_template('inventory/add_product.html')
 
-@inventory_bp.route('/edit_modal/<item_id>')
+@inventory_bp.route('/edit_product/<product_id>')
 @login_required
-def edit_modal(item_id):
-    item = InventoryItem.query.get_or_404(item_id)
-    return render_template('inventory/edit_item.html', item=item)
+def edit_product(product_id):
+    categories = Category.query.all()
+    product = Product.query.get_or_404(product_id)
+    return render_template('inventory/edit_product.html', product=product, categories = categories)

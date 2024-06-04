@@ -1,0 +1,28 @@
+<!-- edit_product_form.html -->
+<form id="editProductForm" method="post" action="{{ url_for('inventory_bp.update_product', product_id=product.id) }}">
+    <input type="hidden" name="item_id" value="{{ product.id }}">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" name="name" id="name" value="{{ product.name }}" required>
+    </div>
+
+    <div class="form-group">
+        <label for="category_id">Category</label>
+        <select id="category_id" name="category_id" class="form-control" required>
+            {% for category in categories %}
+            <option value="{{ category.id }}" {% if category.id == product.category_id %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="vendor">Vendor</label>
+        <input type="text" class="form-control" name="vendor" id="vendor" value="{{ product.vendor }}" required>
+    </div>
+    
+    <!-- Add more form fields for other item attributes if necessary -->
+    <button type="submit" class="btn btn-primary button-hover">Update Product</button>
+</form>
+

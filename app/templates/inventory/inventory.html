@@ -23,6 +23,7 @@
                     </form>
                 </div> 
             </div>
+            {% include 'inventory/tab.html'%}
           
             <!-- Add a flash message that displays a wrong old password message -->
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -35,39 +36,67 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            <div class="mb-5 float-left">
+            <!-- <div class="mb-5 float-left">
                 <button class="btn btn-primary button-hover mb-3" onclick="openModal('addModal', 'add')">Add New Item</button>
-            </div>
-            <div class="card custom-card-border table-responsive mt-3">
-                <div class="card-body">
+            </div> -->
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card custom-card-border table-responsive mt-3">
+                        <div class="card-body">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Vendor</th>
+                                        <th>Category</th>
+                                        <!-- <th>Expiry Date</th> -->
+                                        <th>Total Quantity</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in products %}
+                                    <tr>
+                                        <td>{{ product.id }}</td>
+                                        <td>{{ product.name }}</td>
+                                        <td>{{ product.vendor }}</td>
+                                        <td>{{ product.category.name }}</td>
+                                        <td>{{ product.stock }}</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"
+                                            onclick="openModal('editModal', 'edit', '{{ product.id }}')">Manage Batches</button>
+                                            <button class="btn btn-secondary btn-sm" onclick="openModal('editProductModal', 'product', '{{ product.id }}')">Edit Product</button>
+                                           <!--- <form action="{{ url_for('inventory_bp.delete_inventory_item', item_id=product.id) }}" method="post" style="display:inline;">
+                                                <button type="submit" class="btn btn-danger btn-sm"  onclick="confirmDelete({{ product.id }})">Delete</button>
+                                            </form> -->
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-3">
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Quantity</th>
-                                <th>Reorder Point</th>
-                                <th>Expiry Date</th>
-                                <th>Category</th>
-                                <th>Manufacturer</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in inventory %}
+                            {% for category in categories %}
                             <tr>
-                                <td>{{ item.id }}</td>
-                                <td>{{ item.name }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>{{ item.reorder_point }}</td>
-                                <td>{{ item.expiry_date }}</td>
-                                <td>{{ item.category }}</td>
-                                <td>{{ item.manufacturer }}</td>
+                                <td>{{ category.id }}</td>
+                                <td>{{ category.name }}</td>
+                                
                                 <td>
-                                    <button class="btn btn-secondary btn-sm" onclick="openModal('editModal', 'edit', '{{ item.id }}')">Edit</button>
-                                    <form action="{{ url_for('inventory_bp.delete_inventory_item', item_id=item.id) }}" method="post" style="display:inline;">
-                                        <button type="submit" class="btn btn-danger btn-sm"  onclick="confirmDelete({{ item.id }})">Delete</button>
-                                    </form>
+                                    
+                                    <button class="btn btn-secondary btn-sm" onclick="openModal('editProductModal', 'category', '{{ category.id }}')">Edit</button>
+                                 
                                 </td>
                             </tr>
                             {% endfor %}
@@ -75,17 +104,18 @@
                     </table>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>
 
 <!-- Add Item Modal -->
-<div id="addModal" class="modal">
+<div id="addProductModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add New Item</h5>
-                <button type="button" class="btn-close" onclick="closeModal('addModal')" aria-label="Close"></button>
+                <h5 class="modal-title">Add New Product</h5>
+                <button type="button" class="btn-close" onclick="closeModal('addProductModal')" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="addModalContent">
                 <!-- Content will be loaded here via JavaScript -->
@@ -93,12 +123,27 @@
         </div>
     </div>
 </div>
-<!-- Edit Item Modal -->
+<!-- Add Item Modal -->
+<div id="addCategoryModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Category</h5>
+                <button type="button" class="btn-close" onclick="closeModal('addCategoryModal')" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="categoryModalContent">
+                <!-- Content will be loaded here via JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Manage Batches Modal -->
 <div id="editModal" class="modal">
     <div class="modal-dialog custom-modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Item</h5>
+                <h5 class="modal-title">Manage Batches</h5>
                 <button type="button" class="btn-close" onclick="closeModal('editModal')" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="editModalContent">
@@ -107,6 +152,21 @@
         </div>
     </div>
 </div>
+<!-- Edit Product Modal -->
+<div id="editProductModal" class="modal">
+    <div class="modal-dialog custom-modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Product</h5>
+                <button type="button" class="btn-close" onclick="closeModal('editProductModal')" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="editProductContent">
+                <!-- Content will be loaded here via JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
      // Open modal function
@@ -114,19 +174,31 @@
         var modal = document.getElementById(modalId);
         modal.style.display = "block";
         var endpoint;
-        if (type === 'add') {
-            endpoint = '{{ url_for("inventory_bp.add_modal") }}';
+        if (type === 'addProduct') {
+            endpoint = '{{ url_for("inventory_bp.add_product") }}';
         } else if (type === 'edit' && itemId !== null) { // Check if itemId is not null or empty
-            endpoint = '{{ url_for("inventory_bp.edit_modal", item_id="") }}' + itemId; // Include itemId here
+            endpoint = '{{ url_for("inventory_bp.manage_batches", product_id="") }}' + itemId; // Include itemId here
+        }
+        else if(type === 'product' && itemId !== null){
+            endpoint = '{{url_for("inventory_bp.edit_product", product_id="")}}' + itemId;
+        }
+        else if(type === 'addCategory'){
+            endpoint = '{{ url_for("inventory_bp.add_category") }}';
         }
         fetch(endpoint)
             .then(response => response.text())
             .then(html => {
-                if (modalId === 'addModal') {
+                if (modalId === 'addProductModal') {
                     document.getElementById('addModalContent').innerHTML = html;
                 } else if (modalId === 'editModal') {
                     document.getElementById('editModalContent').innerHTML = html;
                 }
+             else if (modalId === 'editProductModal') {
+                document.getElementById('editProductContent').innerHTML = html;
+            }
+            else if (modalId === 'addCategoryModal') {
+                document.getElementById('categoryModalContent').innerHTML = html;
+            }
             })
             .catch(error => console.error('Error loading modal content:', error));
     }
@@ -143,7 +215,7 @@
         for (var i = 0; i < modals.length; i++) {
             var modal = modals[i];
             if (event.target == modal) {
-                modal.style.display = "none";
+                modal.style.display = "block";
             }
         }
     }
@@ -156,6 +228,27 @@
             // If user cancels, do nothing
             event.preventDefault();
         }
+    }
+
+    // adding input field to add more categories in one button click
+    function addField() {
+        const dynamicFields = document.getElementById('dynamicFields');
+        const inputCount = dynamicFields.children.length;
+        const newField = document.createElement('div');
+        newField.classList.add('form-group', 'input-group', 'mb-3');
+        newField.innerHTML = `
+            <input type="text" class="form-control" name="name[]" id="name${inputCount}" placeholder="Category Name ${inputCount + 2}" required>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-danger" onclick="removeField(this)">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        `;
+        dynamicFields.appendChild(newField);
+    }
+
+    function removeField(button) {
+        button.closest('.form-group').remove();
     }
 </script>
 {% endblock body %}

@@ -1,0 +1,20 @@
+
+<h5 class="modal-title mb-3">Add / Update Batch to - {{ product.name }}</h5>
+<form method="post" action="{{ url_for('inventory_bp.manage_batch', product_id=product.id) }}">
+    <div class="form-group">
+        <label for="batchNumber">Batch Number</label>
+        <input type="text" class="form-control" id="batchNumber" name="batchNumber" required>
+    </div>
+    <div class="form-group">
+        <label for="expirationDate">Expiration Date</label>
+        <input type="date" class="form-control" id="expirationDate" name="expirationDate">
+    </div>
+    <div class="form-group">
+        <label for="quantity">Quantity</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" required>
+    </div>
+    <input type="hidden" id="batchId" name="batchId">
+    <button type="submit" class="btn btn-primary button-hover" id="submitBatchBtn">Save Batch</button>
+</form>
+
+

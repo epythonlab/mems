@@ -1,0 +1,15 @@
+<!-- add_category.html -->
+<form id="addCategoryForm" method="post" action="{{ url_for('inventory_bp.add_category') }}">
+    <div class="form-group input-group mb-3">
+        <input type="text" class="form-control" name="name[]" id="name" placeholder="Category Name 1" required>
+        <div class="input-group-append gap-3">
+            <button type="button" class="btn btn-success" onclick="addField()">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+    </div>
+    <div id="dynamicFields">
+        <!-- Dynamic fields will be added here -->
+    </div>
+    <button type="submit" class="btn btn-primary button-hover">Save Categories</button>
+</form>
