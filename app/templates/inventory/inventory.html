@@ -23,8 +23,16 @@
                     </form>
                 </div> 
             </div>
-            {% include 'inventory/tab.html'%}
-          
+             <!-- Tabs navigation -->
+            <ul class="nav nav-tabs" id="inventoryTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="products-tab" onclick="showTab('products')" type="button" role="tab" aria-controls="products" aria-selected="true">Products</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="categories-tab" onclick="showTab('categories')" type="button" role="tab" aria-controls="categories" aria-selected="false">Categories</button>
+                </li>
+            </ul>
+                    
             <!-- Add a flash message that displays a wrong old password message -->
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -36,37 +44,70 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-            <!-- <div class="mb-5 float-left">
-                <button class="btn btn-primary button-hover mb-3" onclick="openModal('addModal', 'add')">Add New Item</button>
-            </div> -->
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="card custom-card-border table-responsive mt-3">
-                        <div class="card-body">
+            
+            <div class="tab-content" id="inventoryTabsContent">
+                <!-- Products Tab -->
+                <div class="tab-pane fade show active" id="products" role="tabpanel" aria-labelledby="products-tab">
+                    <div class="d-flex justify-content-between align-items-center mr-5">
+                        <div class="select-wrapper selection-filter mt-3">
+                            <label for="prodMaxRows">Showing</label>
+                            <select class="form-select" name="prod_rows_per_page" id="prodMaxRows" onchange="updateRowsPerPage()">
+                                <option value="5000">all</option>
+                                <option value="5" {% if prod_rows_per_page == 5 %}selected{% endif %}>5</option>
+                                <option value="10" {% if prod_rows_per_page == 10 %}selected{% endif %}>10</option>
+                                <option value="25" {% if prod_rows_per_page == 25 %}selected{% endif %}>25</option>
+                                <option value="50" {% if prod_rows_per_page == 50 %}selected{% endif %}>50</option>
+                                <option value="100" {% if prod_rows_per_page == 100 %}selected{% endif %}>100</option>
+                            </select>
+                            <label for="prodMaxRows" style="padding-left:10px;">rows</label>
+                        </div>
+                        <!-- Add New Product button -->
+                        <div>
+                            <button class="btn btn-custom-primary btn-sm button-hover" onclick="openModal('addProductModal', 'addProduct')">Add Product</button>
+                        </div>
+                    </div>
+                    <!-- Products Table (implement your table structure here) -->
+                    <div class="card custom-card-border table-responsive">
+                        <div class="">
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Vendor</th>
-                                        <th>Category</th>
-                                        <!-- <th>Expiry Date</th> -->
-                                        <th>Total Quantity</th>
+                                        <th scope="col" class="sortable" data-column="id">
+                                            #
+                                            <span class="sort-icon"></span>
+                                        </th>
+                                        <th scope="col" class="sortable" data-column="product">
+                                            Product
+                                            <span class="sort-icon"></span>
+                                        </th>
+                                        
+                                        <th scope="col" class="sortable" data-column="vendor">
+                                            Vendor
+                                            <span class="sort-icon"></span>
+                                        </th>
+                                        <th scope="col" class="sortable" data-column="category">
+                                            Category
+                                            <span class="sort-icon"></span>
+                                        </th>
+                                        <th scope="col" class="sortable" data-column="quantity">
+                                            Total Quantity
+                                            <span class="sort-icon"></span>
+                                        </th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for product in products %}
                                     <tr>
-                                        <td>{{ product.id }}</td>
+                                        <td>{{ loop.index }}</td>
                                         <td>{{ product.name }}</td>
                                         <td>{{ product.vendor }}</td>
                                         <td>{{ product.category.name }}</td>
                                         <td>{{ product.stock }}</td>
                                         <td>
-                                            <button class="btn btn-secondary btn-sm"
-                                            onclick="openModal('editModal', 'edit', '{{ product.id }}')">Manage Batches</button>
-                                            <button class="btn btn-secondary btn-sm" onclick="openModal('editProductModal', 'product', '{{ product.id }}')">Edit Product</button>
+                                            <button class="btn btn-custom-primary btn-sm"
+                                            onclick="openModal('editModal', 'edit', '{{ product.id }}')" title="Manage Batches">Manage Batches</button>
+                                            <button class="btn btn-secondary btn-sm" onclick="openModal('editProductModal', 'product', '{{ product.id }}')" title="Edit Product">Edit</button>
                                            <!--- <form action="{{ url_for('inventory_bp.delete_inventory_item', item_id=product.id) }}" method="post" style="display:inline;">
                                                 <button type="submit" class="btn btn-danger btn-sm"  onclick="confirmDelete({{ product.id }})">Delete</button>
                                             </form> -->
@@ -77,31 +118,120 @@
                             </table>
                         </div>
                     </div>
+                    <!-- Pagination links for products -->
+                    <div class="pagination mb-3">
+                        <div class="rows_count" id="prodRowCount"></div>
+
+                        {% if products.has_prev %}
+                        <a href="{{ url_for('inventory_bp.inventory_list', prod_page=products.prev_num, prod_rows_per_page=prod_rows_per_page, cat_page=cat_page, cat_rows_per_page=cat_rows_per_page) }}">&laquo;</a>
+                        {% endif %}
+
+                        {% for num in products.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                            {% if num %}
+                                {% if products.page == num %}
+                                    <a href="{{ url_for('inventory_bp.inventory_list', prod_page=num, prod_rows_per_page=prod_rows_per_page, cat_page=cat_page, cat_rows_per_page=cat_rows_per_page) }}" class="current">{{ num }}</a>
+                                {% else %}
+                                    <a href="{{ url_for('inventory_bp.inventory_list', prod_page=num, prod_rows_per_page=prod_rows_per_page, cat_page=cat_page, cat_rows_per_page=cat_rows_per_page) }}">{{ num }}</a>
+                                {% endif %}
+                            {% else %}
+                                <span class="ellipsis">...</span>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if products.has_next %}
+                        <a href="{{ url_for('inventory_bp.inventory_list', prod_page=products.next_num, prod_rows_per_page=prod_rows_per_page, cat_page=cat_page, cat_rows_per_page=cat_rows_per_page) }}">&raquo;</a>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="col-md-3 mt-3">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for category in categories %}
-                            <tr>
-                                <td>{{ category.id }}</td>
-                                <td>{{ category.name }}</td>
-                                
-                                <td>
-                                    
-                                    <button class="btn btn-secondary btn-sm" onclick="openModal('editProductModal', 'category', '{{ category.id }}')">Edit</button>
-                                 
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+               
+                <!-- Categories Tab -->
+                <div class="tab-pane fade" id="categories" role="tabpanel" aria-labelledby="categories-tab">
+                    <div class="d-flex justify-content-between align-items-center mr-5">  
+                        <div class="select-wrapper selection-filter mt-3">
+                            <label for="catMaxRows">Showing</label>
+                            <select class="form-select" name="cat_rows_per_page" id="catMaxRows" onchange="updateRowsPerPage()">
+                                <option value="5000">all</option>
+                                <option value="5" {% if cat_rows_per_page == 5 %}selected{% endif %}>5</option>
+                                <option value="10" {% if cat_rows_per_page == 10 %}selected{% endif %}>10</option>
+                                <option value="25" {% if cat_rows_per_page == 25 %}selected{% endif %}>25</option>
+                                <option value="50" {% if cat_rows_per_page == 50 %}selected{% endif %}>50</option>
+                                <option value="100" {% if cat_rows_per_page == 100 %}selected{% endif %}>100</option>
+                            </select>
+                            <label for="catMaxRows" style="padding-left:10px;">rows</label>
+                        </div>
+                        <div>
+                            <button class="btn btn-custom-primary btn-sm" onclick="openModal('addCategoryModal', 'addCategory')">Add Category</button>
+                        </div>
+                    </div>
+
+                    <!-- Categories Table (implement your table structure here) -->
+                    <div class="card custom-card-border">
+
+                    
+                        <table class="table table-hover">
+                            
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="sortable" data-column="id">
+                                        #
+                                        <span class="sort-icon"></span>
+                                    </th>
+                                    <th scope="col" class="sortable" data-column="category">
+                                        Category
+                                        <span class="sort-icon"></span>
+                                    </th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for category in categories %}
+                                <tr id="category-{{ category.id }}">
+                                    <td>{{ loop.index }}</td>
+                                    <td>
+                                        <span class="category-name">{{ category.name }}</span>
+                                        <input type="text" class="form-control category-input" value="{{ category.name }}" style="display: none;">
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-status btn-small button-hover btn-edit" onclick="editCategory('{{ category.id }}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-small btn-save" style="display: none;" onclick="saveCategory('{{ category.id }}')" title="Save">
+                                            <i class="fas fa-save" style="color:#00AB4F"></i>
+                                        </button>
+                                        <button class="btn btn-small btn-x" style="display: none;" onclick="cancelEdit('{{ category.id }}')" title="Cancel">
+                                            <i class="fas fa-times" style="color:red"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                   
+                    <!-- Pagination links for categories -->
+                    <div class="pagination mb-3">
+                        <div class="rows_count" id="catRowCount"></div>
+
+                        {% if categories.has_prev %}
+                        <a href="{{ url_for('inventory_bp.inventory_list', cat_page=categories.prev_num, cat_rows_per_page=cat_rows_per_page, prod_page=prod_page, prod_rows_per_page=prod_rows_per_page) }}">&laquo;</a>
+                        {% endif %}
+
+                        {% for num in categories.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                            {% if num %}
+                                {% if categories.page == num %}
+                                    <a href="{{ url_for('inventory_bp.inventory_list', cat_page=num, cat_rows_per_page=cat_rows_per_page, prod_page=prod_page, prod_rows_per_page=prod_rows_per_page) }}" class="current">{{ num }}</a>
+                                {% else %}
+                                    <a href="{{ url_for('inventory_bp.inventory_list', cat_page=num, cat_rows_per_page=cat_rows_per_page, prod_page=prod_page, prod_rows_per_page=prod_rows_per_page) }}">{{ num }}</a>
+                                {% endif %}
+                            {% else %}
+                                <span class="ellipsis">...</span>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if categories.has_next %}
+                        <a href="{{ url_for('inventory_bp.inventory_list', cat_page=categories.next_num, cat_rows_per_page=cat_rows_per_page, prod_page=prod_page, prod_rows_per_page=prod_rows_per_page) }}">&raquo;</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
             
@@ -167,88 +297,59 @@
     </div>
 </div>
 
+<script src="{{ url_for('static', filename='js/table.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/inventory.js') }}"></script>
 
 <script>
-     // Open modal function
-    function openModal(modalId, type, itemId = null) {
-        var modal = document.getElementById(modalId);
+    // Open modal function
+function openModal(modalId, type, itemId = null) {
+    var modal = document.getElementById(modalId);
+    modal.style.display = "block";
+    var endpoint;
+    if (type === "addProduct") {
+      endpoint = '{{ url_for("inventory_bp.add_product") }}';
+    } else if (type === "edit" && itemId !== null) {
+      // Check if itemId is not null or empty
+      endpoint =
+        '{{ url_for("inventory_bp.manage_batches", product_id="") }}' + itemId; // Include itemId here
+    } else if (type === "product" && itemId !== null) {
+      endpoint =
+        '{{url_for("inventory_bp.edit_product", product_id="")}}' + itemId;
+    } else if (type === "addCategory") {
+      endpoint = '{{ url_for("inventory_bp.add_category") }}';
+    }
+    fetch(endpoint)
+      .then((response) => response.text())
+      .then((html) => {
+        if (modalId === "addProductModal") {
+          document.getElementById("addModalContent").innerHTML = html;
+        } else if (modalId === "editModal") {
+          document.getElementById("editModalContent").innerHTML = html;
+        } else if (modalId === "editProductModal") {
+          document.getElementById("editProductContent").innerHTML = html;
+        } else if (modalId === "addCategoryModal") {
+          document.getElementById("categoryModalContent").innerHTML = html;
+        }
+      })
+      .catch((error) => console.error("Error loading modal content:", error));
+  }
+  
+  // Close modal function
+  function closeModal(modalId) {
+    var modal = document.getElementById(modalId);
+    modal.style.display = "none";
+  }
+  
+  // Close modal when clicking outside of it
+  window.onclick = function (event) {
+    var modals = document.getElementsByClassName("modal");
+    for (var i = 0; i < modals.length; i++) {
+      var modal = modals[i];
+      if (event.target == modal) {
         modal.style.display = "block";
-        var endpoint;
-        if (type === 'addProduct') {
-            endpoint = '{{ url_for("inventory_bp.add_product") }}';
-        } else if (type === 'edit' && itemId !== null) { // Check if itemId is not null or empty
-            endpoint = '{{ url_for("inventory_bp.manage_batches", product_id="") }}' + itemId; // Include itemId here
-        }
-        else if(type === 'product' && itemId !== null){
-            endpoint = '{{url_for("inventory_bp.edit_product", product_id="")}}' + itemId;
-        }
-        else if(type === 'addCategory'){
-            endpoint = '{{ url_for("inventory_bp.add_category") }}';
-        }
-        fetch(endpoint)
-            .then(response => response.text())
-            .then(html => {
-                if (modalId === 'addProductModal') {
-                    document.getElementById('addModalContent').innerHTML = html;
-                } else if (modalId === 'editModal') {
-                    document.getElementById('editModalContent').innerHTML = html;
-                }
-             else if (modalId === 'editProductModal') {
-                document.getElementById('editProductContent').innerHTML = html;
-            }
-            else if (modalId === 'addCategoryModal') {
-                document.getElementById('categoryModalContent').innerHTML = html;
-            }
-            })
-            .catch(error => console.error('Error loading modal content:', error));
+      }
     }
-
-    // Close modal function
-    function closeModal(modalId) {
-        var modal = document.getElementById(modalId);
-        modal.style.display = "none";
-    }
-
-    // Close modal when clicking outside of it
-    window.onclick = function(event) {
-        var modals = document.getElementsByClassName('modal');
-        for (var i = 0; i < modals.length; i++) {
-            var modal = modals[i];
-            if (event.target == modal) {
-                modal.style.display = "block";
-            }
-        }
-    }
-
-    function confirmDelete(itemId) {
-        if (confirm('Are you sure you want to delete this item?')) {
-            // If user confirms, redirect to delete route
-            window.location.href = '/deleteInventoryItem/' + itemId;
-        } else {
-            // If user cancels, do nothing
-            event.preventDefault();
-        }
-    }
-
-    // adding input field to add more categories in one button click
-    function addField() {
-        const dynamicFields = document.getElementById('dynamicFields');
-        const inputCount = dynamicFields.children.length;
-        const newField = document.createElement('div');
-        newField.classList.add('form-group', 'input-group', 'mb-3');
-        newField.innerHTML = `
-            <input type="text" class="form-control" name="name[]" id="name${inputCount}" placeholder="Category Name ${inputCount + 2}" required>
-            <div class="input-group-append">
-                <button type="button" class="btn btn-danger" onclick="removeField(this)">
-                    <i class="fas fa-minus"></i>
-                </button>
-            </div>
-        `;
-        dynamicFields.appendChild(newField);
-    }
-
-    function removeField(button) {
-        button.closest('.form-group').remove();
-    }
+  };
 </script>
 {% endblock body %}

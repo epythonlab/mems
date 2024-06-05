@@ -8,10 +8,20 @@ from app import db
 @inventory_bp.route('/inventory')
 @login_required
 def inventory_list():
-    categories = Category.query.all()
-    products = Product.query.all()
-    return render_template('inventory/inventory.html', products=products, categories=categories)
-
+    # Get the selected number of rows per page from the dropdown menus
+    prod_rows_per_page = int(request.args.get('prod_rows_per_page', 5))  # Default to 5 rows per page for products
+    cat_rows_per_page = int(request.args.get('cat_rows_per_page', 5))    # Default to 5 rows per page for categories
+    
+    # Get the current page number from the query parameters for both tables
+    prod_page = request.args.get('prod_page', 1, type=int)
+    cat_page = request.args.get('cat_page', 1, type=int)
+    
+    # Paginate products and categories separately
+    products = Product.query.order_by(Product.stock.desc()).paginate(page=prod_page, per_page=prod_rows_per_page, error_out=False)
+    categories = Category.query.order_by(Category.id.desc()).paginate(page=cat_page, per_page=cat_rows_per_page, error_out=False)
+    
+    # Render the template with products and categories
+    return render_template('inventory/inventory.html', products=products, categories=categories, prod_rows_per_page=prod_rows_per_page, cat_rows_per_page=cat_rows_per_page, prod_page=prod_page, cat_page=cat_page)
 @inventory_bp.route('/add_product', methods=['GET', 'POST'])
 @login_required
 def add_product():
@@ -117,6 +127,20 @@ def update_product(product_id):
 
     return redirect(url_for('inventory_bp.inventory_list'))
 
+@inventory_bp.route('/update_category/<int:category_id>', methods=['POST'])
+@login_required
+def update_category(category_id):
+    data = request.get_json()
+    new_name = data.get('name')
+    
+    if not new_name:
+        return jsonify(success=False, message="Name cannot be empty"), 400
+    
+    category = Category.query.get_or_404(category_id)
+    category.name = new_name
+    db.session.commit()
+    
+    return jsonify(success=True)
 
 @inventory_bp.route('/deleteProduct/<int:item_id>', methods=['POST'])
 @login_required

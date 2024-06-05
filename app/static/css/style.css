@@ -804,6 +804,43 @@ body {
   box-shadow: none;
   /* Removes any box shadow that might be used for focus */
 }
+/* Custom btn-custom-primary styles */
+.btn-custom-primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-custom-primary:hover {
+  color: #fff;
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-custom-primary:focus, .btn-custom-primary.focus {
+  color: #fff;
+  background-color: #0056b3;
+  border-color: #0056b3;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+
+.btn-custom-primary.disabled, .btn-custom-primary:disabled {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-custom-primary:not(:disabled):not(.disabled):active, .btn-custom-primary:not(:disabled):not(.disabled).active,
+.show > .btn-custom-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-custom-primary:not(:disabled):not(.disabled):active:focus, .btn-custom-primary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-custom-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
 
 .sign-message {
   font-size: 20px;
@@ -1655,6 +1692,16 @@ td:last-child .btn-status .fas {
 
 }
 
+.nav-item .nav-link.active {
+  color: #1F419B; /* Change text color to blue */
+  background-color: inherit !important;
+  outline: none;
+  border: none;
+  box-sizing: 0;
+}
+.nav-tabs .nav-item .nav-link.active {
+  border-bottom: 2px solid #1F419B; /* Change the border color and width */
+}
 /* CSS for tab content */
 .tabcontent {
   display         : none;
