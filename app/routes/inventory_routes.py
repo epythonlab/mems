@@ -1,27 +1,40 @@
-from flask import request, render_template, url_for, redirect, flash, jsonify
-from flask_security import login_required
+from flask import request, render_template, session, url_for, redirect, flash, jsonify
+from flask_security import login_required, current_user
 from app.models.inventory import Product, Batch, Category
 from . import inventory_bp
-from datetime import datetime
+from datetime import datetime, date
+
 from app import db
 
 @inventory_bp.route('/inventory')
 @login_required
 def inventory_list():
-    # Get the selected number of rows per page from the dropdown menus
-    prod_rows_per_page = int(request.args.get('prod_rows_per_page', 5))  # Default to 5 rows per page for products
-    cat_rows_per_page = int(request.args.get('cat_rows_per_page', 5))    # Default to 5 rows per page for categories
-    
-    # Get the current page number from the query parameters for both tables
+    filter_type = request.args.get('filter')
     prod_page = request.args.get('prod_page', 1, type=int)
+    prod_rows_per_page = request.args.get('prod_rows_per_page', 5, type=int)
     cat_page = request.args.get('cat_page', 1, type=int)
+    cat_rows_per_page = request.args.get('cat_rows_per_page', 5, type=int)
+
+    products_query = Product.query
+    categories = Category.query.paginate(page=cat_page, per_page=cat_rows_per_page, error_out=False)
+
+    if filter_type == 'expired':
+        products_query = products_query.join(Batch).filter(Batch.expiration_date < datetime.utcnow())
+        session['filter_criteria'] = filter_type
+        # Process the filter criteria and fetch the filtered data
+
+    elif filter_type == 'low_stock':
+        session['filter_criteria'] = filter_type
+        products_query = products_query.filter(Product.stock <= 50)
+        
+    if filter_type == request.args.get('clearfilter'):
+        session['filter_criteria'] = None
     
-    # Paginate products and categories separately
-    products = Product.query.order_by(Product.stock.desc()).paginate(page=prod_page, per_page=prod_rows_per_page, error_out=False)
-    categories = Category.query.order_by(Category.id.desc()).paginate(page=cat_page, per_page=cat_rows_per_page, error_out=False)
-    
-    # Render the template with products and categories
+
+    products = products_query.paginate(page=prod_page, per_page=prod_rows_per_page, error_out=False)
+
     return render_template('inventory/inventory.html', products=products, categories=categories, prod_rows_per_page=prod_rows_per_page, cat_rows_per_page=cat_rows_per_page, prod_page=prod_page, cat_page=cat_page)
+
 @inventory_bp.route('/add_product', methods=['GET', 'POST'])
 @login_required
 def add_product():
@@ -30,7 +43,7 @@ def add_product():
         category_id = request.form['category_id']
         vendor = request.form['vendor']
 
-        product = Product(name=name, category_id=category_id, vendor=vendor)
+        product = Product(name=name, category_id=category_id, vendor=vendor, company_id = current_user.company_id)
         db.session.add(product)
         db.session.commit()
 
@@ -65,6 +78,7 @@ def manage_batch(product_id):
             existing_batch.expiration_date = expiration_date
             existing_batch.quantity = quantity
             existing_batch.updated_at = datetime.utcnow()
+            existing_batch.update_months_left() # update days left of the expiration date
             flash_msg = f'Batch updated successfully to {product.name}'
         else:
             # Add new batch
@@ -73,10 +87,13 @@ def manage_batch(product_id):
                               quantity=quantity, 
                               product_id=product_id,
                               created_at = datetime.utcnow())
+            
+            new_batch.update_months_left() # update days left of the expiration date
             db.session.add(new_batch)
             flash_msg = f'Batch added successfully to {product.name}'
             
         # update stock level of the product based on batch and quantity
+        
         product.update_stock()
         db.session.commit()
         flash(flash_msg, 'success')
@@ -141,6 +158,24 @@ def update_category(category_id):
     db.session.commit()
     
     return jsonify(success=True)
+
+@inventory_bp.route('/product_details')
+def product_details():
+    product_id = request.args.get('id') # Retrieve the ID from the query parameter
+    # Fetch the product based on the product_id
+    product = Product.query.get_or_404(product_id)
+    
+    # Retrieve the filter criteria from session
+    filter_criteria = session.get('filter_criteria')
+
+    # Filter the batches based on the expiration criteria
+    if filter_criteria == 'expired':
+        # Filter batches where expiration_date is before today
+        product.batches = [batch for batch in product.batches if batch.expiration_date < date.today() and batch.quantity > 1]
+    else:
+        product.batches = [batch for batch in product.batches if batch.expiration_date > date.today() and batch.quantity > 1]
+    # Pass the product data and filtered batches to the template
+    return render_template('inventory/product_details.html', product=product)
 
 @inventory_bp.route('/deleteProduct/<int:item_id>', methods=['POST'])
 @login_required

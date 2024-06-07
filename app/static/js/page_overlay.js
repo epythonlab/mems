@@ -31,7 +31,7 @@ function loadForm(pageUrl, rowId) {
   })
   .catch(error => console.error('Error loading form:', error));
 }
-  a
+
 function closeForm() {
   document.getElementById('overlay').style.display = 'none';
   document.getElementById('overlay').innerHTML = '';

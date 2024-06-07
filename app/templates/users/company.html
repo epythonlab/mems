@@ -41,7 +41,7 @@
                         <div class="company-section">
                             
                             <form id="companyForm" action="{{ url_for('user_bp.update_company') }}" method="POST" enctype="multipart/form-data">
-                                <input type="text" id="companyName" class="form-control read-only-input" name="company_name" value="{{company.company_name}}" placeholder="Company Name" readonly>
+                                <input type="text" id="companyName" class="form-control read-only-input" name="company_name" value="{{current_user.company.name}}" placeholder="Company Name" readonly>
                                 <label for="form-label">Company Logo</label>
                                 <input type="file" id="companyLogo" class="form-control read-only-input" name="logo" accept="image/*" readonly>
                                 <label for="lable-form">Company Trade License(Copy)</label>
@@ -55,9 +55,9 @@
 
                         <div class="preview-section">
                             <h4>Company Trade License Preview</h4>
-                            <div id="namePreview">{{company.company_name}}</div>
-                            {% if company.license %}
-                                <img id="licensePreview" src="{{url_for('static', filename='images/'+ company.license)}}">
+                            <div id="namePreview">{{current_user.company.name}}</div>
+                            {% if current_user.company.license %}
+                                <img id="licensePreview" src="{{url_for('static', filename='images/'+ current_user.company.license)}}">
                             {% endif %}
                         </div>
                     </div>

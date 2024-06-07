@@ -125,7 +125,7 @@
                                 </label>
                                 <input
                                     type="text"
-                                    value="{{ user.country }}"
+                                    value="{{ current_user.company.country }}"
                                     class="form-control read-only-input"
                                     id="country"
                                     name="country"
@@ -143,7 +143,7 @@
                                     class="form-control read-only-input"
                                     id="state"
                                     name="state"
-                                    value="{{ user.state }}"
+                                    value="{{ current_user.company.state }}"
                                     placeholder="eg. Addis Ababa"
                                     readonly
                                 >
@@ -157,8 +157,8 @@
                                     type="text"
                                     class="form-control read-only-input"
                                     id="zone"
-                                    name="zone"
-                                    value="{{ user.sub_city }}"
+                                    name="sub_city"
+                                    value="{{ current_user.company.sub_city }}"
                                     placeholder="eg. Addis Ketema"
                                     readonly
                                 >
@@ -167,7 +167,7 @@
                                 <label for="wereda" class="form-label">Wereda</label>
                                 <input
                                     type="text"
-                                    value="{{ user.wereda }}"
+                                    value="{{ current_user.company.wereda }}"
                                     class="form-control read-only-input"
                                     id="wereda"
                                     name="wereda"
@@ -182,7 +182,7 @@
                                     class="form-control read-only-input"
                                     id="kebele"
                                     name="kebele"
-                                    value="{{ user.kebele }}"
+                                    value="{{ current_user.company.kebele }}"
                                     placeholder="eg. 05"
                                     readonly
                                 >
@@ -194,7 +194,7 @@
                                     class="form-control read-only-input"
                                     id="house_no"
                                     name="house_no"
-                                    value="{{ user.house_number }}"
+                                    value="{{ current_user.company.house_number }}"
                                     placeholder="eg. 20/220"
                                     readonly
                                 >

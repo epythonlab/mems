@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Details</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    </head>
+    <body>
+        <div class="overlay-container" id="overlay" >
+            <a href="/inventory" class="close-button" id="close-form-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            
+            <div class="container mt-5">
+                <h1>{{ product.name }}</h1>
+                <p><strong>Category:</strong> {{ product.category.name }}</p>
+                <p><strong>Vendor:</strong> {{ product.vendor }}</p>
+                <p><strong>Stock:</strong> {{ product.stock }}</p>
+                <p><strong>Company:</strong> {{ product.company.name }}</p>
+        
+                <h2>Batches</h2>
+                <div class="table-responsive">
+                    
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Batch Number</th>
+                                <th>Expiration Date</th>
+                                <th>Quantity</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for batch in product.batches %}
+                            <tr>
+                                <td>{{loop.index}}</td>
+                                <td>{{ batch.batch_number }}</td>
+                                <td>{{ batch.expiration_date }}</td>
+                                <td>{{ batch.quantity }}</td>
+                                <td>{{ batch.created_at }}</td>
+                                <td>{{ batch.updated_at }}</td>
+
+                                <td>
+                                    {% if batch.months_left <= 0.1 %}
+                                        <span class="text-danger">Expired</span>
+                                    {% elif batch.months_left < 3 %}
+                                        <span class="text-warning">{{ batch.months_left }} months left</span>
+                                    {% else %}
+                                        <span class="text-success">{{ batch.months_left }} months left</span>
+                                    {% endif %}
+
+                                </td>                             
+                               
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script>
+            function submitForm(action) {
+                document.getElementById('action-input').value = action;
+                document.getElementById('status-form').submit();
+            }
+</script>
+        <!-- add the script files in the body of every html content -->
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        
+    </body>
+</html>

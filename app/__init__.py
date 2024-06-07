@@ -51,7 +51,7 @@ def create_app():
 
     # Create database tables within application context
     with app.app_context():
-        from app.models.users import Role, User
+        from app.models.users import Role, User, Company
         try:
             # Create database tables
             db.create_all()
@@ -66,8 +66,13 @@ def create_app():
 
             # Create a default admin user if no users exist
             if not User.query.filter(User.roles.contains(root_role)).first():
+                company = Company(name='Medicine and Equipment Management Software')
+                
+                db.session.add(company) # update changes to company
+                db.session.commit()  # Commit to persist the company and get the id
+             
                 default_admin = User(
-                    email='root@superuser.com', password=generate_password_hash('root'), active=True)
+                    email='root@superuser.com', password=generate_password_hash('root'), active=True, company_id=company.id)
                 default_admin.roles.append(root_role)
                 import uuid
                 default_admin.fs_uniquifier = uuid.uuid4()

@@ -2,13 +2,14 @@
 from flask import g, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
-from app.models.users import User, Role # Make sure to import your User model
+from app.models.users import User, Role, Company # Make sure to import your User model
 from app.models.FileUpload import UploadFile
 from app import db, login_manager
 from app.log_user import log_user_activity, log_action
 from . import auth_bp
 from app.utils import generate_random_password
 import uuid
+
 # route to login
 @auth_bp.route('/login', methods=['POST', 'GET'])
 def login():
@@ -46,48 +47,52 @@ def load_user(user_id):
         return User.query.get(user_id)
     return None
 
-# register new user
 @auth_bp.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
-        # Extract form data
         form_data = request.form
         email = form_data.get('email')
 
-        # Check if email already exists
         if User.query.filter_by(email=email).first():
             flash("Email already exists. Please use a different email.", "danger")
             return redirect(url_for('auth_bp.register'))
-
-        # Generate random password
-        password = generate_random_password()
-        hashed_password = generate_password_hash(password, method='scrypt')
 
         # Process file uploads
         logo = UploadFile.save_picture(request.files.get('logo'))
         license = UploadFile.save_picture(request.files.get('license'))
 
-        # Create new user object
+        # Create new company profile
+        new_company = Company(
+            name=form_data.get('company_name'),
+            house_number=form_data.get('house_no'),
+            kebele=form_data.get('kebele'),
+            wereda=form_data.get('wereda'),
+            sub_city=form_data.get('sub_city'),
+            state=form_data.get('state'),
+            country=form_data.get('country'),
+            logo=logo,
+            license=license
+        )
+
+        db.session.add(new_company)
+        db.session.commit()
+
+        # Generate random password
+        password = generate_random_password()
+        hashed_password = generate_password_hash(password, method='scrypt')
+
+        # Create new user associated with the company
         new_user = User(
             first_name=form_data.get('fname'),
             last_name=form_data.get('lname'),
             phone_number=form_data.get('phone'),
             email=email,
             password=hashed_password,
-            country=form_data.get('country'),
-            state=form_data.get('state'),
-            sub_city=form_data.get('sub_city'),
-            wereda=form_data.get('wereda'),
-            kebele=form_data.get('kebele'),
-            house_number=form_data.get('house_no'),
-            company_name=form_data.get('company_name'),
-            logo=logo,
-            license=license,
+            company_id=new_company.id,
             fs_uniquifier=str(uuid.uuid4()),  # Use str() to convert UUID to string
-            active=0  # Assuming 0 represents inactive users
+            active=False  # Assuming False represents inactive users
         )
 
-        # Add user to the database
         db.session.add(new_user)
         db.session.commit()
 

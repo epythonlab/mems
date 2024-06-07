@@ -7,7 +7,7 @@ import uuid
 
 from . import user_bp
 from app import db
-from app.models.users import User, Role, roles_users
+from app.models.users import User, Role, roles_users,Company
 from app.models.userlog import UserLog
 
 from app.models.FileUpload import UploadFile
@@ -172,7 +172,7 @@ def add_user():
             email=email,
             password=password,
             fs_uniquifier=uuid.uuid4(),
-            active=0
+            active=0, company_id=current_user.company_id
         )
         db.session.add(new_user)
         db.session.commit()
@@ -190,39 +190,32 @@ def profile():
     
     return render_template('users/profile.html', user = current_user)
 
-@user_bp.route('/update_profile', methods=['GET', 'POST'])
-@login_required  # Ensure the user is logged in
+@user_bp.route('/update_profile', methods=['POST'])
+@login_required
 def update_profile():
-    section = request.form['section']
+    section = request.form.get('section')
     try:
-        
         if section == 'profile':
-            
             # Update user basic profile information
             current_user.first_name = request.form['first_name']
             current_user.last_name = request.form['last_name']
             current_user.email = request.form['email']
             current_user.phone_number = request.form['phone']
-            
             flash('Your profile has been updated.', 'success')
-            
+
         elif section == 'address':
-             
-            # Update user address information
-            
-            current_user.country = request.form['country']
-            current_user.state = request.form['state']
-            current_user.sub_city = request.form['zone']
-            current_user.wereda = request.form['wereda']
-            current_user.kebele = request.form['kebele']
-            current_user.house_number = request.form['house_no']
-            
-            flash('Your address has been updated.', 'success')
-        
-        # Commit changes to the database
+            # Update company address information
+            current_user.company.country = request.form['country']
+            current_user.company.state = request.form['state']
+            current_user.company.sub_city = request.form['sub_city']
+            current_user.company.wereda = request.form['wereda']
+            current_user.company.kebele = request.form['kebele']
+            current_user.company.house_number = request.form['house_no']
+            flash('Company address has been updated.', 'success')
+
+        # Commit changes to the company profile
         db.session.commit()
-                 
-            
+
     except Exception as e:
         flash(str(e), 'danger')
 
@@ -231,26 +224,32 @@ def update_profile():
 @user_bp.route('/company', methods=['GET', 'POST'])
 @login_required
 def company():
-    return render_template('users/company.html', company=current_user)
+    company = Company.query.filter_by(id=current_user.company_id).first
+    return render_template('users/company.html', company=company)
 
-@user_bp.route('/update_company', methods=['POST', 'GET'])
+@user_bp.route('/update_company', methods=['POST'])
 @login_required
 def update_company():
-    # update company info
-    current_user.company_name = request.form['company_name']
-    if request.files['logo']:
-        
-        current_user.logo = UploadFile.save_picture(request.files['logo'])
-    if request.files['license']:
-        
-        current_user.license = UploadFile.save_picture(request.files['license'])
     try:
-        # commit changes to the database
+        # Update company info
+        current_user.company.name = request.form['company_name']
+        if 'logo' in request.files:
+            logo = request.files['logo']
+            if logo.filename:
+                current_user.company.logo = UploadFile.save_picture(logo)
+
+        if 'license' in request.files:
+            license = request.files['license']
+            if license.filename:
+                current_user.company.license = UploadFile.save_picture(license)
+
+        # Commit changes to the company profile
         db.session.commit()
         flash('Company info updated successfully.', 'success')
+
     except Exception as e:
-        flash(f'{str(e)}', 'danger')
-    
+        flash(str(e), 'danger')
+
     return redirect(url_for('user_bp.company'))
 
 # route to userLog activity page and list out the activities

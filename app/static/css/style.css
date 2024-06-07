@@ -807,14 +807,14 @@ body {
 /* Custom btn-custom-primary styles */
 .btn-custom-primary {
   color: #fff;
-  background-color: #007bff;
+  background-color: #15317E;
   border-color: #007bff;
 }
 
 .btn-custom-primary:hover {
-  color: #fff;
-  background-color: #0056b3;
-  border-color: #0056b3;
+  background-color: #3f51b5;
+  /* A lighter shade of blue */
+  color           : #ccc;
 }
 
 .btn-custom-primary:focus, .btn-custom-primary.focus {
@@ -1895,3 +1895,49 @@ td:last-child .btn-status .fas {
   overflow-x: auto;
 }
 
+/* css layout for filtering */
+
+.filter-container {
+ 
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.filter-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.filter-dropdown button {
+  background-color: #1F419B;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.filter-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px;
+}
+.filter-dropdown-content a {
+  color: black;
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block;
+}
+.filter-dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+.filter-dropdown:hover .filter-dropdown-content {
+  display: block;
+}
+.filter-dropdown:hover button {
+  background-color: #15317E;
+}

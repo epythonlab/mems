@@ -12,35 +12,45 @@ roles_users = db.Table(
     db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
 )
 
-class User(UserMixin, db.Model):
-    """User account model."""
+class Company(db.Model):
+    """Company profile model."""
+    __tablename__ = 'company'
 
-    __tablename__ = 'user'
-
-    id = db.Column(db.Integer, primary_key=True )
-    first_name = db.Column(db.String(100), nullable=True, unique=False )
-    last_name = db.Column(db.String(100), nullable=True, unique=False )
-    phone_number = db.Column(db.String(100), nullable=True, unique=False )
-    email = db.Column(db.String(40), unique=True, nullable=False )
-    password = db.Column(db.String(200), primary_key=False, unique=False, nullable=False )
-    country = db.Column(db.String(200))
-    state = db.Column(db.String(200))
-    sub_city = db.Column(db.String(200))
-    wereda = db.Column(db.String(200))
-    kebele = db.Column(db.String(200))
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), unique=True, nullable=False)
     house_number = db.Column(db.String(200))
-    company_name = db.Column(db.String(200))
+    kebele = db.Column(db.String(200))
+    wereda = db.Column(db.String(200))
+    sub_city = db.Column(db.String(200))
+    state = db.Column(db.String(200))
+    country = db.Column(db.String(200))
     logo = db.Column(db.String(200))
     license = db.Column(db.String(200))
-    confirmed_at = db.Column(db.DateTime, index=False, unique=False, nullable=True )
+    users = db.relationship('User', backref='company')
+
+    def __repr__(self):
+        return f'<Company {self.name}>'
+
+class User(UserMixin, db.Model):
+    """User account model."""
+    __tablename__ = 'user'
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(100), nullable=True)
+    last_name = db.Column(db.String(100), nullable=True)
+    phone_number = db.Column(db.String(100), nullable=True)
+    email = db.Column(db.String(40), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    confirmed_at = db.Column(db.DateTime, nullable=True)
     fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False)
-    active = db.Column(db.Boolean(), unique=False, nullable=False)
+    active = db.Column(db.Boolean(), nullable=False)
     roles = db.relationship(
         'Role',
         secondary=roles_users,
         backref=db.backref('users', lazy='dynamic')
     )
 
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
 
     def set_password(self, password):
         """Create hashed password."""
@@ -51,8 +61,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password, password)
 
     def __repr__(self):
-        return '<User {}>'.format(self.email)
-
+        return f'<User {self.email}>'
 
     def is_accessible(self):
         if not current_user.is_active or not current_user.is_authenticated:
@@ -61,10 +70,8 @@ class User(UserMixin, db.Model):
             return True
         if current_user.has_role('admin'):
             return True
-        # if current_user.has_role('super-admin'):
-        #     return True
         if current_user.has_role('user'):
-             return True
+            return True
         if current_user.is_anonymous(self):
             return False
         return False
@@ -73,11 +80,10 @@ class User(UserMixin, db.Model):
         """Override built in _handle_view in order to redirect users when a view is not accessible"""
         if not self.is_accessible():
             if current_user.is_authenticated:
-                #permission denied
                 abort(403)
-
             else:
-                 return redirect(url_for('index_bp.index'))
+                return redirect(url_for('index_bp.index'))
+
 
 # Role class
 class Role(db.Model, RoleMixin):

@@ -16,12 +16,24 @@
                     <form id="search-form" action="{{ url_for('user_bp.users') }}" method="GET">
                         <div class="search-wrapper">
                             <i class="material-icons search-icon">search</i>
-                            <input type="search" class="search-input" id="search" name="email" placeholder="Search items..." autocomplete="off">
+                            <input type="search" class="search-input" id="search" name="email" placeholder="Search by product, batch_no, or category..." autocomplete="off">
                             
                             <ul id="suggestions" class="suggestions"></ul>
                         </div>
                     </form>
                 </div> 
+            </div>
+            <!-- Filter Container -->
+          
+            <div class="filter-container">
+                <div class="filter-dropdown">
+                    <button class="button-hover"><i class="fas fa-filter"></i> Filter By</button>
+                    <div class="filter-dropdown-content">
+                        <a href="#" onclick="filterProducts('expired')"> <i class="fas fa-calendar-times"></i> Expired Products</a>
+                        <a href="#" onclick="filterProducts('low_stock')"><i class="fas fa-exclamation-circle"></i> Low Stock Products</a>
+                        <a href="{{ url_for('inventory_bp.inventory_list') }}" name="clearfilter"><i class="fas fa-times-circle"></i> Clear Filters</a>
+                    </div>
+                </div>
             </div>
              <!-- Tabs navigation -->
             <ul class="nav nav-tabs" id="inventoryTabs" role="tablist">
@@ -63,7 +75,8 @@
                         </div>
                         <!-- Add New Product button -->
                         <div>
-                            <button class="btn btn-custom-primary btn-sm button-hover" onclick="openModal('addProductModal', 'addProduct')">Add Product</button>
+                            <button class="btn btn-custom-primary btn-sm button-hover" onclick="openModal('addProductModal', 'addProduct')">
+                                <i class="fas fa-plus"></i> Add Product</button>
                         </div>
                     </div>
                     <!-- Products Table (implement your table structure here) -->
@@ -106,11 +119,15 @@
                                         <td>{{ product.stock }}</td>
                                         <td>
                                             <button class="btn btn-custom-primary btn-sm"
-                                            onclick="openModal('editModal', 'edit', '{{ product.id }}')" title="Manage Batches">Manage Batches</button>
-                                            <button class="btn btn-secondary btn-sm" onclick="openModal('editProductModal', 'product', '{{ product.id }}')" title="Edit Product">Edit</button>
-                                           <!--- <form action="{{ url_for('inventory_bp.delete_inventory_item', item_id=product.id) }}" method="post" style="display:inline;">
-                                                <button type="submit" class="btn btn-danger btn-sm"  onclick="confirmDelete({{ product.id }})">Delete</button>
-                                            </form> -->
+                                            onclick="openModal('editModal', 'edit', '{{ product.id }}')" title="Manage Batches">
+                                            <i class="fas fa-cogs"></i> Batches</button>
+                                            <button class="btn-status btn-small" onclick="openModal('editProductModal', 'product', '{{ product.id }}')" title="Edit Product">
+                                                <i class="fas fa-pencil"></i>
+                                            </button>
+
+                                            <button class="btn-status btn-small button-hover open-detail-btn" data-row-id="{{product.id}}" data-page-url="/product_details" title="View Details" >
+                                                <i class="fas fa-eye"></i> <!-- Font Awesome icon for view -->
+                                            </button>
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -160,16 +177,18 @@
                             <label for="catMaxRows" style="padding-left:10px;">rows</label>
                         </div>
                         <div>
-                            <button class="btn btn-custom-primary btn-sm" onclick="openModal('addCategoryModal', 'addCategory')">Add Category</button>
+                            {% if not current_user.has_role('user') %} 
+                                <!-- disable button if the current user is not user-->
+                                <button class="btn btn-custom-primary btn-sm" onclick="openModal('addCategoryModal', 'addCategory')">
+                                    <i class="fas fa-plus"></i> Add Category</button>
+                            {% endif %}
                         </div>
                     </div>
 
                     <!-- Categories Table (implement your table structure here) -->
                     <div class="card custom-card-border">
 
-                    
                         <table class="table table-hover">
-                            
                             <thead>
                                 <tr>
                                     <th scope="col" class="sortable" data-column="id">
@@ -296,10 +315,13 @@
         </div>
     </div>
 </div>
-
+<!-- overlay the product details here -->
+<div class="overlay" id="overlay"></div>
+<!-- add the script files in the body of every html content -->
+<script src="{{ url_for('static', filename='js/page_overlay.js') }}"></script>
 <script src="{{ url_for('static', filename='js/table.js') }}"></script>
-
 <script src="{{ url_for('static', filename='js/inventory.js') }}"></script>
+
 
 <script>
     // Open modal function
@@ -351,5 +373,24 @@ function openModal(modalId, type, itemId = null) {
       }
     }
   };
+
+  function filterProducts(filter) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('filter', filter);
+    url.searchParams.set('page', 1);  // Reset to first page
+    window.location.href = url.toString();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const filter = new URLSearchParams(window.location.search).get('filter');
+    if (filter) {
+        const filterLinks = document.querySelectorAll('.filter-dropdown-content a');
+        filterLinks.forEach(link => {
+            if (link.textContent.toLowerCase().includes(filter)) {
+                link.classList.add('active-filter');
+            }
+        });
+    }
+});
 </script>
 {% endblock body %}
