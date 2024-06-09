@@ -28,7 +28,7 @@ blinker==1.6.2
 Brotli==1.1.0
 bytecode==0.15.1
 Camelot==12.6.29
-catfish==4.16.4
+# catfish==4.16.4
 cattrs==23.2.3
 certifi==2022.12.7
 cffi==1.15.1
