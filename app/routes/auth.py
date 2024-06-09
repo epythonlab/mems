@@ -133,9 +133,8 @@ def check_email():
 def logout():
     log_action(current_user.id, 'User logged out', 'logout', 'User logged out successfully')
     logout_user()
-    return jsonify({"message": "Logged out successfully"}), 200
-
-
+    # return jsonify({"message": "Logged out successfully"}), 200
+    return redirect(url_for('auth_bp.login'))
 
 """Change an existing user's password."""
 @auth_bp.route('/change_password')

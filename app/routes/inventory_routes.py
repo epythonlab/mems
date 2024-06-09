@@ -43,7 +43,7 @@ def add_product():
         category_id = request.form['category_id']
         vendor = request.form['vendor']
 
-        product = Product(name=name, category_id=category_id, vendor=vendor, company_id = current_user.company_id)
+        product = Product(name=name, category_id=category_id, company_id = current_user.company_id, vendor=vendor)
         db.session.add(product)
         db.session.commit()
 

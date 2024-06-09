@@ -1,3 +1,7 @@
+import uuid  # Import uuid module
+
+# app/__init__.py
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore
@@ -6,17 +10,18 @@ import logging
 from werkzeug.security import generate_password_hash
 from flask_login import LoginManager
 
-
 # Initialize SQLAlchemy
 db = SQLAlchemy()
 # Initialize LoginManager
 login_manager = LoginManager()
 
-def create_app():
+def create_app(config_class=None):
     app = Flask(__name__)
 
-    # Application configuration
-    app.config.from_object("settings.Config")
+    if config_class:
+        app.config.from_object(config_class)
+    else:
+        app.config.from_object("config.Config")
 
     # Initialize Plugins
     db.init_app(app)
@@ -26,6 +31,7 @@ def create_app():
                         filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
     # Ensure that exceptions during logging are propagated
     logging.getLogger().propagate = True
+
     # init login_manager
     login_manager.init_app(app)
     login_manager.login_view = 'auth_bp.login'
@@ -48,7 +54,6 @@ def create_app():
     app.register_blueprint(analytic_bp)
     app.register_blueprint(inventory_bp)
     
-
     # Create database tables within application context
     with app.app_context():
         from app.models.users import Role, User, Company
@@ -74,8 +79,8 @@ def create_app():
                 default_admin = User(
                     email='root@superuser.com', password=generate_password_hash('root'), active=True, company_id=company.id)
                 default_admin.roles.append(root_role)
-                import uuid
-                default_admin.fs_uniquifier = uuid.uuid4()
+                # Assign a unique identifier using a UUID
+                default_admin.fs_uniquifier = str(uuid.uuid4())  # Convert UUID to string
                 db.session.add(default_admin)
 
             db.session.commit()
