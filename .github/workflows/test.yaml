@@ -28,8 +28,8 @@ jobs:
 
     - name: Install dependencies (isolated environment)
       run: |
-        python -m venv .vmems  # Create clean virtual environment
-        source .vmems/bin/activate
+        python -m venv venv  # Create clean virtual environment
+        source venv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
         # Try upgrading Flask or flask-babelex based on your approach
@@ -52,9 +52,10 @@ jobs:
     - name: Run tests (with logging for versions)
       env:
         DATABASE_URL: postgres://user:password@localhost:5432/test_db
+        FLASK_ENV: testing
       run: |
-        source .vmems/bin/activate
+        source venv/bin/activate
         # Add logging statements to print Flask and flask-babelex versions
-        print(f"Flask version: {import flask; print(flask.__version__)}")
-        print(f"flask-babelex version: {import flask_babelex; print(flask_babelex.__version__)}")
+        python -c "import flask; print(f'Flask version: {flask.__version__}')"
+        python -c "import flask_babelex; print(f'flask-babelex version: {flask_babelex.__version__}')"
         pytest --maxfail=5 --disable-warnings -v
