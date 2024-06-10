@@ -9,7 +9,7 @@ from sqlalchemy.exc import OperationalError, InvalidRequestError, NoForeignKeysE
 import logging
 from werkzeug.security import generate_password_hash
 from flask_login import LoginManager
-from flask_babel import Babel
+
 # Initialize SQLAlchemy
 db = SQLAlchemy()
 # Initialize LoginManager
