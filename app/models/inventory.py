@@ -50,13 +50,13 @@ class Batch(db.Model):
             today = datetime.today().date()
             months_left = (self.expiration_date.year - today.year) * 12 + self.expiration_date.month - today.month
             
-            self.months_left = months_left
+            # Ensure months_left is 0 if expiration date is in the past
+            self.months_left = max(0, months_left)
         else:
             # If expiration_date is None, set months_left to 0
             self.months_left = 0
             
         db.session.commit()
-            
 
     def __repr__(self):
         return f'<Batch {self.batch_number} of {self.product.name}>'

@@ -50,4 +50,4 @@ jobs:
         DATABASE_URL: postgres://user:password@localhost:5432/test_db
       run: |
         source .vmems/bin/activate
-        pytest
+        pytest --maxfail=5 --disable-warnings -v
