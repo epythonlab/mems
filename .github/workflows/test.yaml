@@ -15,6 +15,11 @@ jobs:
           POSTGRES_DB: test_db
           POSTGRES_USER: user
           POSTGRES_PASSWORD: password
+        options: > 
+          --health-cmd="pg_isready -U user -d test_db"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
     - name: Checkout code
@@ -27,12 +32,22 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m venv .vmems
-        source .vmems/bin/activate
+        python -m venv .venv
+        source .venv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run tests
+    - name: Wait for PostgreSQL to be ready
       run: |
-        source .vmems/bin/activate
+        echo "Waiting for PostgreSQL to be ready..."
+        while ! pg_isready -h localhost -p 5432 -U user -d test_db; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 1
+        done
+
+    - name: Run tests
+      env:
+        DATABASE_URL: postgres://user:password@localhost:5432/test_db
+      run: |
+        source .venv/bin/activate
         pytest
