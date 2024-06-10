@@ -24,22 +24,23 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.11
+        python-version: 3.12
 
     - name: Install dependencies
       run: |
-        python -m venv .venv
-        source .venv/bin/activate
+        python -m venv .vmems
+        source .vmems/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
+        pip install pytest  # Ensure pytest is installed
 
     - name: Install PostgreSQL client
-      run: sudo apt-get install postgresql-client
+      run: sudo apt-get install -y postgresql-client
 
     - name: Wait for PostgreSQL to be ready
       run: |
         echo "Waiting for PostgreSQL to be ready..."
-        while ! pg_isready -h localhost -p 5432 -U user -d test_db; do
+        until pg_isready -h localhost -p 5432 -U user -d test_db; do
           echo "Waiting for PostgreSQL to be ready..."
           sleep 1
         done
@@ -48,5 +49,5 @@ jobs:
       env:
         DATABASE_URL: postgres://user:password@localhost:5432/test_db
       run: |
-        source .venv/bin/activate
+        source .vmems/bin/activate
         pytest
