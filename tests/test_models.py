@@ -232,5 +232,7 @@
 #         db.session.commit()
 #         # If expiration date is in the past
 #         self.assertEqual(batch.months_left, 0)
-def test_sample(self):
-    self.assertEqual(1+1+1, 3)
+# test_sample.py
+
+def test_example():
+    assert 1 + 1 == 2
