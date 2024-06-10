@@ -26,13 +26,17 @@ jobs:
       with:
         python-version: 3.12
 
-    - name: Install dependencies
+    - name: Install dependencies (isolated environment)
       run: |
-        python -m venv .vmems
+        python -m venv .vmems  # Create clean virtual environment
         source .vmems/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest-flask  # Ensure pytest is installed
+        # Try upgrading Flask or flask-babelex based on your approach
+        # Upgrade Flask (recommended)
+        pip install --upgrade Flask
+        # OR (if Flask upgrade is not feasible)
+        # pip install --upgrade flask-babelex
 
     - name: Install PostgreSQL client
       run: sudo apt-get install -y postgresql-client
@@ -45,9 +49,12 @@ jobs:
           sleep 1
         done
 
-    - name: Run tests
+    - name: Run tests (with logging for versions)
       env:
         DATABASE_URL: postgres://user:password@localhost:5432/test_db
       run: |
         source .vmems/bin/activate
+        # Add logging statements to print Flask and flask-babelex versions
+        print(f"Flask version: {import flask; print(flask.__version__)}")
+        print(f"flask-babelex version: {import flask_babelex; print(flask_babelex.__version__)}")
         pytest --maxfail=5 --disable-warnings -v
