@@ -15,7 +15,11 @@ jobs:
           POSTGRES_DB: test_db
           POSTGRES_USER: user
           POSTGRES_PASSWORD: password
-        options: --health-cmd="pg_isready -U user -d test_db" --health-interval=10s --health-timeout=5s --health-retries=5
+        options: >-
+          --health-cmd="pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }}" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=5
 
     steps:
     - name: Checkout code
@@ -24,18 +28,15 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.12
+        python-version: '3.12'
 
-    - name: Install dependencies (isolated environment)
+    - name: Install dependencies
       run: |
-        python -m venv venv  # Create clean virtual environment
+        python -m venv venv
         source venv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
-     
-
-    - name: Install PostgreSQL client
-      run: sudo apt-get install -y postgresql-client
+        pip install -r requirements-dev.txt
 
     - name: Wait for PostgreSQL to be ready
       run: |
@@ -45,10 +46,9 @@ jobs:
           sleep 1
         done
 
-    - name: Run tests (with logging for versions)
+    - name: Run tests
       env:
         DATABASE_URL: postgres://user:password@localhost:5432/test_db
-        FLASK_ENV: testing
       run: |
         source venv/bin/activate
-        pytest --disable-warnings -v
+        pytest --maxfail=5 --disable-warnings -v
