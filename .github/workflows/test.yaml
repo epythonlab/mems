@@ -15,11 +15,7 @@ jobs:
           POSTGRES_DB: test_db
           POSTGRES_USER: user
           POSTGRES_PASSWORD: password
-        options: >-
-          --health-cmd="pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }}" 
-          --health-interval=10s 
-          --health-timeout=5s 
-          --health-retries=5
+        options: --health-cmd="pg_isready -U user -d test_db" --health-interval=10s --health-timeout=5s --health-retries=5
 
     steps:
     - name: Checkout code
@@ -28,7 +24,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.12'
+        python-version: 3.12
 
     - name: Install dependencies
       run: |
@@ -37,6 +33,10 @@ jobs:
         pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
+     
+
+    - name: Install PostgreSQL client
+      run: sudo apt-get install -y postgresql-client
 
     - name: Wait for PostgreSQL to be ready
       run: |
@@ -45,6 +45,7 @@ jobs:
           echo "Waiting for PostgreSQL to be ready..."
           sleep 1
         done
+
 
     - name: Run tests
       env:
