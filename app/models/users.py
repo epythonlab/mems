@@ -1,7 +1,7 @@
 """Database models."""
 from app import db
 from flask_login import current_user
-from flask import redirect, url_for, abort, request
+from flask import redirect, url_for, abort
 from flask_security import UserMixin, RoleMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
