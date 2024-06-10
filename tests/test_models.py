@@ -17,7 +17,7 @@ def teardown_module():
 
 # Test User model
 def test_create_user():
-    user = User(email='test@example.com', password='password', fs_uniquifier=str(uuid.uuid4()))
+    user = User(email='test@example.com', password='password', fs_uniquifier=str(uuid.uuid4()), active=True)
     db.session.add(user)
     db.session.commit()
     assert user.id is not None
