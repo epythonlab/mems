@@ -32,7 +32,7 @@ jobs:
         source .vmems/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest  # Ensure pytest is installed
+        pip install pytest-flask  # Ensure pytest is installed
 
     - name: Install PostgreSQL client
       run: sudo apt-get install -y postgresql-client
