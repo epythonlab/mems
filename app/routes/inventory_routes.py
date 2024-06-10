@@ -31,7 +31,7 @@ def inventory_list():
         session['filter_criteria'] = None
     
 
-    products = products_query.paginate(page=prod_page, per_page=prod_rows_per_page, error_out=False)
+    products = products_query.order_by(Product.stock.desc()).paginate(page=prod_page, per_page=prod_rows_per_page, error_out=False)
 
     return render_template('inventory/inventory.html', products=products, categories=categories, prod_rows_per_page=prod_rows_per_page, cat_rows_per_page=cat_rows_per_page, prod_page=prod_page, cat_page=cat_page)
 
