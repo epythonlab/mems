@@ -343,66 +343,6 @@ body {
   fill: #00AB4F;
 }
 
-.header2 {
-  display       : flex;
-  flex-direction: row;
-  position      : relative;
-
-}
-
-.search-wrapper {
-  position   : relative;
-  width      : 500px;
-  margin-left: 20%;
-}
-
-.search-icon {
-  position      : absolute;
-  left          : 20px;
-  top           : 50%;
-  transform     : translateY(-50%);
-  color         : #b9b5b5;
-  pointer-events: none;
-  /* Allows clicks to pass through to the input */
-}
-
-.suggestions {
-  list-style-type : none;
-  padding         : 0;
-  margin          : 0;
-  position        : absolute;
-  top             : calc(100% + 10px);
-  /* Position below the search input with a small gap */
-  left            : 0;
-  width           : 100%;
-  /* Match the search input width */
-  border          : 1px solid #ddd;
-  border-radius   : 8px;
-  max-height      : 200px;
-  overflow-y      : auto;
-  background-color: #fff;
-  box-shadow      : 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* Add a subtle shadow */
-  z-index         : 1000;
-  /* Ensure it appears above other elements */
-  display         : none;
-  /* Hidden by default */
-}
-
-.suggestions.active {
-  display: block;
-  /* Show when active */
-}
-
-.suggestions li {
-  padding: 10px;
-  cursor : pointer;
-}
-
-.suggestions li:hover {
-  background-color: #eee;
-}
-
 /* Responsive Adjustments */
 @media (max-width: 992px) {
   .header {
@@ -411,10 +351,6 @@ body {
     align-items    : center;
     padding        : 0 10px;
     /* Adjust padding as needed */
-  }
-
-  .search-wrapper {
-    display: none;
   }
 
   .header-menu {
@@ -473,6 +409,137 @@ body {
     display: none;
   }
 }
+/* search styles */
+.header2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 10px;
+  width: 100%;
+}
+
+.welcome-title {
+  font-size: 24px;
+  /* Adjust the font size as needed */
+  margin: 0; /* Remove margins */
+  padding: 0; /* Remove padding */
+  text-align: left; /* Center align the text */
+  margin-bottom: 10px; /* Reduce the bottom margin */
+}
+
+.welcome-title span {
+  font-weight: bold;
+  /* Make the user's name bold */
+  color: #1F419B;
+  /* Change the color of the user's name */
+  margin-left: 5px;
+  /* Add some spacing between the text and the emoji */
+}
+
+.search-menu {
+  width: 100%;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px; /* Adjust this value as needed */
+  margin: 0 auto;
+}
+
+.search-input {
+  width: 100%;
+  padding-left: 40px; /* Ensure padding for the search icon */
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b9b5b5;
+  pointer-events: none;
+}
+
+/* Media queries for different screen sizes */
+@media (min-width: 600px) {
+  .header2 {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center; /* Align items to the center */
+    padding: 0 20px; /* Add padding to the sides */
+  }
+
+  .search-wrapper {
+    width: auto;
+    margin: 0; /* Remove margins */
+  }
+
+  .welcome-title {
+    width: auto; /* Adjust width for better alignment */
+    margin-bottom: 0; /* Remove bottom margin */
+    margin-right: 20px; /* Add right margin */
+  }
+}
+
+@media (max-width: 600px) {
+  .search-wrapper {
+    width: 100%;
+    margin: 0;
+  }
+  
+  .welcome-title {
+    width: 100%;
+    margin-bottom: 10px; /* Maintain bottom margin for small screens */
+  }
+
+  .search-input {
+    padding-left: 30px;
+  }
+
+  .search-icon {
+    left: 10px;
+  }
+}
+
+
+.suggestions {
+  list-style-type : none;
+  padding         : 0;
+  margin          : 0;
+  position        : absolute;
+  top             : calc(100% + 10px);
+  /* Position below the search input with a small gap */
+  left            : 0;
+  width           : 100%;
+  /* Match the search input width */
+  border          : 1px solid #ddd;
+  border-radius   : 8px;
+  max-height      : 200px;
+  overflow-y      : auto;
+  background-color: #fff;
+  box-shadow      : 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Add a subtle shadow */
+  z-index         : 1000;
+  /* Ensure it appears above other elements */
+  display         : none;
+  /* Hidden by default */
+}
+
+.suggestions.active {
+  display: block;
+  /* Show when active */
+}
+
+.suggestions li {
+  padding: 10px;
+  cursor : pointer;
+}
+
+.suggestions li:hover {
+  background-color: #eee;
+}
 
 /* css style user settings menu */
 /* profile menu */
@@ -524,19 +591,6 @@ body {
   font-weight: bold;
 }
 
-.welcome-title {
-  font-size: 24px;
-  /* Adjust the font size as needed */
-}
-
-.welcome-title span {
-  font-weight: bold;
-  /* Make the user's name bold */
-  color      : #1F419B;
-  /* Change the color of the user's name */
-  margin-left: 5px;
-  /* Add some spacing between the text and the emoji */
-}
 
 /* menu (the right one) */
 
