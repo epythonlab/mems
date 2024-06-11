@@ -13,16 +13,17 @@
             <div class="header2">
                 <h2 class="welcome-title">Inventory Management 🎉</h2>
                 <div class="search-menu">
-                    <form id="search-form" action="{{ url_for('user_bp.users') }}" method="GET">
+                    <form id="search-form"  method="GET">
                         <div class="search-wrapper">
                             <i class="material-icons search-icon">search</i>
-                            <input type="search" class="search-input" id="search" name="email" placeholder="Search by product, batch_no, or category..." autocomplete="off">
+                            <input type="search" class="search-input" id="search" name="query" placeholder="Search by product, batch_no, or category..." autocomplete="off">
                             
                             <ul id="suggestions" class="suggestions"></ul>
                         </div>
                     </form>
                 </div> 
             </div>
+            
             <!-- Filter Container -->
           
             <div class="filter-container">
@@ -82,7 +83,7 @@
                     <!-- Products Table (implement your table structure here) -->
                     <div class="card custom-card-border table-responsive">
                         <div class="">
-                            <table class="table table-hover">
+                            <table id="product-table" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th scope="col" class="sortable" data-column="id">
@@ -109,7 +110,7 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tableBody">
                                     {% for product in products %}
                                     <tr>
                                         <td>{{ loop.index }}</td>
@@ -374,23 +375,8 @@ function openModal(modalId, type, itemId = null) {
     }
   };
 
-  function filterProducts(filter) {
-    const url = new URL(window.location.href);
-    url.searchParams.set('filter', filter);
-    url.searchParams.set('page', 1);  // Reset to first page
-    window.location.href = url.toString();
-}
+ 
 
-document.addEventListener('DOMContentLoaded', function() {
-    const filter = new URLSearchParams(window.location.search).get('filter');
-    if (filter) {
-        const filterLinks = document.querySelectorAll('.filter-dropdown-content a');
-        filterLinks.forEach(link => {
-            if (link.textContent.toLowerCase().includes(filter)) {
-                link.classList.add('active-filter');
-            }
-        });
-    }
-});
+  
 </script>
 {% endblock body %}

@@ -1,4 +1,4 @@
-from flask import request, render_template, session, url_for, redirect, flash, jsonify
+from flask import request, abort, render_template, session, url_for, redirect, flash, jsonify
 from flask_security import login_required, current_user
 from app.models.inventory import Product, Batch, Category
 from . import inventory_bp
@@ -17,7 +17,7 @@ def inventory_list():
 
     products_query = Product.query
     categories = Category.query.paginate(page=cat_page, per_page=cat_rows_per_page, error_out=False)
-
+    
     if filter_type == 'expired':
         products_query = products_query.join(Batch).filter(Batch.expiration_date < datetime.utcnow())
         session['filter_criteria'] = filter_type
@@ -29,11 +29,11 @@ def inventory_list():
         
     if filter_type == request.args.get('clearfilter'):
         session['filter_criteria'] = None
-    
 
     products = products_query.order_by(Product.stock.desc()).paginate(page=prod_page, per_page=prod_rows_per_page, error_out=False)
 
     return render_template('inventory/inventory.html', products=products, categories=categories, prod_rows_per_page=prod_rows_per_page, cat_rows_per_page=cat_rows_per_page, prod_page=prod_page, cat_page=cat_page)
+
 
 @inventory_bp.route('/add_product', methods=['GET', 'POST'])
 @login_required
@@ -161,21 +161,35 @@ def update_category(category_id):
 
 @inventory_bp.route('/product_details')
 def product_details():
-    product_id = request.args.get('id') # Retrieve the ID from the query parameter
-    # Fetch the product based on the product_id
-    product = Product.query.get_or_404(product_id)
-    
-    # Retrieve the filter criteria from session
-    filter_criteria = session.get('filter_criteria')
-
-    # Filter the batches based on the expiration criteria
-    if filter_criteria == 'expired':
-        # Filter batches where expiration_date is before today
-        product.batches = [batch for batch in product.batches if batch.expiration_date < date.today() and batch.quantity > 1]
+    id_or_batch = request.args.get('id')  # Retrieve the ID from the query parameter
+    # Attempt to retrieve product by ID
+    product = Product.query.get(id_or_batch)
+ 
+    if not product:
+        # If product is not found by ID, try to retrieve it by batch number
+        batch = Batch.query.filter_by(batch_number=id_or_batch.strip()).first()
+        if batch:
+            product = batch.product
+            product.batches = [batch]  # Ensure batches is a list containing the single batch
+            # print(f"Batch Number: {batch.batch_number}, Category: {product.category.name}, Vendor: {product.vendor}, Quantity: {batch.quantity}")
+        else:
+            abort(404)  # If neither product nor batch is found, raise a 404 error
     else:
-        product.batches = [batch for batch in product.batches if batch.expiration_date > date.today() and batch.quantity > 1]
+              
+        # Retrieve the filter criteria from session
+        filter_criteria = session.get('filter_criteria')
+
+        # Filter the batches based on the expiration criteria
+        
+        if filter_criteria == 'expired':
+            # Filter batches where expiration_date is before today
+            product.batches = [batch for batch in product.batches if batch.expiration_date < date.today() and batch.quantity > 1]
+        else:
+            product.batches = [batch for batch in product.batches if batch.expiration_date > date.today() and batch.quantity > 1]    
+
     # Pass the product data and filtered batches to the template
     return render_template('inventory/product_details.html', product=product)
+
 
 @inventory_bp.route('/deleteProduct/<int:item_id>', methods=['POST'])
 @login_required
@@ -200,3 +214,52 @@ def edit_product(product_id):
     categories = Category.query.all()
     product = Product.query.get_or_404(product_id)
     return render_template('inventory/edit_product.html', product=product, categories = categories)
+
+
+@inventory_bp.route('/inventory-search-suggestions')
+@login_required
+def inventory_search_suggestions():
+    query = request.args.get('q', '').lower()
+    if not query:
+        return jsonify([])
+
+    suggestions = db.session.query(
+        Product.id, Product.name.label('product'), Category.name.label('category'), Batch.batch_number.label('batch_no')  # Correctly label batch_number as 'batch_no'
+    ).join(Category, Product.category_id == Category.id
+    ).join(Batch, Product.id == Batch.product_id
+    ).filter(
+        db.or_(
+            Product.name.ilike(f'%{query}%'),
+            Category.name.ilike(f'%{query}%'),
+            Batch.batch_number.ilike(f'%{query}%')
+        )
+    ).all()
+
+    suggestion_list = [
+        {"id": item.id, "product": item.product, "category": item.category, "batch_no": item.batch_no}  # Use the correct label for batch_number
+        for item in suggestions
+    ]
+    return jsonify(suggestion_list)
+
+
+
+@inventory_bp.route('/inventory-search-results')
+@login_required
+def inventory_search_results():
+    batch_no = request.args.get('batch_no')
+    if not batch_no:
+        return jsonify([])
+
+    products = Product.query.filter_by(batch_no=batch_no).all()
+
+    results = []
+    for product in products:
+        results.append({
+            'id': product.id,
+            'product': product.name,
+            'vendor': product.vendor,
+            'category': product.category.name,
+            'quantity': product.stock  # Assuming stock represents quantity
+        })
+
+    return jsonify(results)

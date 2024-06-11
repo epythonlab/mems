@@ -106,6 +106,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+// js - tab manipulation
+
 function showTab(tabId) {
   // Get all tabs and hide them
   var tabs = document.querySelectorAll(".tab-pane");
@@ -123,3 +125,91 @@ function showTab(tabId) {
   document.getElementById(tabId).classList.add("show", "active");
   document.getElementById(tabId + "-tab").classList.add("active");
 }
+
+// search product by product name, category, or batch suggestion js code
+ // Main JavaScript file
+ document.addEventListener("DOMContentLoaded", function() {
+  const searchInput = document.getElementById('search');
+  const suggestions = document.getElementById('suggestions');
+  const overlay = document.getElementById('overlay');
+
+  searchInput.addEventListener('input', function() {
+      const query = searchInput.value.toLowerCase();
+      if (query.length === 0) {
+          suggestions.classList.remove('active');
+          return;
+      }
+
+      fetch(`/inventory-search-suggestions?q=${encodeURIComponent(query)}`)
+          .then(response => response.json())
+          .then(data => {
+              if (data.length > 0) {
+                  suggestions.innerHTML = data.map(item => `<li data-batch="${item.batch_no}" data-page-url="/product_details" data-row-id="${item.batch_no}">${item.product} - ${item.batch_no} (${item.category})</li>`).join('');
+                  suggestions.classList.add('active');
+              } else {
+                  suggestions.classList.remove('active');
+              }
+          });
+  });
+
+  // Add an event listener to each suggestion item
+  suggestions.addEventListener('click', function(e) {
+      if (e.target.tagName === 'LI') {
+          const batchNo = e.target.getAttribute('data-batch');
+          const pageUrl = e.target.getAttribute('data-page-url');
+          const rowId = e.target.getAttribute('data-row-id');
+
+          searchInput.value = batchNo; // Set input value to the selected batch number
+          e.preventDefault(); // Prevent default link behavior
+
+          // Display the overlay and load the form
+          overlay.style.display = 'flex';
+          loadForm(pageUrl, rowId); // Load the form with the specified page URL and row ID
+          e.target.remove(); // Remove the clicked suggestion item
+        }
+  });
+
+  document.addEventListener('click', function(e) {
+      if (!suggestions.contains(e.target) && e.target !== searchInput) {
+          suggestions.classList.remove('active');
+      }
+  });
+
+  document.getElementById('overlay').addEventListener('click', function(event) {
+      if (event.target === this) {
+          closeForm();
+      }
+  });
+
+  document.getElementById('close-form-btn').addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default anchor behavior
+      closeForm();
+  });
+
+  function closeForm() {
+      overlay.style.display = 'none';
+      overlay.innerHTML = '';
+  }
+});
+
+
+
+// filter inventory product js
+function filterProducts(filter) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('filter', filter);
+    url.searchParams.set('page', 1);  // Reset to first page
+    window.location.href = url.toString();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const filter = new URLSearchParams(window.location.search).get('filter');
+    if (filter) {
+        const filterLinks = document.querySelectorAll('.filter-dropdown-content a');
+        filterLinks.forEach(link => {
+            if (link.textContent.toLowerCase().includes(filter)) {
+                link.classList.add('active-filter');
+            }
+        });
+    }
+});

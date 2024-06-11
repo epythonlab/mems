@@ -19,6 +19,7 @@ document.getElementById('close-form-btn').addEventListener('click', function(eve
 });
 
 function loadForm(pageUrl, rowId) {
+  console.log(pageUrl, rowId)
   fetch(pageUrl + '?id=' + rowId) // Pass the ID as a query parameter
   .then(response => response.text())
   .then(html => {
