@@ -8,7 +8,7 @@
     </div>
     <div class="header-menu">
         <button class="button-menu" onclick="toggleMenu()">
-            <i class="material-icons">menu</i>
+            <i class="fas fa-bars"></i>
         </button>
         <div class="greeting" id="greeting">
             <!-- Greeting message will be displayed here -->
@@ -36,35 +36,49 @@
             
         </div>
         <div class="menu">
+            <div class="menu-header">
+                <div class="img-box">
+                    {% if current_user.company.logo %}
+                    <img src="{{url_for('static', filename='images/'+ current_user.company.logo)}}" alt="some user image">
+                    {% else %}
+                    <img src="https://i.postimg.cc/BvNYhMHS/user-img.jpg" alt="some user image">
+                    {% endif %}
+                    
+                </div>
+                <!-- Close button -->
+                <button class="close-btn" onclick="closeMenu()"><i class="fas fa-close"></i></button>
+            </div>
             <ul>
                 <li>
                     <a href="/profile">
-                        <i class="material-icons">person</i> Profile
+                        <i class="fas fa-user"></i> Profile
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <i class="material-icons">mail</i> Inbox
+                        <i class="fas fa-envelope"></i> Inbox
                     </a>
                 </li>
                 <li>
                     <a href="/setting">
-                        <i class="material-icons">settings</i> Settings
+                        <i class="fas fa-cog"></i> Settings
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <i class="material-icons">help</i> Help
+                        <i class="fas fa-question-circle"></i> Help
                     </a>
                 </li>
                 <li>
+                    <hr>
                     <a href="/logout">
-                        <i class="material-icons">exit_to_app</i> Sign Out
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
                     </a>
                 </li>
             </ul>
         </div>
-    </div>
+    </div>  
 </div>
+
 
 <script src="{{ url_for('static', filename='js/header_nav.js') }}"></script>

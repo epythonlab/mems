@@ -133,6 +133,7 @@ def check_email():
 def logout():
     log_action(current_user.id, 'User logged out', 'logout', 'User logged out successfully')
     logout_user()
+    flash('Logged out successfully. Please log in to access this page.', 'success')
     # return jsonify({"message": "Logged out successfully"}), 200
     return redirect(url_for('auth_bp.login'))
 

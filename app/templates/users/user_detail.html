@@ -13,10 +13,10 @@
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div class="detail-header">
-                {% if user.logo %}
-                <img src="{{url_for('static', filename='images/'+ user.logo)}}" alt="Company Logo" class="company-logo">
+                {% if user.company.logo %}
+                <img src="{{url_for('static', filename='images/'+ user.company.logo)}}" alt="Company Logo" class="company-logo">
                 {% endif %}
-                <h1 class="company-name">{{user.company_name}}</h1>
+                <h1 class="company-name">{{user.company.name}}</h1>
             </div>
             <div class="content">
                 <div class="company">
@@ -77,10 +77,10 @@
                         <div class="preview_section">
                             <h4>Company Trade License Preview</h4>
                             <div class="image">
-                                {% if user.license %}
+                                {% if user.company.license %}
                                 <div class="caption">Company Trade License</div>
-                                <a href="{{url_for('static', filename='images/'+ user.license)}}" target="_blank">
-                                    <img id="zoomable-image" src="{{url_for('static', filename='images/'+ user.license)}}" alt="Item Image">
+                                <a href="{{url_for('static', filename='images/'+ user.company.license)}}" target="_blank">
+                                    <img id="zoomable-image" src="{{url_for('static', filename='images/'+ user.company.license)}}" alt="Item Image">
                                 </a>
                             
                                 {% endif %}

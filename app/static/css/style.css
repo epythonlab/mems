@@ -4,6 +4,13 @@
   padding    : 0;
   box-sizing : border-box;
   font-family: 'Raleway', sans-serif;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+
+*::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
 }
 
 body {
@@ -255,15 +262,19 @@ body {
 }
 
 .page-content {
-  padding    : 10px 20px;
+  padding    : 10px 25px;
   box-sizing : border-box;
   width      : 100%;
   flex       : 1;
   overflow-x : hidden;
   overflow-y : auto;
   margin-left: 20px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
 }
-
+.page-content::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
 .page-content h1 {
   font-size  : 30px;
   font-weight: 400;
@@ -375,32 +386,14 @@ body {
     font-size: 1.2rem;
   }
 
-  .profile {
-    display    : flex;
-    align-items: center;
-    gap        : 8px;
-    margin-left: auto;
-    /* Push the profile to the right */
-  }
-
-  .user {
-    margin-right: 10px;
-  }
-
-  .user h3 {
-    font-size  : 14px;
-    font-weight: bold;
-  }
-
-  .user p {
-    font-size: 12px;
-  }
 }
 
 @media screen and (max-width: 991px) {
   .page-content {
     width      : 100vw;
     margin-left: 0;
+    padding-left: 10px;
+    padding-right: 15px;
   }
 }
 
@@ -415,7 +408,6 @@ body {
   flex-direction: column;
   align-items: center;
   position: relative;
-  padding: 10px;
   width: 100%;
 }
 
@@ -468,7 +460,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items: center; /* Align items to the center */
-    padding: 0 20px; /* Add padding to the sides */
+    /* padding: 0 0px; Add padding to the sides */
   }
 
   .search-wrapper {
@@ -552,6 +544,7 @@ body {
   gap            : 12px;
   cursor         : pointer;
   text-align     : start;
+  height         : auto; /* Adjust the height percentage as needed */
 }
 
 .profile h3 {
@@ -594,22 +587,40 @@ body {
 
 /* menu (the right one) */
 
+/* menu (the right one) */
 .menu {
   position     : absolute;
-  top          : calc(100% + 24px);
-  right        : 16px;
-  width        : 200px;
-  bottom       : 20px;
+  top          : 5%; /* Offset by the profile height */
+  right        : -200px; /* Start off-screen */
+  width        : 250px;
+  height       : 100vh; /* Remaining height */
   background   : #fff;
-  box-shadow   : 0 10px 20px rgba(0, 0, 0, .2);
-  opacity      : 0;
-  transform    : translateY(-10px);
-  visibility   : hidden;
-  transition   : 300ms;
+  border-radius: 10px;
+  box-shadow   : 5px 0 10px #1F419B; /* Shadow on left side */
+  transition   : right 0.3s ease-in-out; /* Transition for smooth animation */
   z-index      : 9999;
-  margin-bottom: -20px;
+  display      : none; /* Initially hide the menu */
 }
 
+.menu-header {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+}
+
+.menu-header img {
+  width: 100px; /* Adjust logo width as needed */
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #333;
+}
 .menu::before {
   content   : '';
   position  : absolute;
@@ -623,6 +634,8 @@ body {
 }
 
 .menu.active {
+  right: 0;
+  display: block;
   opacity   : 1;
   transform : translateY(0);
   visibility: visible;
@@ -636,7 +649,6 @@ body {
   flex-direction: column;
   z-index       : 10;
   background    : #fff;
-
 }
 
 .menu ul li {
@@ -660,6 +672,29 @@ body {
 
 .menu ul li a i {
   font-size: 1.25rem;
+}
+@media screen and (max-width:900px) {
+  .profile {
+    display    : flex;
+    align-items: center;
+    gap        : 8px;
+    margin-left: auto;
+    /* Push the profile to the right */
+  }
+
+  .user {
+    margin-right: 10px;
+  }
+
+  .user h3 {
+    font-size  : 14px;
+    font-weight: bold;
+  }
+
+  .user p {
+    font-size: 12px;
+  }
+  
 }
 
 /* user settings css end */
@@ -1147,7 +1182,21 @@ body {
 
   /* Adjust this value based on the width of your sidebar */
 }
+.password-container {
+  position: relative;
+}
 
+.password-container input {
+  padding-right: 40px; /* Space for the icon */
+}
+
+.password-container .toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
 /* Media queries for responsiveness */
 @media (max-width: 768px) {
 
@@ -1953,7 +2002,7 @@ td:last-child .btn-status .fas {
 
 .filter-container {
  
-  padding: 15px 20px;
+  padding: 15px 0px;
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
@@ -1995,3 +2044,6 @@ td:last-child .btn-status .fas {
 .filter-dropdown:hover button {
   background-color: #15317E;
 }
+
+
+

@@ -47,3 +47,4 @@ document.addEventListener("DOMContentLoaded", function() {
     // Disable submit button if validation fails
     submitButton.setAttribute("disabled", "disabled");
   }
+

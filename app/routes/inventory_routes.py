@@ -46,7 +46,7 @@ def add_product():
         product = Product(name=name, category_id=category_id, company_id = current_user.company_id, vendor=vendor)
         db.session.add(product)
         db.session.commit()
-
+        flash('Product added successfully', 'success')
         return redirect(url_for('inventory_bp.inventory_list'))
     
     categories = Category.query.all()
