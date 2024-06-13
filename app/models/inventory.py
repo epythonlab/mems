@@ -36,6 +36,7 @@ class Batch(db.Model):
     batch_number = db.Column(db.String(50), nullable=False, unique=True)  # Ensure uniqueness
     expiration_date = db.Column(db.Date, nullable=True)
     quantity = db.Column(db.Integer, nullable=False, default=0)
+    unit_price = db.Column(db.Float, nullable=False, default=0.0)  # Add price attribute
     created_at = db.Column(db.DateTime )
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
     months_left = db.Column(db.Float, nullable=False, default=0)
@@ -60,3 +61,4 @@ class Batch(db.Model):
 
     def __repr__(self):
         return f'<Batch {self.batch_number} of {self.product.name}>'
+    

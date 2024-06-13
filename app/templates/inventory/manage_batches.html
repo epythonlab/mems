@@ -11,7 +11,11 @@
     </div>
     <div class="form-group">
         <label for="quantity">Quantity</label>
-        <input type="number" class="form-control" id="quantity" name="quantity" required>
+        <input type="number" class="form-control" id="quantity" name="quantity" min="0" required>
+    </div>
+    <div class="form-group">
+        <label for="quantity">Unit Price</label>
+        <input type="number" class="form-control" id="unit_price" min="0" name="unit_price" step="0.01" required>
     </div>
     <input type="hidden" id="batchId" name="batchId">
     <button type="submit" class="btn btn-primary btn-sm button-hover" id="submitBatchBtn">Save Batch</button>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Details</title>
+</head>
+<body>
+    <h2>Order Details</h2>
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>Customer ID:</strong> {{ order.customer_id }}</p>
+    <p><strong>Order Date:</strong> {{ order.order_date }}</p>
+    <p><strong>Total Amount:</strong> {{ order.total_amount }}</p>
+    <h3>Items</h3>
+    <ul>
+        {% for item in order.items %}
+        <li>
+            <p><strong>Batch ID:</strong> {{ item.batch_id }}</p>
+            <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+            <p><strong>Total Price:</strong> {{ item.total_price }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('orders.edit', order_id=order.id) }}">Edit Order</a>
+    <form action="{{ url_for('orders.delete', order_id=order.id) }}" method="POST" style="display:inline;">
+        <button type="submit">Delete Order</button>
+    </form>
+</body>
+</html>

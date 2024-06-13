@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Order</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Create Order</h1>
+        
+        <!-- Customer Information Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Customer Information</h5>
+                <p><strong>Name:</strong> {{ customer.name }}</p>
+                <p><strong>Email:</strong> {{ customer.email }}</p>
+                <p><strong>Phone:</strong> {{ customer.phone }}</p>
+                <p><strong>Address:</strong> {{ customer.address }}</p>
+            </div>
+        </div>
+
+        <!-- Order Form Section -->
+        <form method="POST">
+            <!-- Add your order form fields here -->
+            <div class="mb-3">
+                <label for="item1" class="form-label">Item 1</label>
+                <input type="text" class="form-control" id="item1" name="item1" required>
+            </div>
+            <div class="mb-3">
+                <label for="item2" class="form-label">Item 2</label>
+                <input type="text" class="form-control" id="item2" name="item2" required>
+            </div>
+            <!-- More fields as needed -->
+
+            <button type="submit" class="btn btn-primary">Submit Order</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS Bundle (Popper.js included) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

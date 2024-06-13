@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Order</title>
+</head>
+<body>
+    <h2>Edit Order</h2>
+    <form action="{{ url_for('orders.edit', order_id=order.id) }}" method="POST">
+        <label for="customer_id">Customer ID:</label>
+        <input type="text" id="customer_id" name="customer_id" value="{{ order.customer_id }}" required><br><br>
+        
+        <div id="order-items">
+            {% for item in order.items %}
+                <label for="batch_id">Batch ID:</label>
+                <input type="text" name="items[{{ loop.index0 }}][batch_id]" value="{{ item.batch_id }}" required><br>
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="items[{{ loop.index0 }}][quantity]" value="{{ item.quantity }}" required><br><br>
+            {% endfor %}
+        </div>
+        
+        <button type="button" onclick="addItem()">Add Item</button>
+        <button type="submit">Update Order</button>
+    </form>
+
+    <script>
+        let itemIndex = {{ order.items|length }};
+        function addItem() {
+            const itemDiv = document.createElement('div');
+            itemDiv.innerHTML = `
+                <label for="batch_id">Batch ID:</label>
+                <input type="text" name="items[${itemIndex}][batch_id]" required><br>
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="items[${itemIndex}][quantity]" required><br><br>
+            `;
+            document.getElementById('order-items').appendChild(itemDiv);
+            itemIndex++;
+        }
+    </script>
+</body>
+</html>

@@ -45,7 +45,7 @@ def create_app(config_class=None):
     from app.routes import role_bp
     from app.routes import analytic_bp
     from app.routes import inventory_bp
-    
+    from app.routes import orders_bp
     # Register blueprints
     app.register_blueprint(index_bp)
     app.register_blueprint(auth_bp)
@@ -53,6 +53,7 @@ def create_app(config_class=None):
     app.register_blueprint(role_bp)
     app.register_blueprint(analytic_bp)
     app.register_blueprint(inventory_bp)
+    app.register_blueprint(orders_bp)
     
     # Create database tables within application context
     with app.app_context():

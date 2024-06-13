@@ -62,7 +62,7 @@ def manage_batch(product_id):
         batch_number = request.form['batchNumber']
         expiration_date = request.form['expirationDate']
         quantity = request.form['quantity']
-
+        unit_price = request.form['unit_price']
         # Check if batch already exists for the product
         existing_batch = Batch.query.filter_by(product_id=product_id, batch_number=batch_number).first()
 
@@ -77,6 +77,7 @@ def manage_batch(product_id):
             # Update existing batch
             existing_batch.expiration_date = expiration_date
             existing_batch.quantity = quantity
+            existing_batch.unit_price = float(unit_price)
             existing_batch.updated_at = datetime.utcnow()
             existing_batch.update_months_left() # update days left of the expiration date
             flash_msg = f'Batch updated successfully to {product.name}'
@@ -84,7 +85,8 @@ def manage_batch(product_id):
             # Add new batch
             new_batch = Batch(batch_number=batch_number, 
                               expiration_date=expiration_date, 
-                              quantity=quantity, 
+                              quantity=int(quantity),
+                              unit_price = float(unit_price),
                               product_id=product_id,
                               created_at = datetime.utcnow())
             
@@ -202,11 +204,6 @@ def delete_inventory_item(item_id):
     except Exception as e:
         flash('Failed to delete item: ' + str(e), 'error')
     return redirect(url_for('inventory_bp.inventory_list'))
-
-@inventory_bp.route('/add_modal')
-@login_required
-def add_modal():
-    return render_template('inventory/add_product.html')
 
 @inventory_bp.route('/edit_product/<product_id>')
 @login_required

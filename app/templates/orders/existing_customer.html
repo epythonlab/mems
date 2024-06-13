@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Existing Customer</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Existing Customer</h1>
+        <h3>Customer Information</h3>
+        <p><strong>Name:</strong> {{ customer.name }}</p>
+        <p><strong>Email:</strong> {{ customer.email }}</p>
+        <p><strong>Phone:</strong> {{ customer.phone }}</p>
+        <p><strong>Address:</strong> {{ customer.address }}</p>
+
+        <!-- Link to proceed to order form -->
+        <a href="{{ url_for('new_order_form', customer_id=customer.id) }}" class="btn btn-primary">Proceed to Order</a>
+    </div>
+    <!-- Bootstrap JS Bundle (Popper.js included) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
