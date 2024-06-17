@@ -1,24 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Order</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="mb-4">New Order</h1>
-        <form method="POST" action="{{ url_for('orders_bp.check_customer') }}">
-            <div class="mb-3">
-                <label for="tin" class="form-label">Enter Customer TIN</label>
-                <input type="text" class="form-control" id="tin" name="tin" required>
+<title>{% block title %}Inventory Management{% endblock title %}</title>
+{% block body %}
+    {% include 'header.html' %}
+    <!-- Main content -->
+    <div class="container-fluid">
+        {% include 'sideheader.html' %}
+        <div class="main">
+            <!-- Container for sidebar content -->
+            {% include 'sidenav.html' %}
+            <div class="page-content">
+                <!-- include the search bar -->
+                <div class="header2">
+                    <h2 class="welcome-title">Inventory Management 🎉</h2>
+                    <div class="search-menu">
+                        <form id="search-form"  method="GET">
+                            <div class="search-wrapper">
+                                <i class="material-icons search-icon">search</i>
+                                <input type="search" class="search-input" id="search" name="query" placeholder="Search by product, batch_no, or category..." autocomplete="off">
+                                
+                                <ul id="suggestions" class="suggestions"></ul>
+                            </div>
+                        </form>
+                    </div> 
+                </div>
+
+                <!-- main contentns here -->
+
+                <div class="container mt-5">
+                    <h1 class="mb-4">New Order</h1>
+                    <form method="POST" action="{{ url_for('orders_bp.check_customer') }}">
+                        <div class="mb-3">
+                            <label for="tin" class="form-label">Enter Customer TIN</label>
+                            <input type="text" class="form-control" id="tin" name="tin" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form> 
+                </div>
+
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form> 
+        </div>
     </div>
-    <!-- Bootstrap JS Bundle (Popper.js included) -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock body %}

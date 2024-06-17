@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<title>{% block title %}Order Management{% endblock title %}</title>
+{% block body %}
+{% include 'header.html' %}
+<!-- Main content -->
+<div class="container-fluid">
+    {% include 'sideheader.html' %}
+    <div class="main">
+        <!-- Container for sidebar content -->
+        {% include 'sidenav.html' %}
+        <div class="page-content">
+            <!-- include the search bar -->
+            <div class="header2">
+                <h2 class="welcome-title">Orders Management 🎉</h2>
+                <div class="search-menu">
+                    <form id="search-form"  method="GET">
+                        <div class="search-wrapper">
+                            <i class="material-icons search-icon">search</i>
+                            <input type="search" class="search-input" id="search" name="query" placeholder="Search by product, batch_no, or category..." autocomplete="off">
+                            
+                            <ul id="suggestions" class="suggestions"></ul>
+                        </div>
+                    </form>
+                </div> 
+            </div>
+
+            <!-- main contentns here -->
+
+            <div class="container mt-5">
+                <h1>List of Orders</h1>
+                <!-- Add New Order button -->
+                <div>
+                    <button class="btn btn-custom-primary btn-sm button-hover" onclick="openModal('newOrderModal')">
+                        <i class="fas fa-plus"></i> New Order</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Order Date</th>
+                            <th scope="col">Total Amount</th>
+                            <!-- Add more columns as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <th scope="row">{{ order.id }}</th>
+                            <td>{{ order.customer.name }}</td>
+                            <td>{{ order.order_date }}</td>
+                            <td>{{ order.total_amount }}</td>
+                            <!-- Add more columns as needed -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- New Order Modal -->
+<div id="newOrderModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Check Customer TIN</h5>
+                <button type="button" class="btn-close" onclick="closeModal('newOrderModal')" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="addModalContent">
+                <!-- Modal content -->
+                <h1 class="mb-4">New Order</h1>
+                <form method="POST" action="{{ url_for('orders_bp.check_customer') }}">
+                    <div class="mb-3">
+                        <label for="tin" class="form-label">Enter Customer TIN</label>
+                        <input type="text" class="form-control" id="tin" name="tin" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+<script>
+    // Open modal function
+    function openModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "block";
+    }
+
+    // Close modal function
+    function closeModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "none";
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        var modals = document.getElementsByClassName('modal');
+        for (var i = 0; i < modals.length; i++) {
+            var modal = modals[i];
+            if (event.target == modal) {
+                modal.style.display = "block";
+            }
+        }
+    }
+</script>

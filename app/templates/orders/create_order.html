@@ -1,45 +1,230 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Order</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Create Order</h1>
-        
-        <!-- Customer Information Section -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Customer Information</h5>
-                <p><strong>Name:</strong> {{ customer.name }}</p>
-                <p><strong>Email:</strong> {{ customer.email }}</p>
-                <p><strong>Phone:</strong> {{ customer.phone }}</p>
-                <p><strong>Address:</strong> {{ customer.address }}</p>
-            </div>
+<title>{% block title %}New Customer Order{% endblock title %}</title>
+{% block body %}
+{% include 'header.html' %}
+<div class="container-fluid">
+    {% include 'sideheader.html' %}
+    <div class="main">
+        {% include 'sidenav.html' %}
+        <div class="page-content">
+            <form method="POST" action="{{ url_for('orders_bp.create_order') }}">
+                <input type="hidden" name="tin" value="{{ customer.tin if customer else '' }}">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="order-container">
+                            <h1>Create Order</h1>
+                            {% if customer %}
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Customer Information</h5>
+                                    <p><strong>TIN:</strong> {{ customer.tin }}</p>
+                                    <p><strong>Name:</strong> {{ customer.name }}</p>
+                                    <p><strong>Email:</strong> {{ customer.email }}</p>
+                                    <p><strong>Phone:</strong> {{ customer.phone }}</p>
+                                    <p><strong>Address:</strong> {{ customer.address }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div id="order-container">
+                                <!-- Initial order fields -->
+                                <div class="order-item" id="order-item-1">
+                                    <button type="button" class="remove-order-btn">&times;</button>
+                                    <h5>Order Item 1</h5>
+                                    <div class="row">
+                                        <!-- Select Product -->
+                                        <div class="col-md-4 mb-3">
+                                            <label for="product1" class="form-label">Select Product</label>
+                                            <select class="form-control product-select" id="product1" name="items[0][product]" required>
+                                                <option value="">Select a product</option>
+                                            </select>
+                                        </div>
+                                        <!-- Select Batch -->
+                                        <div class="col-md-4 mb-3">
+                                            <label for="batch1" class="form-label">Select Batch</label>
+                                            <select class="form-control batch-select" id="batch1" name="items[0][batch_id]" required>
+                                                <option value="">Select a batch</option>
+                                            </select>
+                                        </div>
+                                        <!-- Quantity -->
+                                        <div class="col-md-4 mb-3">
+                                            <label for="quantity1" class="form-label">Quantity</label>
+                                            <input type="number" class="form-control quantity-input" id="quantity1" name="items[0][quantity]" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success mb-4" id="add-order-btn">Add Another Order</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="preview-container">
+                            <div id="preview-section">
+                                <h3>Order Preview</h3>
+                                <!-- Order preview details will be dynamically added here -->
+                            </div>
+                            <button id="submit-order" class="btn btn-primary button-hover mb-4" style="display: none;">Submit Orders</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-
-        <!-- Order Form Section -->
-        <form method="POST">
-            <!-- Add your order form fields here -->
-            <div class="mb-3">
-                <label for="item1" class="form-label">Item 1</label>
-                <input type="text" class="form-control" id="item1" name="item1" required>
-            </div>
-            <div class="mb-3">
-                <label for="item2" class="form-label">Item 2</label>
-                <input type="text" class="form-control" id="item2" name="item2" required>
-            </div>
-            <!-- More fields as needed -->
-
-            <button type="submit" class="btn btn-primary">Submit Order</button>
-        </form>
     </div>
+</div>
+<!-- Custom JS for fetching products and batches -->
+<!-- Custom JS for fetching products and batches -->
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+             // Function to update preview section
+            function updatePreview() {
+                //console.log('Updating preview...');
+                var previewSection = document.getElementById('preview-section');
+                var orderItems = document.querySelectorAll('.order-item');
+                var submitOrder = document.getElementById('submit-order');
+                
+                previewSection.innerHTML = '<h3>Order Preview</h3>';
+                orderItems.forEach(function(item, index) {
+                    var productSelect = item.querySelector('.product-select');
+                    var batchSelect = item.querySelector('.batch-select');
+                    var quantityInput = item.querySelector('.quantity-input');
 
-    <!-- Bootstrap JS Bundle (Popper.js included) -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+                    if (productSelect && batchSelect && quantityInput) {
+                        var productName = productSelect.options[productSelect.selectedIndex].textContent;
+                        var batchName = batchSelect.options[batchSelect.selectedIndex].textContent;
+                        var quantity = quantityInput.value;
+
+                        // Check if values are valid
+                        if (productSelect.selectedIndex > 0 && batchSelect.selectedIndex > 0 && quantity) {
+                            previewSection.innerHTML += `
+                                <p><strong>${index + 1}:</strong> ${productName} (${batchName}) => ${quantity}</p>
+                            `;
+                        }
+                        submitOrder.style.display = 'block';
+                    }
+                   
+                });
+                console.log('Preview updated.');
+               
+                
+            }
+
+            // Add event listeners to update preview for all order items
+            function addPreviewEventListeners(orderItem) {
+                var productSelect = orderItem.querySelector('.product-select');
+                var batchSelect = orderItem.querySelector('.batch-select');
+                var quantityInput = orderItem.querySelector('.quantity-input');
+                
+
+                productSelect.addEventListener('change', updatePreview);
+                batchSelect.addEventListener('change', updatePreview);
+                quantityInput.addEventListener('input', updatePreview);
+            
+
+            }
+
+            function addOrderItem() {
+                var container = document.getElementById('order-container');
+                var orderCount = container.querySelectorAll('.order-item').length + 1;
+                var newOrderItem = document.createElement('div');
+                newOrderItem.className = 'order-item';
+                newOrderItem.id = 'order-item-' + orderCount;
+                newOrderItem.innerHTML = `
+                    <button type="button" class="remove-order-btn">&times;</button>
+                    <h5>Order Item ${orderCount}</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="product${orderCount}" class="form-label">Select Product</label>
+                            <select class="form-control product-select" id="product${orderCount}" name="items[${orderCount - 1}][product]" required>
+                                <option value="">Select a product</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="batch${orderCount}" class="form-label">Select Batch</label>
+                            <select class="form-control batch-select" id="batch${orderCount}" name="items[${orderCount - 1}][batch_id]" required>
+                                <option value="">Select a batch</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="quantity${orderCount}" class="form-label">Quantity</label>
+                            <input type="number" class="form-control quantity-input" id="quantity${orderCount}" name="items[${orderCount - 1}][quantity]" required>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(newOrderItem);
+                
+                initializeProductSelect(`product${orderCount}`);
+                newOrderItem.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                
+                // Add event listener for the remove button
+                newOrderItem.querySelector('.remove-order-btn').addEventListener('click', function() {
+                    newOrderItem.remove();
+                    updatePreview(); // Update preview after removing an item
+                });
+                // Add event listeners for new select and input elements
+                addPreviewEventListeners(newOrderItem);
+
+                // Add event listeners for new select and input elements
+                newOrderItem.querySelector('.product-select').addEventListener('change', updatePreview);
+                newOrderItem.querySelector('.batch-select').addEventListener('change', updatePreview);
+                newOrderItem.querySelector('.quantity-input').addEventListener('input', updatePreview);
+            }
+
+            function initializeProductSelect(productId) {
+                var productSelect = document.getElementById(productId);
+                fetch("{{ url_for('orders_bp.get_products') }}")
+                    .then(response => response.json())
+                    .then(data => {
+                        productSelect.innerHTML = '<option value="">Select a product</option>';
+                        data.forEach(product => {
+                            var option = document.createElement('option');
+                            option.value = product.id;
+                            option.textContent = product.name;
+                            productSelect.appendChild(option);
+                        });
+
+                        productSelect.addEventListener('change', function () {
+                            var productId = this.value;
+                            var batchSelectId = this.id.replace('product', 'batch');
+                            var batchesUrl = "{{ url_for('orders_bp.get_batches', product_id=0) }}".replace('/0', '/' + productId);
+                            fetch(batchesUrl)
+                                .then(response => response.json())
+                                .then(data => {
+                                    var batchSelect = document.getElementById(batchSelectId);
+                                    batchSelect.innerHTML = '<option value="">Select a batch</option>';
+                                    data.forEach(batch => {
+                                        var option = document.createElement('option');
+                                        option.value = batch.id;
+                                        option.textContent = `Batch ${batch.id} - Expiry: ${batch.expiry_date} months - Quantity: ${batch.quantity}`;
+                                        batchSelect.appendChild(option);
+                                    });
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching batches:', error);
+                                });
+                        });
+
+                        // Add event listener for updating preview on product select change
+                        productSelect.addEventListener('change', updatePreview);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching products:', error);
+                    });
+            }
+
+            initializeProductSelect('product1');
+            document.getElementById('add-order-btn').addEventListener('click', function () {
+                addOrderItem();
+            });
+
+            // Add event listener for the initial remove button
+            document.querySelector('.order-item .remove-order-btn').addEventListener('click', function() {
+                document.querySelector('.order-item').remove();
+                updatePreview(); // Update preview after removing an item
+            });
+
+            // Add event listeners for the initial select and input elements
+            document.querySelector('.product-select').addEventListener('change', updatePreview);
+            document.querySelector('.batch-select').addEventListener('change', updatePreview);
+            document.querySelector('.quantity-input').addEventListener('input', updatePreview);
+        });
+    </script>
+{% endblock body %}

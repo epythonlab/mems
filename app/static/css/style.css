@@ -2045,6 +2045,82 @@ td:last-child .btn-status .fas {
   background-color: #15317E;
 }
 
+/* CSS for order item layout with specific class */
+.order-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-/* css - to show loading spinner */
+/* Order item styles */
+.order-item {
+  position: relative;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #f8f9fa;
+ 
+}
 
+.order-item h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.order-item .form-group {
+  margin-bottom: 15px;
+}
+
+.order-item .remove-order-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: #dc3545;
+  cursor: pointer;
+}
+
+.order-item .remove-order-btn:hover {
+  color: #bd2130;
+}
+
+/* Sticky buttons */
+.sticky-buttons {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  padding: 10px 0;
+  border-top: 1px solid #dee2e6;
+  z-index: 1000;
+}
+
+.sticky-buttons .btn-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sticky-buttons .btn {
+  transition: background-color 0.3s ease;
+}
+
+.sticky-buttons .btn:hover {
+  background-color: #0056b3;
+}
+
+.preview-container {
+  background-color: #f0f0f0;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-top: 20px;
+    min-height: 200px;
+    position: sticky;
+    top: 20px; /* Adjust as needed based on your layout */
+}

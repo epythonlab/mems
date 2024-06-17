@@ -1,43 +1,176 @@
-<div class="profile">
-    <div class="user">
-        <div class="clock" id="clock"></div>
-        <!-- <h5>Welcome back, {{current_user.first_name}}!</h5> -->
+<!DOCTYPE html>
+<title>{% block title %}Inventory Management{% endblock title %}</title>
+{% block body %}
+    {% include 'header.html' %}
+    <!-- Main content -->
+    <div class="container-fluid">
+        {% include 'sideheader.html' %}
+        <div class="main">
+            <!-- Container for sidebar content -->
+            {% include 'sidenav.html' %}
+            <div class="page-content">
+                <!-- include the search bar -->
+                <div class="header2">
+                    <h2 class="welcome-title">Inventory Management 🎉</h2>
+                    <div class="search-menu">
+                        <form id="search-form"  method="GET">
+                            <div class="search-wrapper">
+                                <i class="material-icons search-icon">search</i>
+                                <input type="search" class="search-input" id="search" name="query" placeholder="Search by product, batch_no, or category..." autocomplete="off">
+                                
+                                <ul id="suggestions" class="suggestions"></ul>
+                            </div>
+                        </form>
+                    </div> 
+                </div>
+
+                <!-- main contentns here -->
+
+                <div class="container mt-5">
+                    <h1>Create Order</h1>
+            
+                    <!-- Customer Information Section -->
+                    {% if customer %}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Customer Information</h5>
+                            <p><strong>Name:</strong> {{ customer.name }}</p>
+                            <p><strong>Email:</strong> {{ customer.email }}</p>
+                            <p><strong>Phone:</strong> {{ customer.phone }}</p>
+                            <p><strong>Address:</strong> {{ customer.address }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+            
+                    <!-- Order Form Section -->
+                    <form method="POST" action="{{ url_for('orders_bp.create_order') }}">
+                        <input type="hidden" name="tin" value="{{ customer.tin if customer else '' }}">
+            
+                        <div id="order-container">
+                            <!-- Initial order fields -->
+                            <div class="order-item mb-4">
+                                <h5>Order Item 1</h5>
+                                <!-- Select Product -->
+                                <div class="mb-3">
+                                    <label for="product1" class="form-label">Select Product</label>
+                                    <select class="form-control product-select" id="product1" name="items[0][product]" required>
+                                        <option value="">Select a product</option>
+                                    </select>
+                                </div>
+            
+                                <!-- Select Batch -->
+                                <div class="mb-3">
+                                    <label for="batch1" class="form-label">Select Batch</label>
+                                    <select class="form-control batch-select" id="batch1" name="items[0][batch_id]" required>
+                                        <option value="">Select a batch</option>
+                                    </select>
+                                </div>
+            
+                                <!-- Quantity -->
+                                <div class="mb-3">
+                                    <label for="quantity1" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="quantity1" name="items[0][quantity]" required>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- Add more orders dynamically -->
+                        <button type="button" class="btn btn-success mb-4" id="add-order-btn">Add Another Order</button>
+            
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">Submit Orders</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
     </div>
-    <div class="img-box">
-        {% if current_user.company.logo %}
-        <img src="{{url_for('static', filename='images/'+ current_user.company.logo)}}" alt="some user image">
-        {% else %}
-        <img src="https://i.postimg.cc/BvNYhMHS/user-img.jpg" alt="some user image">
-        {% endif %}
-        
-    </div>
-    <div class="menu">
-        <ul>
-            <li>
-                <a href="/profile">
-                    <i class="fas fa-user"></i> Profile
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class="fas fa-envelope"></i> Inbox
-                </a>
-            </li>
-            <li>
-                <a href="/setting">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class="fas fa-question-circle"></i> Help
-                </a>
-            </li>
-            <li>
-                <a href="/logout">
-                    <i class="fas fa-sign-out-alt"></i> Sign Out
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
+
+ <!-- Custom JS for fetching products and batches -->
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function fetchProducts(selectElement) {
+            fetch("{{ url_for('orders_bp.get_products') }}")
+                .then(response => response.json())
+                .then(data => {
+                    selectElement.innerHTML = '<option value="">Select a product</option>';
+                    data.forEach(product => {
+                        var option = document.createElement('option');
+                        option.value = product.id;
+                        option.textContent = product.name;
+                        selectElement.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                });
+        }
+
+        function fetchBatches(productId, batchSelect) {
+            var batchesUrl = "{{ url_for('orders_bp.get_batches', product_id=0) }}".replace('/0', '/' + productId);
+            fetch(batchesUrl)
+                .then(response => response.json())
+                .then(data => {
+                    batchSelect.innerHTML = '<option value="">Select a batch</option>';
+                    data.forEach(batch => {
+                        var option = document.createElement('option');
+                        option.value = batch.id;
+                        option.textContent = 'Batch ' + batch.id + ' - Expiry: ' + batch.expiry_date + ' - Quantity: ' + batch.quantity;
+                        batchSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching batches:', error);
+                });
+        }
+
+        function addOrderItem() {
+            var container = document.getElementById('order-container');
+            var orderCount = container.querySelectorAll('.order-item').length;
+            var newOrderItem = document.createElement('div');
+            newOrderItem.className = 'order-item mb-4';
+            newOrderItem.innerHTML = `
+                <h5>Order Item ${orderCount + 1}</h5>
+                <div class="mb-3">
+                    <label for="product${orderCount + 1}" class="form-label">Select Product</label>
+                    <select class="form-control product-select" id="product${orderCount + 1}" name="items[${orderCount}][product]" required>
+                        <option value="">Select a product</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="batch${orderCount + 1}" class="form-label">Select Batch</label>
+                    <select class="form-control batch-select" id="batch${orderCount + 1}" name="items[${orderCount}][batch_id]" required>
+                        <option value="">Select a batch</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="quantity${orderCount + 1}" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="quantity${orderCount + 1}" name="items[${orderCount}][quantity]" required>
+                </div>
+            `;
+            container.appendChild(newOrderItem);
+
+            var productSelect = newOrderItem.querySelector('.product-select');
+            fetchProducts(productSelect);
+            productSelect.addEventListener('change', function () {
+                var productId = this.value;
+                var batchSelect = newOrderItem.querySelector('.batch-select');
+                fetchBatches(productId, batchSelect);
+            });
+        }
+
+        var initialProductSelect = document.getElementById('product1');
+        fetchProducts(initialProductSelect);
+        initialProductSelect.addEventListener('change', function () {
+            var productId = this.value;
+            var batchSelect = document.getElementById('batch1');
+            fetchBatches(productId, batchSelect);
+        });
+
+        document.getElementById('add-order-btn').addEventListener('click', function () {
+            addOrderItem();
+        });
+    });
+</script>
+   
+{% endblock body %}
