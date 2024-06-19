@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<title>{% block title %}New Customer Order{% endblock title %}</title>
+<html lang="en">
+<head>
+    <title>{% block title %}New Customer Order{% endblock title %}</title>
+</head>
+<body>
 {% block body %}
 {% include 'header.html' %}
 <div class="container-fluid">
@@ -7,7 +11,8 @@
     <div class="main">
         {% include 'sidenav.html' %}
         <div class="page-content">
-            <form method="POST" action="{{ url_for('orders_bp.create_order') }}">
+            <!-- customer order form -->
+            <form method="POST" >
                 <input type="hidden" name="tin" value="{{ customer.tin if customer else '' }}">
                 <div class="row">
                     <div class="col-md-8">
@@ -62,7 +67,9 @@
                                 <h3>Order Preview</h3>
                                 <!-- Order preview details will be dynamically added here -->
                             </div>
-                            <button id="submit-order" class="btn btn-primary button-hover mb-4" style="display: none;">Submit Orders</button>
+                            <button id="submit-order" class="btn btn-primary mb-4" 
+                            style="display: none;">Submit Orders</button>
+                            <!-- <span id="savingMessage" style="display: none;">Saving...</span> -->
                         </div>
                     </div>
                 </div>
@@ -70,161 +77,180 @@
         </div>
     </div>
 </div>
-<!-- Custom JS for fetching products and batches -->
-<!-- Custom JS for fetching products and batches -->
-<script>
-        document.addEventListener('DOMContentLoaded', function () {
-             // Function to update preview section
-            function updatePreview() {
-                //console.log('Updating preview...');
-                var previewSection = document.getElementById('preview-section');
-                var orderItems = document.querySelectorAll('.order-item');
-                var submitOrder = document.getElementById('submit-order');
-                
-                previewSection.innerHTML = '<h3>Order Preview</h3>';
-                orderItems.forEach(function(item, index) {
-                    var productSelect = item.querySelector('.product-select');
-                    var batchSelect = item.querySelector('.batch-select');
-                    var quantityInput = item.querySelector('.quantity-input');
-
-                    if (productSelect && batchSelect && quantityInput) {
-                        var productName = productSelect.options[productSelect.selectedIndex].textContent;
-                        var batchName = batchSelect.options[batchSelect.selectedIndex].textContent;
-                        var quantity = quantityInput.value;
-
-                        // Check if values are valid
-                        if (productSelect.selectedIndex > 0 && batchSelect.selectedIndex > 0 && quantity) {
-                            previewSection.innerHTML += `
-                                <p><strong>${index + 1}:</strong> ${productName} (${batchName}) => ${quantity}</p>
-                            `;
-                        }
-                        submitOrder.style.display = 'block';
-                    }
-                   
-                });
-                console.log('Preview updated.');
-               
-                
-            }
-
-            // Add event listeners to update preview for all order items
-            function addPreviewEventListeners(orderItem) {
-                var productSelect = orderItem.querySelector('.product-select');
-                var batchSelect = orderItem.querySelector('.batch-select');
-                var quantityInput = orderItem.querySelector('.quantity-input');
-                
-
-                productSelect.addEventListener('change', updatePreview);
-                batchSelect.addEventListener('change', updatePreview);
-                quantityInput.addEventListener('input', updatePreview);
-            
-
-            }
-
-            function addOrderItem() {
-                var container = document.getElementById('order-container');
-                var orderCount = container.querySelectorAll('.order-item').length + 1;
-                var newOrderItem = document.createElement('div');
-                newOrderItem.className = 'order-item';
-                newOrderItem.id = 'order-item-' + orderCount;
-                newOrderItem.innerHTML = `
-                    <button type="button" class="remove-order-btn">&times;</button>
-                    <h5>Order Item ${orderCount}</h5>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="product${orderCount}" class="form-label">Select Product</label>
-                            <select class="form-control product-select" id="product${orderCount}" name="items[${orderCount - 1}][product]" required>
-                                <option value="">Select a product</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="batch${orderCount}" class="form-label">Select Batch</label>
-                            <select class="form-control batch-select" id="batch${orderCount}" name="items[${orderCount - 1}][batch_id]" required>
-                                <option value="">Select a batch</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="quantity${orderCount}" class="form-label">Quantity</label>
-                            <input type="number" class="form-control quantity-input" id="quantity${orderCount}" name="items[${orderCount - 1}][quantity]" required>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(newOrderItem);
-                
-                initializeProductSelect(`product${orderCount}`);
-                newOrderItem.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                
-                // Add event listener for the remove button
-                newOrderItem.querySelector('.remove-order-btn').addEventListener('click', function() {
-                    newOrderItem.remove();
-                    updatePreview(); // Update preview after removing an item
-                });
-                // Add event listeners for new select and input elements
-                addPreviewEventListeners(newOrderItem);
-
-                // Add event listeners for new select and input elements
-                newOrderItem.querySelector('.product-select').addEventListener('change', updatePreview);
-                newOrderItem.querySelector('.batch-select').addEventListener('change', updatePreview);
-                newOrderItem.querySelector('.quantity-input').addEventListener('input', updatePreview);
-            }
-
-            function initializeProductSelect(productId) {
-                var productSelect = document.getElementById(productId);
-                fetch("{{ url_for('orders_bp.get_products') }}")
-                    .then(response => response.json())
-                    .then(data => {
-                        productSelect.innerHTML = '<option value="">Select a product</option>';
-                        data.forEach(product => {
-                            var option = document.createElement('option');
-                            option.value = product.id;
-                            option.textContent = product.name;
-                            productSelect.appendChild(option);
-                        });
-
-                        productSelect.addEventListener('change', function () {
-                            var productId = this.value;
-                            var batchSelectId = this.id.replace('product', 'batch');
-                            var batchesUrl = "{{ url_for('orders_bp.get_batches', product_id=0) }}".replace('/0', '/' + productId);
-                            fetch(batchesUrl)
-                                .then(response => response.json())
-                                .then(data => {
-                                    var batchSelect = document.getElementById(batchSelectId);
-                                    batchSelect.innerHTML = '<option value="">Select a batch</option>';
-                                    data.forEach(batch => {
-                                        var option = document.createElement('option');
-                                        option.value = batch.id;
-                                        option.textContent = `Batch ${batch.id} - Expiry: ${batch.expiry_date} months - Quantity: ${batch.quantity}`;
-                                        batchSelect.appendChild(option);
-                                    });
-                                })
-                                .catch(error => {
-                                    console.error('Error fetching batches:', error);
-                                });
-                        });
-
-                        // Add event listener for updating preview on product select change
-                        productSelect.addEventListener('change', updatePreview);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching products:', error);
-                    });
-            }
-
-            initializeProductSelect('product1');
-            document.getElementById('add-order-btn').addEventListener('click', function () {
-                addOrderItem();
-            });
-
-            // Add event listener for the initial remove button
-            document.querySelector('.order-item .remove-order-btn').addEventListener('click', function() {
-                document.querySelector('.order-item').remove();
-                updatePreview(); // Update preview after removing an item
-            });
-
-            // Add event listeners for the initial select and input elements
-            document.querySelector('.product-select').addEventListener('change', updatePreview);
-            document.querySelector('.batch-select').addEventListener('change', updatePreview);
-            document.querySelector('.quantity-input').addEventListener('input', updatePreview);
-        });
-    </script>
 {% endblock body %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // handle the form submition process api
+        const submitOrderBtn = document.getElementById('submit-order');
+        const savingMessage = document.getElementById('savingMessage');
+        const form = document.querySelector('form');
+
+        submitOrderBtn.addEventListener('click', function (event) {
+            // Prevent default form submission
+            event.preventDefault();
+
+            // Display "Saving..." message
+            submitOrderBtn.innerText = 'Saving...';
+            //savingMessage.style.display = 'inline';
+
+            setTimeout(function () {
+                fetch('/orders/create_order', {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirect;
+                    } else {
+                        console.error(data.error || 'Unexpected response from server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error submitting form:', error);
+                })
+                .finally(() => {
+                    submitOrderBtn.innerText = 'Successfully saved';
+                    savingMessage.style.display = 'none';
+                });
+            }, 2000); // Adjust delay as needed
+        });
+
+        // function to update order preiview that populated from form
+        function updatePreview() {
+            const previewSection = document.getElementById('preview-section');
+            const orderItems = document.querySelectorAll('.order-item');
+            const submitOrder = document.getElementById('submit-order');
+
+            previewSection.innerHTML = '<h3>Order Preview</h3>';
+            let validItems = 0;
+
+            orderItems.forEach((item, index) => {
+                const productSelect = item.querySelector('.product-select');
+                const batchSelect = item.querySelector('.batch-select');
+                const quantityInput = item.querySelector('.quantity-input');
+                if (productSelect && batchSelect && quantityInput && productSelect.value && batchSelect.value && quantityInput.value) {
+                    validItems++;
+                    const productName = productSelect.options[productSelect.selectedIndex].textContent;
+                    const batchName = batchSelect.options[batchSelect.selectedIndex].textContent;
+                    const quantity = quantityInput.value;
+                    previewSection.innerHTML += `<p><strong>${index + 1}:</strong> ${productName} (${batchName}) => ${quantity}</p>`;
+                }
+            });
+
+            submitOrder.style.display = validItems > 0 ? 'block' : 'none';
+        }
+
+        function addPreviewEventListeners(orderItem) {
+            const productSelect = orderItem.querySelector('.product-select');
+            const batchSelect = orderItem.querySelector('.batch-select');
+            const quantityInput = orderItem.querySelector('.quantity-input');
+
+            productSelect.addEventListener('change', updatePreview);
+            batchSelect.addEventListener('change', updatePreview);
+            quantityInput.addEventListener('input', updatePreview);
+        }
+
+        function addOrderItem() {
+            const container = document.getElementById('order-container');
+            const orderCount = container.querySelectorAll('.order-item').length + 1;
+            const newOrderItem = document.createElement('div');
+            newOrderItem.className = 'order-item';
+            newOrderItem.id = 'order-item-' + orderCount;
+            newOrderItem.innerHTML = `
+                <button type="button" class="remove-order-btn">&times;</button>
+                <h5>Order Item ${orderCount}</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="product${orderCount}" class="form-label">Select Product</label>
+                        <select class="form-control product-select" id="product${orderCount}" name="items[${orderCount - 1}][product]" required>
+                            <option value="">Select a product</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="batch${orderCount}" class="form-label">Select Batch</label>
+                        <select class="form-control batch-select" id="batch${orderCount}" name="items[${orderCount - 1}][batch_id]" required>
+                            <option value="">Select a batch</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="quantity${orderCount}" class="form-label">Quantity</label>
+                        <input type="number" class="form-control quantity-input" id="quantity${orderCount}" name="items[${orderCount - 1}][quantity]" required>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newOrderItem);
+
+            initializeProductSelect(`product${orderCount}`);
+
+            newOrderItem.querySelector('.remove-order-btn').addEventListener('click', function () {
+                newOrderItem.remove();
+                updatePreview();
+            });
+
+            addPreviewEventListeners(newOrderItem);
+        }
+
+        function initializeProductSelect(productId) {
+            const productSelect = document.getElementById(productId);
+            fetch("{{ url_for('orders_bp.get_products') }}")
+                .then(response => response.json())
+                .then(data => {
+                    productSelect.innerHTML = '<option value="">Select a product</option>';
+                    data.forEach(product => {
+                        const option = document.createElement('option');
+                        option.value = product.id;
+                        option.textContent = product.name;
+                        productSelect.appendChild(option);
+                    });
+
+                    productSelect.addEventListener('change', function () {
+                        const productId = this.value;
+                        const batchSelectId = this.id.replace('product', 'batch');
+                        const batchesUrl = "{{ url_for('orders_bp.get_batches', product_id=0) }}".replace('/0', '/' + productId);
+                        fetch(batchesUrl)
+                            .then(response => response.json())
+                            .then(data => {
+                                const batchSelect = document.getElementById(batchSelectId);
+                                batchSelect.innerHTML = '<option value="">Select a batch</option>';
+                                data.forEach(batch => {
+                                    const option = document.createElement('option');
+                                    option.value = batch.id;
+                                    option.textContent = `Batch ${batch.id} - Expiry: ${batch.expiry_date} months - Quantity: ${batch.quantity}`;
+                                    batchSelect.appendChild(option);
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error fetching batches:', error);
+                            });
+                    });
+
+                    productSelect.addEventListener('change', updatePreview);
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                });
+        }
+
+        initializeProductSelect('product1');
+        document.getElementById('add-order-btn').addEventListener('click', addOrderItem);
+
+        document.querySelector('.order-item .remove-order-btn').addEventListener('click', function () {
+            document.querySelector('.order-item').remove();
+            updatePreview();
+        });
+
+        document.querySelector('.product-select').addEventListener('change', updatePreview);
+        document.querySelector('.batch-select').addEventListener('change', updatePreview);
+        document.querySelector('.quantity-input').addEventListener('input', updatePreview);
+    });
+</script>
+
+
+</body>
+</html>

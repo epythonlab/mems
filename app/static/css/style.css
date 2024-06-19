@@ -1,52 +1,59 @@
 /* Global Styles */
 * {
-  margin     : 0;
-  padding    : 0;
-  box-sizing : border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: 'Raleway', sans-serif;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-}
-
-
-*::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
 }
 
 body {
   background-color: #FAFAFC;
-  display         : flex;
-  justify-content : center;
-  /* Horizontally center content */
-  align-items     : center;
-  /* Vertically center content */
-  height          : 100vh;
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  align-items: center; /* Center content vertically */
+  height: 100vh; /* Full viewport height */
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: #1F419B;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+p {
+  margin-bottom: 10px;
+}
+
+a {
+  color: #1F419B;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #333;
+}
 /* Custom CSS for Material Style Navigation Drawer */
 .nav-drawer {
-  height          : 100%;
-  width           : 250px;
-  position        : fixed;
-  z-index         : 1040;
-  /* Higher z-index than Bootstrap's navbar */
-  top             : 0;
-  right           : -250px;
-  /* Position on the right side */
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  z-index: 1040;
+  top: 0;
+  right: -250px;
   background-color: #fff;
-  overflow-x      : hidden;
-  transition      : 0.5s;
-  padding-top     : 60px;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
 }
 
 .nav-drawer a {
-  padding        : 10px 15px;
+  padding: 10px 15px;
   text-decoration: none;
-  font-size      : 1.5rem;
-  /* Standard font size */
-  color          : #111;
-  display        : block;
-  transition     : 0.3s;
+  font-size: 1.5rem;
+  color: #111;
+  display: block;
+  transition: 0.3s;
 }
 
 .nav-drawer a:hover {
@@ -59,64 +66,52 @@ body {
 
 .drawer-open {
   right: 0;
-  /* Open the drawer from the right side */
 }
 
 .menu-icon {
-  position : absolute;
-  top      : 20px;
-  right    : 0;
-  /* Position on the right side */
-  cursor   : pointer;
+  position: absolute;
+  top: 20px;
+  right: 0;
+  cursor: pointer;
   font-size: 24px;
 }
 
 .navbar-brand {
-  position : absolute;
-  top      : 20px;
-  left     : 20px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
   max-width: 180px;
-  /* Limit the maximum width of the logo */
 }
 
-/* Logo styling */
 .navbar-brand img {
   max-width: 100%;
-  /* Ensure the logo fits within the navbar */
 }
 
-/* Custom CSS to remove default border from toggler button */
 .navbar-toggler {
-  border : none;
-  /* Remove default border */
+  border: none;
   outline: none;
-  /* Remove outline */
 }
 
-/* End of header styles */
 
-/* New addition for main content */
+/* Container Styles */
 .container-fluid {
-  width        : 100% !important;
-  padding-right: 0 !important;
-  padding-left : 0 !important;
-  margin-right : auto !important;
-  margin-left  : auto !important;
-  height       : 100vh;
-  flex-wrap    : wrap;
-  overflow     : hidden;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  height: 100vh;
+  flex-wrap: wrap;
+  overflow: hidden;
 }
 
 .main {
-  height    : calc(100% - 50px);
-  display   : flex;
-  flex      : 1;
+  height: calc(100% - 50px);
+  display: flex;
+  flex: 1;
   overflow-x: hidden;
-  /* Add this line to avoid horizontal scrolling */
 }
 
- /* Side Styles */
- .sidebar {
+/* Sidebar Styles */
+.sidebar {
   height: 100%;
   width: 220px;
   box-sizing: border-box;
@@ -163,31 +158,31 @@ body {
   background: #1F419B;
   color: #fff;
 }
+
 .sidebar ul li a .fas {
-  margin-right: 10px; /* Adjust margin */
-  font-size: 1rem; /* Adjust font size */
+  margin-right: 10px;
+  font-size: 1rem;
   color: #333;
 }
-/* Dropdown toggle arrow */
+
 .sidebar ul li a.dropdown-toggle::after {
   display: inline-block;
   margin-left: auto;
-  transition: transform 0.3s ease; /* Smooth transition for rotation */
+  transition: transform 0.3s ease;
 }
 
 .sidebar ul li a.dropdown-toggle.rotated::after {
-  transform: rotate(180deg); /* Rotate the arrow when submenu is open */
+  transform: rotate(180deg);
 }
 
-/* Style for submenu */
 .sidebar ul li ul {
-  display: none; /* Hide submenus by default */
-  padding-left: 20px; /* Indent submenu items */
-  border-left: 2px solid #1F419B; /* Vertical line style */
+  display: none;
+  padding-left: 20px;
+  border-left: 2px solid #1F419B;
 }
 
 .sidebar ul li ul li {
-  padding-left: 10px; /* Adjust as needed */
+  padding-left: 10px;
 }
 
 .bottom-links {
@@ -212,29 +207,23 @@ body {
 
 @media (max-width: 768px) {
   .bottom-links {
-      height: auto;
-      /* Reset height for smaller screens */
-      margin-top: 0;
+    height: auto;
+    margin-top: 0;
   }
 }
 
+/* Header Styles */
 .header {
-  height         : 60px;
-  background     : #FAFAFC;
-  width          : 100%;
-  display        : flex;
-  align-items    : center;
-  flex-basis     : 100%;
-  color          : #1F419B;
-  padding        : 0 20px;
-  /* Adjust padding as needed */
-  display        : flex;
+  height: 60px;
+  background: #FAFAFC;
+  width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items    : center;
-  border-bottom  : 2px solid rgba(250, 250, 252, 0.5);
-  margin-top     : 5px;
-  /* Adjust opacity as needed */
-
+  border-bottom: 2px solid rgba(250, 250, 252, 0.5);
+  margin-top: 5px;
+  padding: 0 20px;
+  color: #1F419B;
 }
 
 .sidebar ul li a.active i,
@@ -243,11 +232,11 @@ body {
 }
 
 .site-logo {
-  height    : 32px;
-  width     : 32px;
+  height: 32px;
+  width: 32px;
   min-height: 32px;
-  min-width : 32px;
-  margin    : 0 18px 0 15px;
+  min-width: 32px;
+  margin: 0 18px 0 15px;
 }
 
 .site-logo path {
@@ -255,99 +244,99 @@ body {
 }
 
 .site-title {
-  color         : #1F419B;
-  font-size     : 24px;
+  color: #1F419B;
+  font-size: 24px;
   letter-spacing: 1px;
-  font-weight   : 400;
-}
-
-.page-content {
-  padding    : 10px 25px;
-  box-sizing : border-box;
-  width      : 100%;
-  flex       : 1;
-  overflow-x : hidden;
-  overflow-y : auto;
-  margin-left: 20px;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-}
-.page-content::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
-}
-.page-content h1 {
-  font-size  : 30px;
   font-weight: 400;
-  color      : #111;
 }
 
+/* Page Content Styles */
+.page-content {
+  padding: 10px 25px;
+  box-sizing: border-box;
+  width: 100%;
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-left: 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.page-content::-webkit-scrollbar {
+  display: none;
+}
+
+.page-content h1 {
+  font-size: 30px;
+  font-weight: 400;
+  color: #111;
+}
+
+/* Header Menu Styles */
 .header-menu {
-  height     : 100%;
+  height: 100%;
   align-items: center;
-  display    : flex;
-  padding    : 0 20px;
+  display: flex;
+  padding: 0 20px;
   margin-left: -37px;
-  flex       : 1;
-  position   : relative;
+  flex: 1;
+  position: relative;
 }
 
 .header-menu .button-menu {
-  width       : 28px;
-  height      : 28px;
+  width: 28px;
+  height: 28px;
   margin-right: 15px;
-  background  : none;
-  border      : 0;
-  cursor      : pointer;
-  color       : #00AB4F;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: #00AB4F;
 }
 
 .greeting {
-  /* Add styles for the greeting message */
-  color      : #00AB4F;
+  color: #00AB4F;
   font-weight: 500;
-  font-size  : 18px;
-
+  font-size: 18px;
 }
 
 .header-logo {
-  display    : flex;
+  display: flex;
   align-items: center;
-  width      : 220px;
-  overflow   : hidden;
-  transition : width 0.5s ease;
+  width: 220px;
+  overflow: hidden;
+  transition: width 0.5s ease;
 }
 
+/* Search Menu Styles */
 .search-menu input[type="search"] {
-  height       : auto;
-  padding      : 10px 20px 10px 50px;
-  /* Adjust left padding for icon space */
-  box-sizing   : border-box;
-  background   : #E8F0FE;
-  color        : #333;
-  width        : 100%;
+  height: auto;
+  padding: 10px 20px 10px 50px;
+  box-sizing: border-box;
+  background: #E8F0FE;
+  color: #333;
+  width: 100%;
   border-radius: 10px;
-  /* Oval shape */
-  border       : 1px solid #00AB4F;
-  font-size    : 1rem;
-  line-height  : 22px;
-  font-weight  : 500;
-  transition   : border-color 0.3s ease;
-
+  border: 1px solid #00AB4F;
+  font-size: 1rem;
+  line-height: 22px;
+  font-weight: 500;
+  transition: border-color 0.3s ease;
 }
 
 .search-menu input[type="search"]:focus {
   border-color: #00AB4F;
-  outline     : none;
+  outline: none;
 }
 
 .search-menu input[type="search"]::placeholder {
-  color       : #b9b5b5;
+  color: #b9b5b5;
   padding-left: 10px;
 }
 
 .header-menu .button-menu:focus {
   outline: none;
-  border : none;
+  border: none;
 }
 
 .header-menu .button-menu svg path {
@@ -357,11 +346,10 @@ body {
 /* Responsive Adjustments */
 @media (max-width: 992px) {
   .header {
-    flex-direction : row;
+    flex-direction: row;
     justify-content: space-between;
-    align-items    : center;
-    padding        : 0 10px;
-    /* Adjust padding as needed */
+    align-items: center;
+    padding: 0 10px;
   }
 
   .header-menu {
@@ -377,20 +365,19 @@ body {
   }
 
   .header-logo svg {
-    width       : 32px;
-    height      : 32px;
+    width: 32px;
+    height: 32px;
     margin-right: 8px;
   }
 
   .site-title {
     font-size: 1.2rem;
   }
-
 }
 
 @media screen and (max-width: 991px) {
   .page-content {
-    width      : 100vw;
+    width: 100vw;
     margin-left: 0;
     padding-left: 10px;
     padding-right: 15px;
@@ -402,7 +389,8 @@ body {
     display: none;
   }
 }
-/* search styles */
+
+/* Additional Header Styles */
 .header2 {
   display: flex;
   flex-direction: column;
@@ -413,20 +401,16 @@ body {
 
 .welcome-title {
   font-size: 24px;
-  /* Adjust the font size as needed */
-  margin: 0; /* Remove margins */
-  padding: 0; /* Remove padding */
-  text-align: left; /* Center align the text */
-  margin-bottom: 10px; /* Reduce the bottom margin */
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  margin-bottom: 10px;
 }
 
 .welcome-title span {
   font-weight: bold;
-  /* Make the user's name bold */
   color: #1F419B;
-  /* Change the color of the user's name */
   margin-left: 5px;
-  /* Add some spacing between the text and the emoji */
 }
 
 .search-menu {
@@ -436,13 +420,13 @@ body {
 .search-wrapper {
   position: relative;
   width: 100%;
-  max-width: 600px; /* Adjust this value as needed */
+  max-width: 600px;
   margin: 0 auto;
 }
 
 .search-input {
   width: 100%;
-  padding-left: 40px; /* Ensure padding for the search icon */
+  padding-left: 40px;
 }
 
 .search-icon {
@@ -454,24 +438,22 @@ body {
   pointer-events: none;
 }
 
-/* Media queries for different screen sizes */
 @media (min-width: 600px) {
   .header2 {
     flex-direction: row;
     justify-content: space-between;
-    align-items: center; /* Align items to the center */
-    /* padding: 0 0px; Add padding to the sides */
+    align-items: center;
   }
 
   .search-wrapper {
     width: auto;
-    margin: 0; /* Remove margins */
+    margin: 0;
   }
 
   .welcome-title {
-    width: auto; /* Adjust width for better alignment */
-    margin-bottom: 0; /* Remove bottom margin */
-    margin-right: 20px; /* Add right margin */
+    width: auto;
+    margin-bottom: 0;
+    margin-right: 20px;
   }
 }
 
@@ -483,7 +465,7 @@ body {
   
   .welcome-title {
     width: 100%;
-    margin-bottom: 10px; /* Maintain bottom margin for small screens */
+    margin-bottom: 10px;
   }
 
   .search-input {
@@ -495,111 +477,106 @@ body {
   }
 }
 
-
+/* Suggestions Dropdown */
 .suggestions {
-  list-style-type : none;
-  padding         : 0;
-  margin          : 0;
-  position        : absolute;
-  top             : calc(100% + 10px);
-  /* Position below the search input with a small gap */
-  left            : 0;
-  width           : 100%;
-  /* Match the search input width */
-  border          : 1px solid #ddd;
-  border-radius   : 8px;
-  max-height      : 200px;
-  overflow-y      : auto;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
   background-color: #fff;
-  box-shadow      : 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* Add a subtle shadow */
-  z-index         : 1000;
-  /* Ensure it appears above other elements */
-  display         : none;
-  /* Hidden by default */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 1000;
 }
 
 .suggestions.active {
   display: block;
-  /* Show when active */
 }
 
 .suggestions li {
   padding: 10px;
-  cursor : pointer;
+  cursor: pointer;
 }
 
 .suggestions li:hover {
   background-color: #eee;
 }
 
-/* css style user settings menu */
-/* profile menu */
-
+/* Profile Menu */
 .profile {
-  position       : relative;
-  display        : flex;
+  position: relative;
+  display: flex;
   justify-content: flex-end;
-  align-items    : center;
-  gap            : 12px;
-  cursor         : pointer;
-  text-align     : start;
-  height         : auto; /* Adjust the height percentage as needed */
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: start;
+  height: auto;
 }
 
 .profile h3 {
-  text-align   : end;
-  line-height  : 1;
+  text-align: end;
+  line-height: 1;
   margin-bottom: 4px;
-  font-weight  : 600;
+  font-weight: 600;
+  color: #1F419B;
 }
 
 .profile p {
   line-height: 1;
-  font-size  : 14px;
-  opacity    : .6;
+  font-size: 14px;
+  opacity: 0.6;
 }
 
 .profile .img-box {
-  position     : relative;
-  width        : 38px;
-  height       : 38px;
+  position: relative;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  overflow     : hidden;
-  margin-right : 10px;
+  overflow: hidden;
+  margin-right: 10px;
 }
 
 .profile .img-box img {
-  position  : absolute;
-  top       : 0;
-  left      : 0;
-  width     : 100%;
-  height    : 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
 .clock {
-  color      : #00AB4F;
-  font-size  : 16px;
+  color: #00AB4F;
+  font-size: 16px;
   font-weight: bold;
 }
 
-
-/* menu (the right one) */
-
-/* menu (the right one) */
+/* User Settings Menu */
 .menu {
-  position     : absolute;
-  top          : 5%; /* Offset by the profile height */
-  right        : -200px; /* Start off-screen */
-  width        : 250px;
-  height       : 100vh; /* Remaining height */
-  background   : #fff;
+  position: absolute;
+  top: 5%;
+  right: -200px;
+  width: 250px;
+  height: 100vh;
+  background: #fff;
   border-radius: 10px;
-  box-shadow   : 5px 0 10px #1F419B; /* Shadow on left side */
-  transition   : right 0.3s ease-in-out; /* Transition for smooth animation */
-  z-index      : 9999;
-  display      : none; /* Initially hide the menu */
+  box-shadow: 5px 0 10px #1F419B;
+  transition: right 0.3s ease-in-out;
+  z-index: 9999;
+  display: none;
+}
+
+.menu.active {
+  right: 0;
+  display: block;
 }
 
 .menu-header {
@@ -611,7 +588,7 @@ body {
 }
 
 .menu-header img {
-  width: 100px; /* Adjust logo width as needed */
+  width: 100px;
 }
 
 .close-btn {
@@ -621,65 +598,57 @@ body {
   font-size: 18px;
   color: #333;
 }
+
 .menu::before {
-  content   : '';
-  position  : absolute;
-  top       : -10px;
-  right     : 14px;
-  width     : 20px;
-  height    : 20px;
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  width: 20px;
+  height: 20px;
   background: #fff;
-  transform : rotate(45deg);
-  z-index   : -1;
+  transform: rotate(45deg);
+  z-index: -1;
 }
-
-.menu.active {
-  right: 0;
-  display: block;
-  opacity   : 1;
-  transform : translateY(0);
-  visibility: visible;
-}
-
-/* menu links */
 
 .menu ul {
-  position      : relative;
-  display       : flex;
+  position: relative;
+  display: flex;
   flex-direction: column;
-  z-index       : 10;
-  background    : #fff;
+  z-index: 10;
+  background: #fff;
 }
 
 .menu ul li {
-  list-style : none;
+  list-style: none;
   margin-left: -30px;
-}
-
-.menu ul li a:hover {
-  background: #1F419B;
-  color     : #ccc;
 }
 
 .menu ul li a {
   text-decoration: none;
-  color          : #111;
-  display        : flex;
-  align-items    : start;
-  padding        : 15px 20px 10px;
-  gap            : 6px;
+  color: #111;
+  display: flex;
+  align-items: start;
+  padding: 15px 20px 10px;
+  gap: 6px;
+}
+
+.menu ul li a:hover {
+  background: #1F419B;
+  color: #ccc;
 }
 
 .menu ul li a i {
   font-size: 1.25rem;
 }
-@media screen and (max-width:900px) {
+
+/* Responsive Adjustments */
+@media screen and (max-width: 900px) {
   .profile {
-    display    : flex;
+    display: flex;
     align-items: center;
-    gap        : 8px;
+    gap: 8px;
     margin-left: auto;
-    /* Push the profile to the right */
   }
 
   .user {
@@ -687,15 +656,16 @@ body {
   }
 
   .user h3 {
-    font-size  : 14px;
+    font-size: 14px;
     font-weight: bold;
+    color: #1F419B;
   }
 
   .user p {
     font-size: 12px;
   }
-  
 }
+
 
 /* user settings css end */
 /* custom card */
@@ -808,140 +778,110 @@ body {
 /* Login form styles */
 
 .login-header {
-  width        : 100%;
-  text-align   : center;
+  width: 100%;
+  text-align: center;
   margin-bottom: 20px;
   /* Adjust spacing between header and form */
 }
 
 .login-form {
-  padding              : 30px;
-  margin-bottom        : 20px;
-  margin-top           : 30px;
-  padding-top          : 10px;
-  width                : 100%;
-  color                : #39414e !important;
-  font-size            : 1.2rem;
-  /* Standard font size */
-  line-height          : 22px;
-  font-weight          : 500;
-  font-feature-settings: 'pnum'on, 'lnum'on, 'liga'off;
-  transition           : all 250ms ease-in-out;
+  padding: 30px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  width: 100%;
+  color: #39414e;
+  font-size: 1.2rem;
+  line-height: 22px;
+  font-weight: 500;
+  font-feature-settings: 'pnum' on, 'lnum' on, 'liga' off;
+  transition: all 250ms ease-in-out;
 }
 
 .login-form input {
-  color        : #39414e !important;
-  width        : 100%;
-  padding      : 12px 16px;
-  /* Adjust padding */
+  color: #39414e;
+  width: 100%;
+  padding: 12px 16px;
   border-radius: 8px;
-  box-sizing   : border-box;
-  border       : 2px solid #c2c5c9;
-  /* Add border */
-  font-size    : 1.2rem;
-  /* Standard font size */
-  line-height  : 22px;
-  font-weight  : 500;
-  transition   : border-color 0.3s ease;
-  /* Smooth transition for border color */
+  box-sizing: border-box;
+  border: 2px solid #c2c5c9;
+  font-size: 1.2rem;
+  line-height: 22px;
+  font-weight: 500;
+  transition: border-color 0.3s ease;
 }
 
 .login-form input:focus {
   border-color: #1F419B;
-  /* Change border color on focus */
 }
 
+/* Default styles for both btn-primary and btn-custom-primary */
+.btn-primary,
+.btn-custom-primary {
+  font-weight: bold;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 0; /* Remove rounded corners */
+  cursor: pointer;
+  padding: 10px 20px; /* Adjust padding as needed */
+  margin: 10px 5px;
+  text-align: center;
+  background: #1F419B;
+}
+
+/* Styles specific to .btn-primary (Bootstrap style with rounded corners) */
 .btn-primary {
-  background   : #1F419B;
-  font-weight  : bold;
-  color        : white;
-  border       : none;
-  border-radius: 25px;
-  cursor       : pointer;
-  padding      : 10px 20px;  /* Adjust padding as needed */
-  margin       : 10px 5px;
-  text-align   : center;
-  float        : inline-end;
-
+  border-radius : 25px;
+  float : inline-end;
 }
+
+.btn-primary:hover, .btn-custom-primary:hover {
+  background    : #3f51b5; /* Darker shade of primary color */
+  color: #ccc;
+}
+
+
+/* Styles specific to .btn-custom-primary (Bootstrap style without rounded corners) */
+.btn-custom-primary {
+  border-radius : 5px;
+  background    : #1F419B;
+}
+
 
 .btn-cancel {
-  width      : 100px;
   font-weight: bold;
-  color      : #1F419B;
-  border     : none;
-  outline    : none;
-  box-shadow : none;
-  cursor     : pointer;
-  padding    : 10px 5px;
-  margin     : 10px 5px;
-  float      : inline-end;
+  color: #1F419B;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
 }
 
 .btn-cancel:hover {
-  color          : #4e66a8;
+  color: #4e66a8;
   text-decoration: underline;
-  border         : none;
-
 }
 
 .btn:focus,
 .btn-primary:focus,
-.btn-cancel:focus {
-  outline   : none;
-  /* Prevents the default outline */
+.btn-cancel:focus,
+.btn-custom-primary:focus {
+  outline: none;
   box-shadow: none;
-  /* Removes any box shadow that might be used for focus */
-}
-/* Custom btn-custom-primary styles */
-.btn-custom-primary {
-  color: #fff;
-  background-color: #15317E;
-  border-color: #007bff;
-}
-
-.btn-custom-primary:hover {
-  background-color: #3f51b5;
-  /* A lighter shade of blue */
-  color           : #ccc;
-}
-
-.btn-custom-primary:focus, .btn-custom-primary.focus {
-  color: #fff;
-  background-color: #0056b3;
-  border-color: #0056b3;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-}
-
-.btn-custom-primary.disabled, .btn-custom-primary:disabled {
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.btn-custom-primary:not(:disabled):not(.disabled):active, .btn-custom-primary:not(:disabled):not(.disabled).active,
-.show > .btn-custom-primary.dropdown-toggle {
-  color: #fff;
-  background-color: #0056b3;
-  border-color: #0056b3;
-}
-
-.btn-custom-primary:not(:disabled):not(.disabled):active:focus, .btn-custom-primary:not(:disabled):not(.disabled).active:focus,
-.show > .btn-custom-primary.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
 }
 
 .sign-message {
   font-size: 20px;
-  color    : #333;
-  padding  : 10px 5px;
-  margin   : 10px 5px;
+  color: #333;
+  padding: 10px 5px;
+  margin: 10px 5px;
 }
 
 .sign-message a {
-  color          : #007bff;
+  color: #007bff;
   text-decoration: none;
-  transition     : color 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 .sign-message a:hover {
@@ -950,16 +890,15 @@ body {
 
 /* End of Login Form Style */
 
-/* step wizard form registration  */
-/*form styles*/
+
+/* Form styles */
 #msform {
-  text-align   : center;
-  position     : relative;
-  margin-top   : 30px;
+  text-align: center;
+  position: relative;
+  margin-top: 30px;
   margin-bottom: 10px;
-  width        : 100%;
-  z-index      : 1;
-  /* Ensure the form appears above the overlay */
+  width: 100%;
+  z-index: 1;
 }
 
 .hidden {
@@ -971,193 +910,201 @@ body {
   display: none;
 }
 
+/* Input styles */
 #msform input[type='text'],
 #msform input[type='email'],
 #msform input[type='tel'],
 #msform input[type='number'],
 #msform input[type='file'] {
-  color        : #39414e !important;
-  width        : 100%;
-  padding      : 12px 16px;
-  /* Adjust padding */
+  color: #39414e !important;
+  width: 100%;
+  padding: 12px 16px;
   border-radius: 8px;
-  box-sizing   : border-box;
-  border       : 2px solid #c2c5c9;
-  /* Add border */
-  font-size    : 1rem;
-  /* Standard font size */
-  line-height  : 22px;
-  font-weight  : 500;
+  box-sizing: border-box;
+  border: 2px solid #c2c5c9;
+  font-size: 1rem;
+  line-height: 22px;
+  font-weight: 500;
   margin-bottom: 5px;
-  transition   : border-color 0.3s ease;
-  /* Smooth transition for border color */
+  transition: border-color 0.3s ease;
 }
 
 #msform input:focus {
   border-color: #1F419B;
-  /* Change border color on focus */
 }
 
 /* Buttons */
 #msform .action-button {
-  width        : 100px;
-  background   : #1F419B;
-  font-weight  : bold;
-  color        : white;
-  border       : 0 none;
+  width : 100px;
+  background : #1F419B;
+  font-weight : bold;
+  color : white;
+  border : 0 none;
   border-radius: 25px;
-  cursor       : pointer;
-  padding      : 10px 5px;
-  margin       : 10px 5px;
-  float        : inline-end;
+  cursor : pointer;
+  padding : 10px 5px;
+  margin : 10px 5px;
+  float : inline-end;
+  }
+
+  
+  .submit.action-button {
+  display : inline-block;
+  padding : 10px 20px;
+  background-color: transparent;
+  color : white;
+  border : 2px solid white;
+  border-radius : 25px;
+  font-size : 1rem;
+  /* Standard font size /
+  text-decoration : none;
+  transition : background-color 0.3s, color 0.3s;
+  position : relative;
+  / Ensure z-index works /
+  z-index : 1;
+  / Ensure button is above overlay */
+  }
+  
+  
+#msform .action-button {
+  background: #1F419B;
 }
 
 #msform .action-button:hover {
-  background-color: #1F419B;
-  color           : #ccc;
+  background-color: #3f51b5;
+  color: #ccc;
 }
-
+#msform .action-button-previous {
+  width : 100px;
+  background : #C5C5F1;
+  font-weight : bold;
+  color : white;
+  border : 0 none;
+  border-radius: 25px;
+  cursor : pointer;
+  padding : 10px 5px;
+  margin : 10px 5px;
+  float : right;
+  }
 .submit.action-button {
-  display         : inline-block;
-  padding         : 10px 20px;
   background-color: transparent;
-  color           : white;
-  border          : 2px solid white;
-  border-radius   : 25px;
-  font-size       : 1rem;
-  /* Standard font size */
-  text-decoration : none;
-  transition      : background-color 0.3s, color 0.3s;
-  position        : relative;
-  /* Ensure z-index works */
-  z-index         : 1;
-  /* Ensure button is above overlay */
+  border: 2px solid white;
+  font-size: 1rem;
 }
 
 .submit.action-button:hover,
 .submit.action-button:focus,
 .submit.action-button:active {
   background-color: white;
-  outline         : none;
-  color           : #1F419B;
-  transform       : translateY(1px);
+  color: #1F419B;
+  outline: none;
+  transform: translateY(1px);
 }
 
 #msform .action-button-previous {
-  width        : 100px;
-  background   : #C5C5F1;
-  font-weight  : bold;
-  color        : white;
-  border       : 0 none;
-  border-radius: 25px;
-  cursor       : pointer;
-  padding      : 10px 5px;
-  margin       : 10px 5px;
-  float        : right;
+  width: 100px;
+  background: #C5C5F1;
 }
 
 #msform .action-button-previous:hover,
 #msform .action-button-previous:focus {
-  box-shadow: 0 0 0 2px white, 0 0 0 3px #C5C5F1;
+  outline: none;
+
 }
 
-/* Progressbar */
+/* Progress bar styles */
 #progressbar {
-  overflow     : hidden;
+  overflow: hidden;
   counter-reset: step;
-  /* CSS counters to number the steps */
-  color        : lightgrey;
+  color: lightgrey;
   margin-bottom: 30px;
-  width        : auto;
+  width: auto;
 }
 
 #progressbar li {
   list-style-type: none;
-  font-size      : 1.25rem;
-  /* Standard font size */
-  width          : 33.33%;
-  float          : left;
-  position       : relative;
-  letter-spacing : 1px;
-  font-weight    : 400
+  font-size: 1.25rem;
+  width: 33.33%;
+  float: left;
+  position: relative;
+  letter-spacing: 1px;
+  font-weight: 400;
 }
 
 #progressbar li:before {
-  content          : counter(step);
+  content: counter(step);
   counter-increment: step;
-  width            : 50px;
-  height           : 50px;
-  line-height      : 45px;
-  display          : block;
-  font-size        : 20px;
-  color            : #ffffff;
-  background       : lightgray;
-  border-radius    : 50%;
-  margin           : 0 auto 10px auto;
-  padding          : 2px
+  width: 50px;
+  height: 50px;
+  line-height: 45px;
+  display: block;
+  font-size: 20px;
+  color: #ffffff;
+  background: lightgray;
+  border-radius: 50%;
+  margin: 0 auto 10px auto;
+  padding: 2px;
 }
 
 #progressbar li:after {
-  content   : '';
-  width     : 100%;
-  height    : 2px;
+  content: '';
+  width: 100%;
+  height: 2px;
   background: lightgray;
-  position  : absolute;
-  left      : -50%;
-  top       : 25px;
-  z-index   : -2;
-  /* Put it behind the numbers */
+  position: absolute;
+  left: -50%;
+  top: 25px;
+  z-index: -2;
 }
 
 #progressbar li:first-child:after {
   content: none;
-  /* Connector not needed before the first step */
 }
 
 #progressbar .active {
-  color: #500041
+  color: #500041;
 }
 
 #progressbar li.active:before,
 #progressbar li.active:after {
-  background: #500041
+  background: #500041;
 }
 
+/* Heading styles */
 #heading {
   text-transform: uppercase;
-  color         : #500041;
-  font-weight   : bold
+  color: #500041;
+  font-weight: bold;
 }
 
+/* Message link styles */
 .message a {
-  color          : white;
+  color: white;
   text-decoration: none;
-  font-size      : 1.2rem;
-  font-weight    : bold;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
+
 
 /* Side section styles */
-
 .side-section {
   background-color: #500041;
-  color           : white;
-  height          : 100vh;
-  margin-right    : 20px;
-  display         : flex;
-  justify-content : center;
-  align-items     : flex-start;
-  /* Align items to the top */
-  position        : fixed;
-  top             : 0;
-  left            : 0;
-  bottom          : 0;
-  max-height      : 100%;
-  overflow-y      : hidden;
-  margin-left     : 80px;
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  max-height: 100%;
+  overflow-y: hidden;
+  margin-left: 80px; /* Adjust as needed */
 }
 
 .side-section:hover {
-  transform : translateY(-5px);
+  transform: translateY(-5px);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -1167,9 +1114,9 @@ body {
 }
 
 .side-section p {
-  font-size   : 1.25rem;
+  font-size: 1.25rem;
   padding-left: 20px;
-  margin-top  : 20px;
+  margin-top: 20px;
 }
 
 .side-box {
@@ -1178,10 +1125,9 @@ body {
 
 .form-box {
   padding-top: 40px;
-  margin-left: 50%;
-
-  /* Adjust this value based on the width of your sidebar */
+  margin-left: 50%; /* Adjust this value based on the width of your sidebar */
 }
+
 .password-container {
   position: relative;
 }
@@ -1197,68 +1143,58 @@ body {
   transform: translateY(-50%);
   cursor: pointer;
 }
+
 /* Media queries for responsiveness */
 @media (max-width: 768px) {
-
-  /* Move side section to the top on smaller screens */
   .side-section {
-    margin-right : 0;
+    margin-right: 0;
     border-radius: 8px;
-    display      : flex;
-    margin-left  : 0;
-    margin-top   : 0;
-    height       : 5%;
-    position     : relative;
+    margin-left: 0;
+    margin-top: 0;
+    height: 5%;
+    position: relative;
   }
 
-  /* Adjust width and overflow for side-form */
   .form-box {
-    width      : 100%;
+    width: 100%;
     margin-left: 0;
-    /* Remove margin-left */
-    margin-top : 0;
+    margin-top: 0;
     padding-top: 0;
-    overflow-x : hidden;
-    /* Prevent horizontal overflow */
-
+    overflow-x: hidden;
   }
 
   .side-box {
-    width     : 100%;
+    width: 100%;
     text-align: center;
-    overflow  : hidden;
-    /* Prevent overflow on small screens */
+    overflow: hidden;
   }
 
   .side-section p {
     padding: 10px;
-    /* Adjust padding for paragraphs */
   }
 
   .side-section h1 {
-    padding-top  : 16px;
-    /* Adjust padding for the heading */
+    padding-top: 16px;
     margin-bottom: 20px;
-    /* Add margin to bottom for better spacing */
   }
 }
 
+/* Container height */
 .container {
   height: 100%;
-
 }
 
-/* css layout for form input */
+/* Form input styles */
 .edit-icon {
-  border         : 1px solid;
-  border-radius  : 50%;
-  width          : 40px;
-  height         : 40px;
-  display        : flex;
-  align-items    : center;
+  border: 1px solid;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  font-size      : 1.2em;
-  color          : #00AB4F;
+  font-size: 1.2em;
+  color: #00AB4F;
 }
 
 .edit-icon:hover {
@@ -1266,22 +1202,19 @@ body {
 }
 
 .read-only-input {
-  border          : none;
+  border: none;
   background-color: #fff;
-  padding         : 0;
-  margin          : 0;
-  box-shadow      : none;
-  cursor          : default;
-
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  cursor: default;
 }
 
 .read-only-input:focus {
   outline: none;
 }
 
-/* css to decorate the table layout */
-/* Set minimum width of table */
-
+/* Table layout styles */
 .table-container {
   min-width: 320px;
 }
@@ -1290,12 +1223,10 @@ body {
   font-size: 14px;
 }
 
-/* Default styles for th */
-
-/* Remove white-space: nowrap; from .sortable */
+/* Sortable column styles */
 .sortable {
-  position   : relative;
-  cursor     : pointer;
+  position: relative;
+  cursor: pointer;
   white-space: nowrap;
 }
 
@@ -1305,52 +1236,45 @@ body {
 
 .sort-icon:after {
   content: '▲▼';
-  color  : #999;
-  /* Default color */
+  color: #999; /* Default color */
 }
 
 .sortable:active .sort-icon:after {
-  color: #1F419B;
-  /* Change this to your desired color */
+  color: #1F419B; /* Change to desired active color */
 }
 
-/* css styles for pagination */
+
 /* Pagination styles */
 .pagination {
-  list-style     : none;
-  display        : flex;
+  list-style: none;
+  display: flex;
   justify-content: center;
-  align-items    : center;
-  padding        : 10px;
-  margin-top     : 0;
-
+  align-items: center;
+  padding: 10px;
+  margin-top: 0;
 }
 
 .pagination a {
-  display        : inline-block;
-  padding        : 8px 16px;
-  border-radius  : 50%;
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 50%;
   text-decoration: none;
-  color          : #1F419B;
-  font-size      : 16px;
-  font-weight    : bold;
+  color: #1F419B;
+  font-size: 16px;
+  font-weight: bold;
 }
 
-/* Style for active page */
 .pagination strong {
   background-color: #333;
-  color           : #fff;
+  color: #fff;
 }
 
-/* Style for active page */
 .pagination .current {
   background-color: #00AB4F;
-  color           : #333;
-  border-radius   : 50%;
-
+  color: #333;
+  border-radius: 50%;
 }
 
-/* Hover effect for non-selected page numbers */
 .pagination a:hover {
   background-color: #E4E6FD;
 }
@@ -1362,33 +1286,32 @@ body {
 @media screen and (max-width: 768px) {
   .pagination {
     flex-direction: row;
-    align-items   : center;
+    align-items: center;
   }
 }
 
-/* Custom styling for select menu */
+/* Select menu styling */
 .select-wrapper {
-  display    : flex;
+  display: flex;
   align-items: center;
-  max-width  : 20%;
+  max-width: 20%;
 }
 
 .select-wrapper label {
-  padding     : 10px;
+  padding: 10px;
   padding-left: 0%;
 }
 
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
   .select-wrapper {
     max-width: 65%;
-
   }
 }
 
-.select-wrapper,
-.filter-section {
+/* Filter section */
+.filter-section,
+.select-wrapper {
   margin-bottom: 10px;
-  /* Adjust as needed */
 }
 
 .filter-section label {
@@ -1396,44 +1319,39 @@ body {
 }
 
 .filter-section input[type="text"] {
-  padding      : 8px;
-  border       : 1px solid #ccc;
+  padding: 8px;
+  border: 1px solid #ccc;
   border-radius: 5px;
 }
 
 .filter-section button {
-  padding         : 8px 15px;
+  padding: 8px 15px;
   background-color: #1F419B;
-  color           : #fff;
-  border          : none;
-  border-radius   : 5px;
-  cursor          : pointer;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-/* Styling for the input field when focused */
 .filter-section input:focus {
-  outline     : none;
+  outline: none;
   border-color: #1F419B;
-  /* Change to desired color */
-  box-shadow  : 0 0 5px rgba(0, 123, 255, 0.5);
-  /* Optional : Add a subtle shadow */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-/* button hover for all buttons */
 .button-hover:hover {
   background-color: #3f51b5;
-  /* A lighter shade of blue */
-  color           : #ccc;
+  color: #ccc;
 }
 
-/* button status */
+/* Button status */
 .btn-status.btn-small {
-  height          : 30px;
-  line-height     : 30px;
-  padding         : 0px 10px;
-  color           : #1F419B;
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 10px;
+  color: #1F419B;
   background-color: #fff;
-  border          : none;
+  border: none;
 }
 
 tr:hover .btn-small {
@@ -1441,115 +1359,107 @@ tr:hover .btn-small {
 }
 
 td:last-child .btn-status {
-  width        : 30px;
-  height       : 30px;
-  text-align   : center;
-  padding      : 0px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 0px;
   margin-bottom: 0px;
-  margin-right : 5px;
+  margin-right: 5px;
 }
 
 td:last-child .btn-status .fas {
   line-height: 30px;
-  width      : 30px;
+  width: 30px;
 }
 
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
   .filter-section button {
     margin-top: 10px;
   }
-
 }
 
-/* page details of */
+/* Overlay */
 .overlay {
-  position        : fixed;
-  top             : 0;
-  right           : 0;
-  /* Initially off-screen to the right */
-  width           : 100%;
-  height          : 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  display         : none;
-  align-items     : center;
-  justify-content : center;
-  z-index         : 999;
-  transition      : right 0.5s ease;
-  /* Transition property for animation */
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: right 0.5s ease;
 }
 
 .overlay-container {
-  display         : flex;
-  flex-direction  : column;
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
-  padding         : 20px;
-  border-radius   : 8px;
-  width           : 100%;
-  height          : 100%;
-  margin-left     : 20%;
-  box-shadow      : 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow-x      : hidden;
-  position        : relative;
-
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  margin-left: 20%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-x: hidden;
+  position: relative;
 }
 
 .close-button {
-  position       : absolute;
-  top            : 20px;
-  left           : 20px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
   text-decoration: none;
-  font-size      : 24px;
-  color          : #1F419B;
+  font-size: 24px;
+  color: #1F419B;
 }
 
 .detail-header {
-  display       : flex;
-  align-items   : center;
-  padding       : 20px 0;
-  margin-top    : 30px;
-  margin-left   : 30px;
+  display: flex;
+  padding: 20px 0;
+  margin-top: 30px;
+  margin-left: 30px;
   flex-direction: column;
-  align-items   : flex-start;
-
+  align-items: flex-start;
 }
 
 .company-logo {
-  height       : 100px;
+  height: 100px;
   border-radius: 8px;
-  margin-right : 20px;
+  margin-right: 20px;
 }
 
 .company-name {
   font-size: 32px;
-  color    : #333;
-
+  color: #333;
 }
 
 .content {
   display: flex;
-
-  gap           : 20px;
-  margin-left   : 30px;
+  gap: 20px;
+  margin-left: 30px;
   flex-direction: row;
 }
 
 .details,
 .image {
   padding: 10px 0;
-  flex   : 1;
+  flex: 1;
 }
 
 .image {
   position: relative;
-  display : inline-block;
+  display: inline-block;
 }
 
 .image img {
-  width        : 100%;
-  height       : auto;
+  width: 100%;
+  height: auto;
   border-radius: 8px;
-  cursor       : pointer;
-  transition   : transform 0.3s ease-in-out;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
 }
 
 .buttons {
@@ -1558,29 +1468,29 @@ td:last-child .btn-status .fas {
 
 .approve-button,
 .disapprove-button {
-  padding      : 10px 20px;
-  margin-right : 10px;
-  border       : none;
+  padding: 10px 20px;
+  margin-right: 10px;
+  border: none;
   border-radius: 5px;
-  cursor       : pointer;
-  font-size    : 16px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .approve-button:disabled,
 .approve-button.approved {
   background-color: #6c757d;
-  cursor          : not-allowed;
+  cursor: not-allowed;
 }
 
 .disapprove-button:disabled,
 .disapprove-button.disapproved {
   background-color: #6c757d;
-  cursor          : not-allowed;
+  cursor: not-allowed;
 }
 
 .approve-button {
   background-color: #00AB4F;
-  color           : white;
+  color: white;
 }
 
 .approve-button:hover {
@@ -1589,7 +1499,7 @@ td:last-child .btn-status .fas {
 
 .disapprove-button {
   background-color: #dc3545;
-  color           : white;
+  color: white;
 }
 
 .disapprove-button:hover {
@@ -1597,28 +1507,28 @@ td:last-child .btn-status .fas {
 }
 
 .caption {
-  position        : absolute;
-  bottom          : 8px;
-  left            : 50%;
-  transform       : translateX(-50%);
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.7);
-  color           : white;
-  padding         : 5px 10px;
-  border-radius   : 5px;
-  font-size       : 14px;
-  text-align      : center;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
   .detail-header {
     flex-direction: column;
-    align-items   : flex-start;
+    align-items: flex-start;
   }
 
   .company-logo {
-    width        : 100%;
-    max-width    : 100px;
-    height       : auto;
+    width: 100%;
+    max-width: 100px;
+    height: auto;
     margin-bottom: 10px;
   }
 
@@ -1632,12 +1542,12 @@ td:last-child .btn-status .fas {
   }
 
   .close-button {
-    top : 10px;
+    top: 10px;
     left: 20px;
   }
 
   .overlay-container {
-    margin-left  : 10px;
+    margin-left: 10px;
     border-radius: 0;
   }
 
@@ -1646,94 +1556,76 @@ td:last-child .btn-status .fas {
   }
 }
 
-/* Styles for the stat box */
+/* Stat Box */
 .stat-row {
-  display        : flex;
-  /* Display items in a row */
+  display: flex;
   justify-content: space-around;
-  /* Distribute items evenly along the main axis */
-  margin-top     : 25px;
-  /* Add margin above the row */
-  gap            : 10px;
-  flex-wrap      : wrap;
-  /* Allow items to wrap to the next line */
+  margin-top: 25px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .stat-box {
-  flex            : 1;
-  align-items     : center;
-  padding         : 20px;
-  border          : 1px solid #ccc;
-  border-radius   : 8px;
-  box-shadow      : 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition      : transform 0.3s ease;
+  flex: 1;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
   background-color: #E4E6FD;
-  margin-bottom   : 10px;
-  width           : calc(33.33% - 40px);
-  /* Set initial width for large screens */
+  margin-bottom: 10px;
+  width: calc(33.33% - 40px);
 }
 
 .stat-content {
-  display    : flex;
+  display: flex;
   align-items: center;
 }
 
 .stat-info {
   margin-left: 20px;
-  /* Add spacing between icon and text */
 }
 
-/* Styles for the icon */
-/* Styles for the icon */
 .stat-icon {
   font-size: 24px;
-  color    : #1F419B;
-  /* Example color for total users icon */
+  color: #1F419B;
 }
 
-/* Styles for the second icon */
 .stat-box:nth-child(2) .stat-icon {
   color: #2ecc71;
-  /* Example color for new users icon */
 }
 
-/* Styles for the third icon */
 .stat-box:nth-child(3) .stat-icon {
   color: #f39c12;
-  /* Example color for revenue icon */
 }
 
-/* Styles for the statistical number */
 .stat-number {
-  font-size    : 32px;
-  font-weight  : bold;
+  font-size: 32px;
+  font-weight: bold;
   margin-bottom: 5px;
 }
 
-/* Styles for the text below the number */
 .stat-text {
   font-size: 14px;
-  color    : #666;
+  color: #666;
 }
 
-/* display rows to columns in small devices */
-/* Media query for small screens */
 @media (max-width: 768px) {
   .stat-box {
     width: calc(50% - 40px);
-    /* Set width for medium screens */
   }
 }
 
-/* Media query for extra small screens */
 @media (max-width: 576px) {
   .stat-box {
     width: calc(100% - 40px);
-    /* Set width for small screens */
   }
 }
 
+
 /* css layout for the roles management */
+/* Roles Management Section */
 .form-section {
   margin-bottom: 40px;
 }
@@ -1743,19 +1635,19 @@ td:last-child .btn-status .fas {
 }
 
 .form-group label {
-  display      : block;
+  display: block;
   margin-bottom: 5px;
 }
 
 .form-group input {
-  width     : 100%;
-  padding   : 8px;
+  width: 100%;
+  padding: 8px;
   box-sizing: border-box;
 }
 
 .form-group input:focus {
   border-color: #1F419B;
-  outline     : none;
+  outline: none;
 }
 
 .inline-form {
@@ -1764,54 +1656,42 @@ td:last-child .btn-status .fas {
 
 .role-list {
   list-style-type: none;
-  padding        : 0;
+  padding: 0;
 }
 
 .role-list li {
   margin-bottom: 10px;
 }
 
-/* CSS for tabs */
-/* CSS for tabs */
+/* Tabs Styling */
 .tabs {
-  display      : flex;
+  display: flex;
   border-bottom: 1px solid #ddd;
 }
 
 .tab {
-  cursor          : pointer;
-  padding         : 10px 15px;
-  border          : none;
+  cursor: pointer;
+  padding: 10px 15px;
+  border: none;
   background-color: transparent;
-  transition      : background-color 0.3s;
-  margin-right    : 10px;
-  border-radius   : 5px 5px 0 0;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+  border-radius: 5px 5px 0 0;
 }
 
 .tab.active {
-  color        : #1F419B;
+  color: #1F419B;
   border-bottom: 3px solid #1F419B;
-  font-weight  : bold;
-
+  font-weight: bold;
 }
 
-.nav-item .nav-link.active {
-  color: #1F419B; /* Change text color to blue */
-  background-color: inherit !important;
-  outline: none;
-  border: none;
-  box-sizing: 0;
-}
-.nav-tabs .nav-item .nav-link.active {
-  border-bottom: 2px solid #1F419B; /* Change the border color and width */
-}
-/* CSS for tab content */
+/* Tab Content Styling */
 .tabcontent {
-  display         : none;
-  padding         : 20px;
-  border-top      : none;
-  height          : 100%;
-  border-radius   : 0 0 5px 5px;
+  display: none;
+  padding: 20px;
+  border-top: none;
+  height: 100%;
+  border-radius: 0 0 5px 5px;
   background-color: #fefefe;
 }
 
@@ -1819,83 +1699,76 @@ td:last-child .btn-status .fas {
   display: block;
 }
 
-/* Form styles */
-.form-group {
-  margin-bottom: 15px;
-}
-
-/* css modal layout */
-/* Custom Modal Styles */
+/* Modal Styles */
 .modal {
-  display         : none;
-  position        : fixed;
-  z-index         : 1000;
-  left            : 0;
-  top             : 0;
-  width           : 100%;
-  height          : 80%;
-  overflow        : auto;
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 80%;
+  overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
   background-color: #fefefe;
-  margin          : 1% auto;
-  padding         : 20px;
-  border          : 1px solid #888;
-  width           : 90%;
+  margin: 1% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
 }
 
 .close {
-  color      : #aaa;
-  float      : right;
-  font-size  : 28px;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
   font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-  color          : black;
+  color: black;
   text-decoration: none;
-  cursor         : pointer;
+  cursor: pointer;
 }
 
 /* Circular Button Styles */
 .btn-circle {
-  width           : 40px;
-  height          : 40px;
-  padding         : 6px 0;
-  border-radius   : 50%;
-  text-align      : center;
-  font-size       : 24px;
-  line-height     : 1.42857;
+  width: 40px;
+  height: 40px;
+  padding: 6px 0;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 24px;
+  line-height: 1.42857;
   background-color: #00AB4F;
-  color           : #fff;
+  color: #fff;
 }
 
 .btn-circle:hover {
   background-color: #2ecc71;
-  color           : #ccc;
+  color: #ccc;
 }
 
 .btn-add-user {
   position: absolute;
-  top     : 15px;
-  right   : 15px;
+  top: 15px;
+  right: 15px;
 }
 
-/* company profile */
+/* Company Profile Section */
 .company {
-  display         : flex;
-  justify-content : space-between;
-  align-items     : flex-start;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   background-color: #fff;
-
 }
 
 .company-section form input:focus {
   border-color: #1F419B;
-  outline     : none;
+  outline: none;
 }
 
 .company-section,
@@ -1905,28 +1778,27 @@ td:last-child .btn-status .fas {
 
 .company-section form input[type="text"],
 .company-section form input[type="file"] {
-  width        : 100%;
-  padding      : 10px;
+  width: 100%;
+  padding: 10px;
   margin-bottom: 10px;
-
 }
 
 .preview-section img {
-  max-width    : 100%;
-  height       : auto;
-  display      : block;
+  max-width: 100%;
+  height: auto;
+  display: block;
   margin-bottom: 10px;
 }
 
 .preview-section div {
-  font-weight  : bold;
+  font-weight: bold;
   margin-bottom: 5px;
 }
 
 .company-section .btn-row {
-  display       : flex;
+  display: flex;
   flex-direction: row;
-  margin-bottom : 10px;
+  margin-bottom: 10px;
 }
 
 @media screen and (max-width:768px) {
@@ -1941,7 +1813,7 @@ td:last-child .btn-status .fas {
 
   .company-section .btn-row {
     flex-wrap: wrap;
-    gap      : 10px;
+    gap: 10px;
   }
 
   .company-section .btn-row button {
@@ -1949,20 +1821,19 @@ td:last-child .btn-status .fas {
   }
 }
 
-/* css style to layout the user analytics chart */
-
+/* User Analytics Chart Section */
 .log-filters {
-  position     : absolute;
-  top          : 3px;
-  left         : 12px;
-  z-index      : 10;
-  background   : rgba(255, 255, 255, 0.9);
-  padding      : 10px;
+  position: absolute;
+  top: 3px;
+  left: 12px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
   border-radius: none;
-  color        : #500041;
-  transition   : all 0.3s ease;
-  width        : auto;
-  overflow     : hidden;
+  color: #500041;
+  transition: all 0.3s ease;
+  width: auto;
+  overflow: hidden;
 }
 
 .log-filters:hover {
@@ -1970,7 +1841,7 @@ td:last-child .btn-status .fas {
 }
 
 .log-filters .form-group {
-  display      : none;
+  display: none;
   margin-bottom: 10px;
 }
 
@@ -1982,36 +1853,39 @@ td:last-child .btn-status .fas {
   width: 100%;
   height: 100%;
   min-height: 300px; /* Ensure a minimum height */
-  
 }
 
-.log-filters h3 {
+.log-filters h3,
+.filter-container h3 {
   margin-bottom: 10px;
 }
 
-.log-filters .form-group {
+.log-filters .form-group,
+.filter-container .form-group {
   margin-bottom: 10px;
 }
+
+/* Table Container */
 .table-container {
   width: 100%;
   margin: 0 auto;
   overflow-x: auto;
 }
 
-/* css layout for filtering */
-
+/* Filtering Section */
 .filter-container {
- 
   padding: 15px 0px;
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .filter-dropdown {
   position: relative;
   display: inline-block;
 }
+
 .filter-dropdown button {
   background-color: #1F419B;
   color: white;
@@ -2020,6 +1894,7 @@ td:last-child .btn-status .fas {
   cursor: pointer;
   border-radius: 5px;
 }
+
 .filter-dropdown-content {
   display: none;
   position: absolute;
@@ -2029,23 +1904,30 @@ td:last-child .btn-status .fas {
   z-index: 1;
   border-radius: 5px;
 }
+
 .filter-dropdown-content a {
   color: black;
   padding: 10px 15px;
   text-decoration: none;
   display: block;
 }
+
 .filter-dropdown-content a:hover {
   background-color: #f1f1f1;
 }
+
 .filter-dropdown:hover .filter-dropdown-content {
   display: block;
 }
+
 .filter-dropdown:hover button {
-  background-color: #15317E;
+  background-color: #3f51b5;
+  color: #ccc;
 }
 
+
 /* CSS for order item layout with specific class */
+/* Order Container */
 .order-container {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -2055,7 +1937,7 @@ td:last-child .btn-status .fas {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Order item styles */
+/* Order Item Styles */
 .order-item {
   position: relative;
   border: 1px solid #dee2e6;
@@ -2063,13 +1945,13 @@ td:last-child .btn-status .fas {
   padding: 15px;
   margin-bottom: 20px;
   background-color: #f8f9fa;
- 
 }
 
 .order-item h5 {
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 15px;
+  color: #1F419B; /* Match button color */
 }
 
 .order-item .form-group {
@@ -2091,7 +1973,7 @@ td:last-child .btn-status .fas {
   color: #bd2130;
 }
 
-/* Sticky buttons */
+/* Sticky Buttons */
 .sticky-buttons {
   position: sticky;
   bottom: 0;
@@ -2111,16 +1993,74 @@ td:last-child .btn-status .fas {
 }
 
 .sticky-buttons .btn:hover {
-  background-color: #0056b3;
+  background-color: #3f51b5;
 }
 
+/* Preview Container */
 .preview-container {
-  background-color: #f0f0f0;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    margin-top: 20px;
-    min-height: 200px;
-    position: sticky;
-    top: 20px; /* Adjust as needed based on your layout */
+  background-color: #FAFAFC; /* Background color to match the overall background */
+  color: #1F419B; /* Text color to match button color for consistency */
+  padding: 20px;
+  border: 1px solid #1F419B; /* Border color matching the button color */
+  border-radius: 10px;
+  margin-top: 20px;
+  min-height: 200px;
+  position: sticky;
+  top: 20px; /* Adjust as needed based on your layout */
+  margin-bottom: 20px;
+}
+.preview-container .btn-primary{
+  float: none;
+}
+
+.preview-container h3 {
+  color: #00AB4F; /* Text color matching the header text */
+}
+
+.preview-container p {
+  color: #1F419B; /* Text color to match button color */
+}
+
+/* Form Labels */
+.form-label {
+  color: #007A3E; /* Darker shade of green */
+}
+
+/* Form Control Placeholder Text */
+.form-control::placeholder {
+  color: #555555; /* Dark gray for placeholders */
+}
+
+/*-- CSS for Loading Spinner --> */
+.loading-spinner {
+  display: none;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  border: 6px solid #FAFAFC;
+  border-radius: 50%;
+  border-top: 6px solid #1F419B;
+  animation: spin 1s linear infinite;
+  z-index: 1000;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-message {
+  display: none;
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 1.2em;
+  color: #1F419B;
+  font-family: 'Arial', sans-serif;
+  z-index: 1000;
 }

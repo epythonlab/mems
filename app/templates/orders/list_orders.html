@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-<title>{% block title %}Order Management{% endblock title %}</title>
+<html lang="en">
+<head>
+
+    <title>{% block title %}Order Management{% endblock title %}</title>
+    
+</head>
+<body>
 {% block body %}
 {% include 'header.html' %}
 <!-- Main content -->
@@ -9,29 +15,28 @@
         <!-- Container for sidebar content -->
         {% include 'sidenav.html' %}
         <div class="page-content">
-            <!-- include the search bar -->
+            <!-- Header section -->
             <div class="header2">
                 <h2 class="welcome-title">Orders Management 🎉</h2>
                 <div class="search-menu">
-                    <form id="search-form"  method="GET">
+                    <form id="search-form" method="GET">
                         <div class="search-wrapper">
                             <i class="material-icons search-icon">search</i>
                             <input type="search" class="search-input" id="search" name="query" placeholder="Search by product, batch_no, or category..." autocomplete="off">
-                            
                             <ul id="suggestions" class="suggestions"></ul>
                         </div>
                     </form>
-                </div> 
+                </div>
             </div>
 
-            <!-- main contentns here -->
-
+            <!-- Main content section -->
             <div class="container mt-5">
-                <h1>List of Orders</h1>
+                <h3>List of Orders</h3>
                 <!-- Add New Order button -->
                 <div>
                     <button class="btn btn-custom-primary btn-sm button-hover" onclick="openModal('newOrderModal')">
-                        <i class="fas fa-plus"></i> New Order</button>
+                        <i class="fas fa-plus"></i> New Order
+                    </button>
                 </div>
                 <table class="table">
                     <thead>
@@ -60,28 +65,31 @@
         </div>
     </div>
 </div>
+
 <!-- New Order Modal -->
 <div id="newOrderModal" class="modal">
-    <div class="modal-dialog">
+    <div id="modalSpinner" class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Check Customer TIN</h5>
                 <button type="button" class="btn-close" onclick="closeModal('newOrderModal')" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="addModalContent">
-                <!-- Modal content -->
-                <h1 class="mb-4">New Order</h1>
-                <form method="POST" action="{{ url_for('orders_bp.check_customer') }}">
+                <form id="checkCustomerForm" onsubmit="submitForm(event)">
                     <div class="mb-3">
                         <label for="tin" class="form-label">Enter Customer TIN</label>
                         <input type="text" class="form-control" id="tin" name="tin" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form> 
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+                </form>
+               
             </div>
         </div>
     </div>
+    <div class="loading-spinner" id="loadingSpinner"></div>
+    <div class="loading-message" id="loadingMessage">Processing your request, please wait...</div>
 </div>
+
 {% endblock body %}
 
 <script>
@@ -97,14 +105,53 @@
         modal.style.display = "none";
     }
 
-    // Close modal when clicking outside of it
-    window.onclick = function(event) {
-        var modals = document.getElementsByClassName('modal');
-        for (var i = 0; i < modals.length; i++) {
-            var modal = modals[i];
-            if (event.target == modal) {
-                modal.style.display = "block";
+    // Function to handle form submission
+    function submitForm(event) {
+        event.preventDefault(); // Prevent default form submission
+        var formData = new FormData(document.getElementById('checkCustomerForm'));
+        var loadingSpinner = document.getElementById('loadingSpinner');
+        var loadingMessage = document.getElementById('loadingMessage');
+        var formContent = document.getElementById('modalSpinner');
+
+        formContent.style.display = "none"; // Hide form content
+        loadingSpinner.style.display = "block"; // Show loading spinner
+        loadingMessage.style.display = "block"; // Show loading message
+
+        var minLoadingTime = 5000; // Minimum loading time in milliseconds
+
+        // Promise that resolves after the minimum loading time
+        var minLoadingPromise = new Promise(resolve => {
+            setTimeout(resolve, minLoadingTime);
+        });
+
+        // Promise that resolves when the fetch request completes
+        var fetchPromise = fetch('{{ url_for('orders_bp.check_customer') }}', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (response.redirected) {
+                window.location.href = response.url; // Redirect to the new_customer URL
+            } else {
+                return response.json(); // Handle non-redirect responses if necessary
             }
-        }
+        });
+
+        // Wait for both the minimum loading time and the fetch request to complete
+        Promise.all([minLoadingPromise, fetchPromise])
+            .then(() => {
+                // Ensure spinner and message are hidden after loading
+                loadingSpinner.style.display = "none";
+                loadingMessage.style.display = "none";
+            })
+            .catch(error => {
+                // Ensure spinner and message are hidden after loading
+                loadingSpinner.style.display = "none";
+                loadingMessage.style.display = "none";
+                formContent.style.display = "block"; // Show form content again on error
+                console.error('Error:', error);
+                // Optionally, show an error message here
+            });
     }
 </script>
+</body>
+</html>
