@@ -82,7 +82,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         // handle the form submition process api
         const submitOrderBtn = document.getElementById('submit-order');
-        const savingMessage = document.getElementById('savingMessage');
+        //const savingMessage = document.getElementById('savingMessage');
         const form = document.querySelector('form');
 
         submitOrderBtn.addEventListener('click', function (event) {
@@ -116,7 +116,7 @@
                 })
                 .finally(() => {
                     submitOrderBtn.innerText = 'Successfully saved';
-                    savingMessage.style.display = 'none';
+                    //savingMessage.style.display = 'none';
                 });
             }, 2000); // Adjust delay as needed
         });

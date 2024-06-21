@@ -54,7 +54,9 @@
                             <th scope="row">{{ order.id }}</th>
                             <td>{{ order.customer.name }}</td>
                             <td>{{ order.order_date }}</td>
-                            <td>{{ order.total_amount }}</td>
+                            <td>{{ "{:,.2f}".format(order.total_amount)  }} ETB </td>
+
+
                             <!-- Add more columns as needed -->
                         </tr>
                         {% endfor %}

@@ -49,7 +49,16 @@ class Order(db.Model):
     items = db.relationship('OrderItem', back_populates='order', lazy=True, cascade="all, delete-orphan")
 
     def update_total_amount(self):
-        self.total_amount = sum(item.total_price for item in self.items)
+        # print(self.items)
+        # print(f"Order ID: {self.id}, Customer ID: {self.customer_id}")
+        # print("Items in Order:")
+        # for item in self.items:
+        #     print(f"OrderItem ID: {item.id}, Batch ID: {item.batch_id}, Quantity: {item.quantity}")
+        
+        total_amount = sum(item.calculate_total_price() for item in self.items)
+        self.total_amount = total_amount
+        
+        # print(f"Calculated Total Amount: {self.total_amount}")
         db.session.commit()
 
 class OrderItem(db.Model):
@@ -60,13 +69,29 @@ class OrderItem(db.Model):
 
     order = db.relationship('Order', back_populates='items')
     batch = db.relationship('Batch', backref='order_items')
+    
+    
+    def calculate_total_price(self):
+        try:
+            # print(f"Calculating total_price for OrderItem {self.id}")
+            # print(f"Batch ID: {self.batch_id}, Quantity: {self.quantity}")
 
-    @property
-    def total_price(self):
-        batch = Batch.query.get(self.batch_id)
-        if batch:
-            return batch.price * self.quantity
-        return 0.0
+            batch = Batch.query.get(self.batch_id)
+            # print(batch)  # Print batch object for debugging
+
+            if batch:
+                # print(f"Batch found: Batch Price: {batch.unit_price}")
+                total_price = batch.unit_price * int(self.quantity)
+                # print(f'total price: {total_price}')
+                
+                return total_price
+            else:
+                print("No batch found")
+                return 0.0
+        except Exception as e:
+            print(f"Error fetching Batch: {e}")
+            return 0.0  # Handle error gracefully
+
 
     @classmethod
     def create(cls, order_id, batch_id, quantity):

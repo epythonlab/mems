@@ -266,6 +266,9 @@ a:hover {
 .page-content::-webkit-scrollbar {
   display: none;
 }
+.main::-webkit-scrollbar{
+  display: none;
+}
 
 .page-content h1 {
   font-size: 30px;
@@ -2063,4 +2066,179 @@ td:last-child .btn-status .fas {
   color: #1F419B;
   font-family: 'Arial', sans-serif;
   z-index: 1000;
+}
+
+/* css for chart layout */
+main {
+  margin: 0 auto;
+  padding: auto !important;
+}
+/* Summary Container */
+.summary-container {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow-x: auto; /* Enable horizontal scroll */
+  justify-content: space-around; /* Center items with space around */
+  gap: 20px; /* Adjust as needed */
+  
+}
+.summary-container::-webkit-scrollbar{
+  display: none;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #dcdde1;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+  background-color: #f9f9f9;
+  width: calc(33.33% - 20px);
+  min-width: 250px;
+  text-overflow: ellipsis;
+}
+
+.summary-item:hover {
+  transform: translateY(-5px);
+}
+
+.icon-container {
+  background-color: #1F419B;
+  color: #ffffff;
+  padding: 15px;
+  border-radius: 50%;
+  margin-right: 20px;
+  min-width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-container i {
+  font-size: 24px;
+}
+/* Icon colors */
+.total-orders-icon {
+  background-color: #E8EAF6;
+  color: #1F419B; /* Example color for Total Orders */
+}
+
+.total-revenue-icon {
+  background-color: #FCE4EC;
+  color: #500041; /* Example color for Total Revenue */
+}
+
+.average-order-icon {
+  background-color: #E8F5E9;
+  color: #00AB4F; /* Example color for Average Order Value */
+}
+.info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.title-text {
+  font-size: 16px;
+  color: #4b7bec;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.summary-item p {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: #333333;
+}
+
+@media (max-width: 768px) {
+  .summary-item {
+      min-width: calc(50% - 30px);
+  }
+}
+
+@media (max-width: 576px) {
+  .summary-item {
+      min-width: calc(100% - 30px);
+  }
+
+  /* Pagination Dots */
+.pagination-dots {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  margin: 1px 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.dot.active {
+  background-color: #500041;
+}
+}
+
+section {
+  margin-bottom: 30px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.data-container {
+  margin-top: 10px;
+}
+
+.charts-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+.charts-container::-webkit-scrollbar{
+  display: none;
+}
+
+.chart-section {
+  flex: 0 0 auto;
+  width: 300px;
+  margin-right: 20px;
+}
+
+.chart-section:last-child {
+  margin-right: 0;
+}
+
+canvas {
+  width: 100%;
+  height: 200px;
+}
+
+/* Enhanced styling for statistic text */
+.title-text {
+  font-size: 16px; /* Increase font size for better readability */
+  font-weight: bold; /* Ensure titles are bold */
+  color: #333; /* Darker color for better contrast */
+}
+
+
+@media (min-width: 768px) {
+  .chart-section {
+      width: 500px;
+  }
+}
+
+@media (min-width: 1200px) {
+
+  .chart-section {
+      width: calc(33.3333% - 20px);
+  }
 }

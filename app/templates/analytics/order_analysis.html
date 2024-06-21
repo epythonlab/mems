@@ -1,0 +1,334 @@
+<main>
+    <h4 class="card-text">
+        Order Analysis
+        <span>📈</span>
+    </h4>
+    
+    <div class="summary-container pagination" id="summary-container-1">
+        <section id="total-orders" class="summary-item">
+            <div class="icon-container total-orders-icon">
+                <i class="fas fa-shopping-cart "></i>
+            </div>
+            <div class="info-container">
+                <h5 class="title-text">Total Orders</h5>
+                <p id="total-orders-value">...</p>
+            </div>
+        </section>
+
+        <section id="total-revenue" class="summary-item">
+            <div class="icon-container total-revenue-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="info-container">
+                <h5 class="title-text">Total Revenue</h5>
+                <p id="total-revenue-value">...</p>
+            </div>
+        </section>
+
+        <section id="average-order" class="summary-item">
+            <div class="icon-container average-order-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="info-container">
+                <h5 class="title-text">Average Order Value</h5>
+                <p id="aov-value">...</p>
+            </div>
+        </section>
+    </div>
+    <div class="pagination-dots" data-target="summary-container-1">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+    <div class="charts-container pagination" id="summary-container-2">
+        <section id="daily-orders" class="chart-section">
+            <h5 class="title-text">Daily Orders (Last 7 Days)</h5>
+            <canvas id="dailyOrdersChart"></canvas>
+        </section>
+        
+        <section id="monthly-orders" class="chart-section">
+            <h5 class="title-text">Monthly Orders (Last Year)</h5>
+            <canvas id="monthlyOrdersChart"></canvas>
+        </section>
+        
+        <section id="yearly-orders" class="chart-section">
+            <h5 class="title-text">Yearly Orders</h5>
+            <canvas id="yearlyOrdersChart"></canvas>
+        </section>
+    </div>
+    <div class="pagination-dots" data-target="summary-container-2">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+</main>
+
+<script>
+
+    function formatRevenue(revenue) {
+        if (Math.abs(revenue) >= 1.0e9) {
+            return (Math.abs(revenue) / 1.0e9).toFixed(1) + 'B';
+        }
+        if (Math.abs(revenue) >= 1.0e6) {
+            return (Math.abs(revenue) / 1.0e6).toFixed(1) + 'M';
+        }
+        if (Math.abs(revenue) >= 1.0e3) {
+            return (Math.abs(revenue) / 1.0e3).toFixed(1) + 'K';
+        }
+        return revenue.toFixed(2); // Default format if less than 1000
+    }
+    function formatOrderCount(orderCount) {
+        if (orderCount >= 1.0e9) {
+            return (orderCount / 1.0e9).toFixed(1) + 'B';
+        }
+        if (orderCount >= 1.0e6) {
+            return (orderCount / 1.0e6).toFixed(1) + 'M';
+        }
+        if (orderCount >= 1.0e3) {
+            return (orderCount / 1.0e3).toFixed(1) + 'K';
+        }
+        return orderCount; // No formatting for small numbers
+    }
+
+
+    async function fetchOrderAnalysis() {
+        try {
+            const response = await fetch('/order_analysis');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching order analysis:', error);
+            return { error: 'Failed to fetch data' };
+        }
+    }
+    
+    function renderTotalOrders(totalOrders) {
+        const totalOrdersElement = document.getElementById('total-orders-value');
+        if (totalOrdersElement) {
+            totalOrdersElement.innerText = formatOrderCount(totalOrders);
+        } else {
+            console.error('Total orders element not found in the DOM');
+        }
+    }
+    
+    function renderTotalRevenue(totalRevenue) {
+        const totalRevenueElement = document.getElementById('total-revenue-value');
+        if (totalRevenueElement) {
+            totalRevenueElement.innerText = formatRevenue(totalRevenue);
+        } else {
+            console.error('Total revenue element not found in the DOM');
+        }
+    }
+    
+    function renderAOV(aov) {
+        const aovElement = document.getElementById('aov-value');
+        if (aovElement) {
+            aovElement.innerText = formatRevenue(aov);
+        } else {
+            console.error('AOV element not found in the DOM');
+        }
+    }
+    
+    function renderChart(canvasId, labels, datasets) {
+        try {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Orders'
+                            },
+                            beginAtZero: true
+                        },
+                        y1: {
+                            title: {
+                                display: true,
+                                text: 'Revenue'
+                            },
+                            position: 'right',
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false // only want the grid lines for one axis
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const datasetIndex = elements[0].datasetIndex;
+                            const datasetLabel = chart.data.datasets[datasetIndex].label;
+                            const value = chart.data.datasets[datasetIndex].data[index];
+                            console.log(`Clicked on ${datasetLabel}: ${value}`);
+                            // Add your custom action here, such as navigating to a detailed view
+                        }
+                    }
+                }
+            });
+    
+            return chart; // Return the chart instance
+        } catch (error) {
+            console.error('Error rendering chart:', error);
+        }
+    }
+    
+    function renderOrderAnalysis(data) {
+        try {
+            if (!data || data.error) {
+                console.error('Failed to fetch order analysis data');
+                return;
+            }
+    
+            renderTotalOrders(data.total_orders);
+            renderTotalRevenue(data.total_revenue);
+            renderAOV(data.aov);
+    
+            // Define random colors
+            const randomColors = ['#1F419B', '#4e66a8', '#0056b3', '#500041', '#00AB4F', '#FF5733'];
+    
+            // Prepare datasets for daily orders chart
+            const dailyLabels = data.daily_orders.map(order => order.date);
+            const dailyOrderCounts = data.daily_orders.map(order => order.count);
+            const dailyRevenues = data.daily_orders.map(order => order.revenue);
+            const dailyDatasets = [
+                {
+                    label: 'Daily Orders',
+                    data: dailyOrderCounts,
+                    borderColor: randomColors[0],
+                    backgroundColor: randomColors[1],
+                    fill: true,
+                    tension: 0.1,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Daily Revenue',
+                    data: dailyRevenues,
+                    borderColor: randomColors[4],
+                    backgroundColor: randomColors[5],
+                    fill: false,
+                    tension: 0.1,
+                    yAxisID: 'y1'
+                }
+            ];
+            renderChart('dailyOrdersChart', dailyLabels, dailyDatasets);
+    
+            // Prepare datasets for monthly orders chart
+            const monthlyLabels = data.monthly_orders.map(order => order.month);
+            const monthlyOrderCounts = data.monthly_orders.map(order => order.count);
+            const monthlyRevenues = data.monthly_orders.map(order => order.revenue);
+            const monthlyDatasets = [
+                {
+                    label: 'Monthly Orders',
+                    data: monthlyOrderCounts,
+                    borderColor: randomColors[2],
+                    backgroundColor: randomColors[3],
+                    fill: true,
+                    tension: 0.1,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Monthly Revenue',
+                    data: monthlyRevenues,
+                    borderColor: randomColors[4],
+                    backgroundColor: randomColors[5],
+                    fill: false,
+                    tension: 0.1,
+                    yAxisID: 'y1'
+                }
+            ];
+            renderChart('monthlyOrdersChart', monthlyLabels, monthlyDatasets);
+    
+            // Prepare datasets for yearly orders chart
+            const yearlyLabels = data.yearly_orders.map(order => order.year);
+            const yearlyOrderCounts = data.yearly_orders.map(order => order.count);
+            const yearlyRevenues = data.yearly_orders.map(order => order.revenue);
+            const yearlyDatasets = [
+                {
+                    label: 'Yearly Orders',
+                    data: yearlyOrderCounts,
+                    borderColor: randomColors[4],
+                    backgroundColor: randomColors[0],
+                    fill: true,
+                    tension: 0.1,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Yearly Revenue',
+                    data: yearlyRevenues,
+                    borderColor: randomColors[1],
+                    backgroundColor: randomColors[2],
+                    fill: false,
+                    tension: 0.1,
+                    yAxisID: 'y1'
+                }
+            ];
+            renderChart('yearlyOrdersChart', yearlyLabels, yearlyDatasets);
+    
+        } catch (error) {
+            console.error('Error rendering order analysis:', error);
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const orderAnalysis = await fetchOrderAnalysis();
+            renderOrderAnalysis(orderAnalysis);
+        } catch (error) {
+            console.error('Error initializing order analysis:', error);
+        }
+    });
+    
+    
+  // paginate the pages while in small devices
+  document.addEventListener('DOMContentLoaded', function() {
+    const summaryContainers = document.querySelectorAll('.pagination');
+
+    summaryContainers.forEach(summaryContainer => {
+        const targetId = summaryContainer.id;
+        const dotsContainer = document.querySelector(`.pagination-dots[data-target="${targetId}"]`);
+        const dots = dotsContainer.querySelectorAll('.dot');
+        
+        summaryContainer.addEventListener('scroll', function() {
+            const scrollLeft = summaryContainer.scrollLeft;
+            const scrollWidth = summaryContainer.scrollWidth - summaryContainer.clientWidth;
+            const scrollFraction = scrollLeft / scrollWidth;
+            const totalItems = dots.length;
+            const activeIndex = Math.round(scrollFraction * (totalItems - 1));
+    
+            dots.forEach((dot, index) => {
+                if (index === activeIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        });
+    
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                const itemWidth = summaryContainer.scrollWidth / dots.length;
+                summaryContainer.scrollLeft = itemWidth * index;
+            });
+        });
+    });
+});
+
+
+  
+</script>

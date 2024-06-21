@@ -7,6 +7,7 @@ from datetime import datetime
 from . import orders_bp
 from sqlalchemy import and_
 
+
 @orders_bp.route('/new_order')
 @login_required
 def new_order():
@@ -63,7 +64,6 @@ def new_customer(tin):
 @login_required
 def create_order():
     customer = None  # Initialize customer as None
-    
 
     if request.method == 'POST':
         tin = request.form.get('tin')
@@ -77,6 +77,7 @@ def create_order():
 
         try:
             new_order = Order(customer_id=customer.id, order_date=datetime.now())
+           
             db.session.add(new_order)
             db.session.flush()  # Ensure new_order.id is available
 
@@ -89,8 +90,13 @@ def create_order():
                 
                 if batch_id and quantity:
                     order_item = OrderItem(order_id=new_order.id, batch_id=batch_id, quantity=quantity)
+                    # total_price = order_item.total_price  # Calculate total_price
+                    # order_item.total_price = total_price  # Store total_price in the instance
+                    order_item.calculate_total_price()
                     db.session.add(order_item)
-
+            
+            new_order.update_total_amount() # ensure that the total amount is updated
+             
             db.session.commit()
 
             return jsonify({'success': True, 'redirect': url_for('orders_bp.list_orders')})

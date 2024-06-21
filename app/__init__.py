@@ -17,7 +17,13 @@ login_manager = LoginManager()
 
 def create_app(config_class=None):
     app = Flask(__name__)
+    @app.template_filter('currency')
+    def currency_filter(value):
+        """Format a value as currency."""
+        return f"${value:,.2f}"
 
+    app.jinja_env.filters['currency'] = currency_filter
+    
     if config_class:
         app.config.from_object(config_class)
     else:
