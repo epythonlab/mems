@@ -1,16 +1,14 @@
 <main>
-    <h4 class="card-text">
-        Order Analysis
-        <span>📈</span>
-    </h4>
-    
-    <div class="summary-container pagination" id="summary-container-1">
+    <!-- Summary Containers with Pagination -->
+    <!-- Order Value -->
+    <p class="section-title">Order Value</p>
+    <div class="summary-container" id="summary-container-1">
         <section id="total-orders" class="summary-item">
             <div class="icon-container total-orders-icon">
-                <i class="fas fa-shopping-cart "></i>
+                <i class="fas fa-shopping-cart"></i>
             </div>
             <div class="info-container">
-                <h5 class="title-text">Total Orders</h5>
+                <h5 class="stat-text">Total Orders</h5>
                 <p id="total-orders-value">...</p>
             </div>
         </section>
@@ -20,7 +18,7 @@
                 <i class="fas fa-dollar-sign"></i>
             </div>
             <div class="info-container">
-                <h5 class="title-text">Total Revenue</h5>
+                <h5 class="stat-text">Total Revenue</h5>
                 <p id="total-revenue-value">...</p>
             </div>
         </section>
@@ -30,42 +28,90 @@
                 <i class="fas fa-chart-line"></i>
             </div>
             <div class="info-container">
-                <h5 class="title-text">Average Order Value</h5>
+                <h5 class="stat-text">Average Order Value</h5>
                 <p id="aov-value">...</p>
             </div>
         </section>
     </div>
+
     <div class="pagination-dots" data-target="summary-container-1">
         <span class="dot active"></span>
         <span class="dot"></span>
         <span class="dot"></span>
     </div>
-    <div class="charts-container pagination" id="summary-container-2">
-        <section id="daily-orders" class="chart-section">
-            <h5 class="title-text">Daily Orders (Last 7 Days)</h5>
-            <canvas id="dailyOrdersChart"></canvas>
+
+    <!-- Customer Analysis -->
+    <p class="section-title">Customer Analysis</p>
+    <div class="summary-container" id="summary-container-2">
+        <section id="new-customer" class="summary-item">
+            <div class="icon-container new-customers-icon">
+                <i class="fas fa-user-friends"></i>
+            </div>
+            <div class="info-container">
+                <h5 class="stat-text">New Customers</h5>
+                <p id="new-customer-percentage">...</p>
+            </div>
         </section>
-        
-        <section id="monthly-orders" class="chart-section">
-            <h5 class="title-text">Monthly Orders (Last Year)</h5>
-            <canvas id="monthlyOrdersChart"></canvas>
+
+        <section id="returning-customer" class="summary-item">
+            <div class="icon-container returning-customers-icon">
+                <i class="fas fa-user-friends"></i>
+            </div>
+            <div class="info-container">
+                <h5 class="stat-text">Returning Customers</h5>
+                <p id="returning-customer-percentage">...</p>
+            </div>
         </section>
-        
-        <section id="yearly-orders" class="chart-section">
-            <h5 class="title-text">Yearly Orders</h5>
-            <canvas id="yearlyOrdersChart"></canvas>
+
+        <section id="clv" class="summary-item">
+            <div class="icon-container clv-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="info-container">
+                <h5 class="stat-text">Customer Lifetime Value</h5>
+                <p id="clv-value">...</p>
+            </div>
         </section>
     </div>
+
     <div class="pagination-dots" data-target="summary-container-2">
         <span class="dot active"></span>
         <span class="dot"></span>
         <span class="dot"></span>
     </div>
+
+    <!-- Charts Containers with Pagination -->
+    <!-- Order Volume and Trends -->
+    <p class="section-title">Order Volume and Trends</p>
+    <div class="summary-container" id="summary-container-3">
+        <section id="daily-orders" class="chart-section">
+            <h5 class="stat-text">Daily(Last 7 Days)</h5>
+            <canvas id="dailyOrdersChart"></canvas>
+        </section>
+
+        <section id="monthly-orders" class="chart-section">
+            <h5 class="stat-text">Monthly(Last Year)</h5>
+            <canvas id="monthlyOrdersChart"></canvas>
+        </section>
+
+        <section id="yearly-orders" class="chart-section">
+            <h5 class="stat-text">Yearly</h5>
+            <canvas id="yearlyOrdersChart"></canvas>
+        </section>
+    </div>
+
+    <div class="pagination-dots" data-target="summary-container-3">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+
 </main>
+
 
 <script>
 
-    function formatRevenue(revenue) {
+    function formatCurrency(revenue) {
         if (Math.abs(revenue) >= 1.0e9) {
             return (Math.abs(revenue) / 1.0e9).toFixed(1) + 'B';
         }
@@ -77,7 +123,7 @@
         }
         return revenue.toFixed(2); // Default format if less than 1000
     }
-    function formatOrderCount(orderCount) {
+    function formatNumber(orderCount) {
         if (orderCount >= 1.0e9) {
             return (orderCount / 1.0e9).toFixed(1) + 'B';
         }
@@ -108,7 +154,7 @@
     function renderTotalOrders(totalOrders) {
         const totalOrdersElement = document.getElementById('total-orders-value');
         if (totalOrdersElement) {
-            totalOrdersElement.innerText = formatOrderCount(totalOrders);
+            totalOrdersElement.innerText = formatNumber(totalOrders);
         } else {
             console.error('Total orders element not found in the DOM');
         }
@@ -117,7 +163,7 @@
     function renderTotalRevenue(totalRevenue) {
         const totalRevenueElement = document.getElementById('total-revenue-value');
         if (totalRevenueElement) {
-            totalRevenueElement.innerText = formatRevenue(totalRevenue);
+            totalRevenueElement.innerText = formatCurrency(totalRevenue);
         } else {
             console.error('Total revenue element not found in the DOM');
         }
@@ -126,68 +172,129 @@
     function renderAOV(aov) {
         const aovElement = document.getElementById('aov-value');
         if (aovElement) {
-            aovElement.innerText = formatRevenue(aov);
+            aovElement.innerText = formatCurrency(aov);
         } else {
             console.error('AOV element not found in the DOM');
         }
     }
-    
-    function renderChart(canvasId, labels, datasets) {
-        try {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            const chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: datasets
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Orders'
-                            },
-                            beginAtZero: true
-                        },
-                        y1: {
-                            title: {
-                                display: true,
-                                text: 'Revenue'
-                            },
-                            position: 'right',
-                            beginAtZero: true,
-                            grid: {
-                                drawOnChartArea: false // only want the grid lines for one axis
-                            }
-                        }
-                    },
-                    onClick: (event, elements) => {
-                        if (elements.length > 0) {
-                            const index = elements[0].index;
-                            const datasetIndex = elements[0].datasetIndex;
-                            const datasetLabel = chart.data.datasets[datasetIndex].label;
-                            const value = chart.data.datasets[datasetIndex].data[index];
-                            console.log(`Clicked on ${datasetLabel}: ${value}`);
-                            // Add your custom action here, such as navigating to a detailed view
-                        }
-                    }
-                }
-            });
-    
-            return chart; // Return the chart instance
-        } catch (error) {
-            console.error('Error rendering chart:', error);
+
+    function renderNewVsReturning(newPercentage, returningPercentage) {
+        const newCustomerElement = document.getElementById('new-customer-percentage');
+        const returningCustomerElement = document.getElementById('returning-customer-percentage');
+        if (newCustomerElement && returningCustomerElement) {
+            newCustomerElement.innerText = `${newPercentage.toFixed(2)}%`;
+            returningCustomerElement.innerText = `${returningPercentage.toFixed(2)}%`;
+        } else {
+            console.error('New vs Returning customers elements not found in the DOM');
         }
     }
     
+    function renderCLV(clv) {
+        const clvElement = document.getElementById('clv-value');
+        if (clvElement) {
+            clvElement.innerText = formatNumber(clv);
+        } else {
+            console.error('CLV element not found in the DOM');
+        }
+    }
+    
+    // Helper function to format numbers as 1K, 1M, 1B
+function formatRevenue(value) {
+    if (value >= 1e9) {
+        return (value / 1e9).toFixed(1) + 'B';
+    } else if (value >= 1e6) {
+        return (value / 1e6).toFixed(1) + 'M';
+    } else if (value >= 1e3) {
+        return (value / 1e3).toFixed(1) + 'K';
+    } else {
+        return value;
+    }
+}
+
+function renderChart(canvasId, labels, datasets) {
+    try {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Orders'
+                        },
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value; // No formatting for orders
+                            }
+                        }
+                    },
+                    y1: {
+                        title: {
+                            display: true,
+                            text: 'Revenue'
+                        },
+                        position: 'right',
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: false // only want the grid lines for one axis
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return formatRevenue(value);
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.dataset.yAxisID === 'y1') {
+                                    label += formatRevenue(context.raw);
+                                } else {
+                                    label += context.raw;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const datasetIndex = elements[0].datasetIndex;
+                        const datasetLabel = chart.data.datasets[datasetIndex].label;
+                        const value = chart.data.datasets[datasetIndex].data[index];
+                        console.log(`Clicked on ${datasetLabel}: ${value}`);
+                        // Add your custom action here, such as navigating to a detailed view
+                    }
+                }
+            }
+        });
+
+        return chart; // Return the chart instance
+    } catch (error) {
+        console.error('Error rendering chart:', error);
+    }
+}
+
     function renderOrderAnalysis(data) {
         try {
             if (!data || data.error) {
@@ -198,6 +305,8 @@
             renderTotalOrders(data.total_orders);
             renderTotalRevenue(data.total_revenue);
             renderAOV(data.aov);
+            renderNewVsReturning(data.new_customer_percentage, data.returning_customer_percentage);
+            renderCLV(data.clv);
     
             // Define random colors
             const randomColors = ['#1F419B', '#4e66a8', '#0056b3', '#500041', '#00AB4F', '#FF5733'];
@@ -297,38 +406,40 @@
     
   // paginate the pages while in small devices
   document.addEventListener('DOMContentLoaded', function() {
-    const summaryContainers = document.querySelectorAll('.pagination');
+    const paginationContainers = document.querySelectorAll('.summary-container');
 
-    summaryContainers.forEach(summaryContainer => {
-        const targetId = summaryContainer.id;
-        const dotsContainer = document.querySelector(`.pagination-dots[data-target="${targetId}"]`);
+    paginationContainers.forEach(container => {
+        const dotsContainer = document.querySelector(`.pagination-dots[data-target="${container.id}"]`);
         const dots = dotsContainer.querySelectorAll('.dot');
-        
-        summaryContainer.addEventListener('scroll', function() {
-            const scrollLeft = summaryContainer.scrollLeft;
-            const scrollWidth = summaryContainer.scrollWidth - summaryContainer.clientWidth;
-            const scrollFraction = scrollLeft / scrollWidth;
-            const totalItems = dots.length;
-            const activeIndex = Math.round(scrollFraction * (totalItems - 1));
-    
-            dots.forEach((dot, index) => {
-                if (index === activeIndex) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            container.scrollTo({
+                left: index * container.clientWidth,
+                behavior: 'smooth'
             });
-        });
-    
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === index);
+            });
+        }
+
         dots.forEach((dot, index) => {
             dot.addEventListener('click', () => {
-                const itemWidth = summaryContainer.scrollWidth / dots.length;
-                summaryContainer.scrollLeft = itemWidth * index;
+                currentIndex = index;
+                showSlide(index);
             });
+        });
+
+        container.addEventListener('scroll', () => {
+            const newIndex = Math.round(container.scrollLeft / container.clientWidth);
+            if (newIndex !== currentIndex) {
+                currentIndex = newIndex;
+                dots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === newIndex);
+                });
+            }
         });
     });
 });
 
-
-  
 </script>
