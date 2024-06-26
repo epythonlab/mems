@@ -164,33 +164,28 @@ def update_category(category_id):
 @inventory_bp.route('/product_details')
 def product_details():
     id_or_batch = request.args.get('id')  # Retrieve the ID from the query parameter
-    # Attempt to retrieve product by ID
     product = Product.query.get(id_or_batch)
  
     if not product:
-        # If product is not found by ID, try to retrieve it by batch number
         batch = Batch.query.filter_by(batch_number=id_or_batch.strip()).first()
         if batch:
             product = batch.product
             product.batches = [batch]  # Ensure batches is a list containing the single batch
-            # print(f"Batch Number: {batch.batch_number}, Category: {product.category.name}, Vendor: {product.vendor}, Quantity: {batch.quantity}")
         else:
             abort(404)  # If neither product nor batch is found, raise a 404 error
     else:
-              
         # Retrieve the filter criteria from session
         filter_criteria = session.get('filter_criteria')
 
-        # Filter the batches based on the expiration criteria
-        
+        # Filter the batches based on the expiration criteria and quantity
         if filter_criteria == 'expired':
-            # Filter batches where expiration_date is before today
-            product.batches = [batch for batch in product.batches if batch.expiration_date < date.today() and batch.quantity > 1]
+            product.batches = [batch for batch in product.batches if batch.expiration_date < date.today() and batch.quantity > 0]
         else:
-            product.batches = [batch for batch in product.batches if batch.expiration_date > date.today() and batch.quantity > 1]    
+            product.batches = [batch for batch in product.batches if batch.expiration_date > date.today() and batch.quantity > 0]
 
     # Pass the product data and filtered batches to the template
     return render_template('inventory/product_details.html', product=product)
+
 
 
 @inventory_bp.route('/deleteProduct/<int:item_id>', methods=['POST'])

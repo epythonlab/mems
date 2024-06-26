@@ -40,6 +40,8 @@ class Batch(db.Model):
     created_at = db.Column(db.DateTime )
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
     months_left = db.Column(db.Float, nullable=False, default=0)
+    # Define relationship with OrderItem
+    order_items = db.relationship('OrderItem', back_populates='batch', cascade='all, delete-orphan', single_parent=True)
 
     def update_months_left(self):
         if self.expiration_date is not None:

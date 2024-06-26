@@ -1,6 +1,6 @@
 from app import db
 from datetime import datetime
-from app.models.inventory import Batch
+from app.models.inventory import Batch, Product
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -60,49 +60,60 @@ class Order(db.Model):
         
         # print(f"Calculated Total Amount: {self.total_amount}")
         db.session.commit()
-
+        
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
-    batch_id = db.Column(db.Integer, db.ForeignKey('batch.id'), nullable=False)
+    batch_id = db.Column(db.Integer, db.ForeignKey('batch.id'), nullable=False, unique=False)
     quantity = db.Column(db.Integer, nullable=False)
 
     order = db.relationship('Order', back_populates='items')
-    batch = db.relationship('Batch', backref='order_items')
+    batch = db.relationship('Batch', back_populates='order_items')
     
+    def __init__(self, order_id, batch_id, quantity):
+        self.order_id = order_id
+        self.batch_id = batch_id
+        self.quantity = quantity
     
     def calculate_total_price(self):
         try:
-            # print(f"Calculating total_price for OrderItem {self.id}")
-            # print(f"Batch ID: {self.batch_id}, Quantity: {self.quantity}")
-
             batch = Batch.query.get(self.batch_id)
-            # print(batch)  # Print batch object for debugging
-
             if batch:
-                # print(f"Batch found: Batch Price: {batch.unit_price}")
                 total_price = batch.unit_price * int(self.quantity)
-                # print(f'total price: {total_price}')
-                
                 return total_price
             else:
                 print("No batch found")
                 return 0.0
         except Exception as e:
-            print(f"Error fetching Batch: {e}")
-            return 0.0  # Handle error gracefully
+            print(f"Error calculating total price: {e}")
+            return 0.0
 
-
-    @classmethod
-    def create(cls, order_id, batch_id, quantity):
-        order_item = cls(order_id=order_id, batch_id=batch_id, quantity=quantity)
-        db.session.add(order_item)
-        db.session.commit()
-        return order_item
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
+    # update batch quantity
+    def update_batch_quantity(self):
+        try:
+            with db.session.no_autoflush:
+                # Your update logic here
+                 batch = Batch.query.get(self.batch_id)
+            if batch:
+                if batch.quantity < int(self.quantity):
+                    raise ValueError("Not enough quantity in batch to fulfill the order")
+                
+                batch.quantity -= int(self.quantity)
+                
+                product = Product.query.get(batch.product_id)
+                if product:
+                    product.update_stock()
+                    print(f"Product {product.name} stock updated to {product.stock}")
+                else:
+                    print("No product found for this batch.")
+                
+                db.session.commit()
+            else:
+                print("No batch found.")
+                pass
+        except Exception as e:
+            print(f"Error updating batch quantity: {e}")
+            db.session.rollback()
 
     def __repr__(self):
         return f'<OrderItem {self.id}>'
