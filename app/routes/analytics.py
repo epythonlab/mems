@@ -1,7 +1,7 @@
 # app.py (or your main Flask app file)
 from flask import render_template, jsonify, request
 from sqlalchemy import func, extract
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from app import db
 from app.models.userlog import UserLog
@@ -12,8 +12,8 @@ from . import analytic_bp
 @analytic_bp.route('/api/user-activity')
 def user_activity_data():
     # Dynamic filtering based on date range
-    start_date = request.args.get('start_date', (datetime.utcnow() - timedelta(days=7)).strftime('%Y-%m-%d'))
-    end_date = request.args.get('end_date', datetime.utcnow().strftime('%Y-%m-%d'))
+    start_date = request.args.get('start_date', ( datetime.now(tz=timezone.utc) - timedelta(days=7)).strftime('%Y-%m-%d'))
+    end_date = request.args.get('end_date',  datetime.now(tz=timezone.utc).strftime('%Y-%m-%d'))
 
     data = db.session.query(
         func.date(UserLog.timestamp).label('date'),

@@ -75,9 +75,15 @@ def user_detail():
 def get_stats():
     # Query user data and count users based on status
     # Count users with status 1
-    active_users = User.query.filter_by(active=1).count()
-    # Count users with status 0
-    inactive_users = User.query.filter_by(active=0).count()
+    if any(role.name in ['admin', 'root'] for role in current_user.roles):
+        active_users = User.query.filter_by(active=1).count()
+        # Count users with status 0
+        inactive_users = User.query.filter_by(active=0).count()
+    else:
+        active_users = 0
+        inactive_users = 0
+        
+   
 
     # Create a dictionary with the fetched statistics
     stats = {

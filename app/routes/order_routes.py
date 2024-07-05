@@ -1,9 +1,9 @@
 from flask import jsonify, request, render_template, redirect, url_for
-from flask_login import login_required
+from flask_login import login_required, current_user
 from app import db
 from app.models.orders import Customer, Order, OrderItem
 from app.models.inventory import Product, Batch
-from datetime import datetime
+from datetime import datetime, timezone
 from . import orders_bp
 from sqlalchemy import and_
 
@@ -52,7 +52,7 @@ def new_customer(tin):
         phone = request.form['phone']
         address = request.form['address']
 
-        new_customer = Customer(name=name, email=email, phone=phone, address=address, tin=tin)
+        new_customer = Customer(company_id=current_user.company_id, name=name, email=email, phone=phone, address=address, tin=tin)
         db.session.add(new_customer)
         db.session.commit()
 
@@ -60,11 +60,10 @@ def new_customer(tin):
 
     return render_template('orders/new_customer.html', tin=tin)
 
-
 @orders_bp.route('/create_order', methods=['GET', 'POST'])
 @login_required
 def create_order():
-    customer = None
+    customer = None  # Initialize customer as None
 
     if request.method == 'POST':
         tin = request.form.get('tin')
@@ -72,40 +71,33 @@ def create_order():
             return jsonify({'error': 'TIN is required'}), 400
 
         customer = Customer.query.filter_by(tin=tin).first()
+
         if not customer:
             return jsonify({'error': 'Customer not found', 'redirect': url_for('orders_bp.new_customer', tin=tin)}), 404
 
         try:
-            new_order = Order(customer_id=customer.id, order_date=datetime.now())
+            new_order = Order(customer_id=customer.id, order_date= datetime.now(tz=timezone.utc))
+           
             db.session.add(new_order)
             db.session.flush()  # Ensure new_order.id is available
 
             items = request.form.to_dict(flat=False)
             item_count = len([key for key in items.keys() if key.startswith('items[') and key.endswith('][batch_id]')])
 
-            with db.session.no_autoflush:  # Prevent autoflush to avoid IntegrityError
-                for index in range(item_count):
-                    batch_id = items.get(f'items[{index}][batch_id]')[0]
-                    quantity = items.get(f'items[{index}][quantity]')[0]
-                    
-                    if batch_id and quantity:
-                        batch = Batch.query.get(batch_id)
-                        if not batch:
-                            raise ValueError(f"Batch with ID {batch_id} not found")
-                        
-                        if batch.quantity <= 0:
-                            raise ValueError(f"Batch with ID {batch_id} has zero quantity")
-                        
-                        if batch.quantity < int(quantity):
-                            raise ValueError(f"Batch with ID {batch_id} has insufficient quantity")
-                        
-                        order_item = OrderItem(order_id=new_order.id, batch_id=batch_id, quantity=int(quantity))
-                        order_item.calculate_total_price()
-                        order_item.update_batch_quantity()
-                        
-                        db.session.add(order_item)
-
-            new_order.update_total_amount()  # Ensure the total amount is updated
+            for index in range(item_count):
+                batch_id = items.get(f'items[{index}][batch_id]')[0]
+                quantity = items.get(f'items[{index}][quantity]')[0]
+                
+                if batch_id and quantity:
+                    order_item = OrderItem(order_id=new_order.id, batch_id=batch_id, quantity=quantity)
+                    # total_price = order_item.total_price  # Calculate total_price
+                    # order_item.total_price = total_price  # Store total_price in the instance
+                    order_item.calculate_total_price()
+                    order_item.update_batch_quantity()
+                    db.session.add(order_item)
+            
+            new_order.update_total_amount() # ensure that the total amount is updated
+             
             db.session.commit()
 
             return jsonify({'success': True, 'redirect': url_for('orders_bp.list_orders')})
@@ -113,12 +105,13 @@ def create_order():
         except Exception as e:
             db.session.rollback()
             return jsonify({'error': str(e)}), 500
-
+        
     tin = request.args.get('tin', '')
     if tin:
         customer = Customer.query.filter_by(tin=tin).first()
 
     return render_template('orders/create_order.html', customer=customer)
+
 
 @orders_bp.route('/list_orders')
 @login_required

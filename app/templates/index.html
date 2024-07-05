@@ -11,8 +11,11 @@
         <div class="page-content">
             <h2 class="welcome-title">Welcome back! <span>{{current_user.first_name}} 🎉</span></h2>
 
-            <!-- include user stats here -->
-            {% include 'users/user_stat.html' %}
+           <!-- include user stats here -->
+            {% if 'admin' in current_user.roles or 'root' in current_user.roles %}
+                 {% include 'users/user_stat.html' %}
+            {% endif %}
+
             
             <!-- <div class="header-search">
                 <input type="search" placeholder="Search Documentation...">

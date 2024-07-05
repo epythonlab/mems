@@ -1,5 +1,6 @@
 from app import db
-from datetime import datetime
+from datetime import datetime, timezone
+from sqlalchemy import UniqueConstraint
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,16 +34,18 @@ class Product(db.Model):
 class Batch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
-    batch_number = db.Column(db.String(50), nullable=False, unique=True)  # Ensure uniqueness
+    batch_number = db.Column(db.String(50), nullable=False, unique=False)  # Ensure uniqueness
     expiration_date = db.Column(db.Date, nullable=True)
     quantity = db.Column(db.Integer, nullable=False, default=0)
     unit_price = db.Column(db.Float, nullable=False, default=0.0)  # Add price attribute
     created_at = db.Column(db.DateTime )
-    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate= datetime.now(tz=timezone.utc))
     months_left = db.Column(db.Float, nullable=False, default=0)
     # Define relationship with OrderItem
     order_items = db.relationship('OrderItem', back_populates='batch', cascade='all, delete-orphan', single_parent=True)
-
+    
+    __table_args__ = (UniqueConstraint('batch_number', 'product_id', name='uq_batch_product'),)
+     
     def update_months_left(self):
         if self.expiration_date is not None:
             # Ensure self.expiration_date is a datetime object

@@ -2,7 +2,7 @@ from flask import request, abort, render_template, session, url_for, redirect, f
 from flask_security import login_required, current_user
 from app.models.inventory import Product, Batch, Category
 from . import inventory_bp
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 
 from app import db
 
@@ -15,24 +15,39 @@ def inventory_list():
     cat_page = request.args.get('cat_page', 1, type=int)
     cat_rows_per_page = request.args.get('cat_rows_per_page', 5, type=int)
 
-    products_query = Product.query
+    company_id = current_user.company_id
+
+    products_query = Product.query.filter_by(company_id=company_id)
     categories = Category.query.paginate(page=cat_page, per_page=cat_rows_per_page, error_out=False)
-    
+
     if filter_type == 'expired':
-        products_query = products_query.join(Batch).filter(Batch.expiration_date < datetime.utcnow())
+        products_query = products_query.join(Batch).filter(
+            Batch.expiration_date < datetime.now(tz=timezone.utc),
+            Batch.company_id == company_id
+        )
         session['filter_criteria'] = filter_type
-        # Process the filter criteria and fetch the filtered data
 
     elif filter_type == 'low_stock':
         session['filter_criteria'] = filter_type
         products_query = products_query.filter(Product.stock <= 50)
-        
+
     if filter_type == request.args.get('clearfilter'):
         session['filter_criteria'] = None
 
-    products = products_query.order_by(Product.stock.desc()).paginate(page=prod_page, per_page=prod_rows_per_page, error_out=False)
+    products = products_query.order_by(Product.stock.desc()).paginate(
+        page=prod_page, per_page=prod_rows_per_page, error_out=False
+    )
 
-    return render_template('inventory/inventory.html', products=products, categories=categories, prod_rows_per_page=prod_rows_per_page, cat_rows_per_page=cat_rows_per_page, prod_page=prod_page, cat_page=cat_page)
+    return render_template(
+        'inventory/inventory.html', 
+        products=products, 
+        categories=categories, 
+        prod_rows_per_page=prod_rows_per_page, 
+        cat_rows_per_page=cat_rows_per_page, 
+        prod_page=prod_page, 
+        cat_page=cat_page
+    )
+
 
 
 @inventory_bp.route('/add_product', methods=['GET', 'POST'])
@@ -64,11 +79,19 @@ def manage_batch(product_id):
         quantity = request.form['quantity']
         unit_price = request.form['unit_price']
         # Check if batch already exists for the product
-        existing_batch = Batch.query.filter_by(product_id=product_id, batch_number=batch_number).first()
+        existing_batch = Batch.query.filter_by(product_id=product_id, batch_number=batch_number, ).first()
 
         # Check if the batch number is already associated with another product
-        batch_associated_with_another_product = Batch.query.filter_by(batch_number=batch_number).filter(Batch.product_id != product_id).first()
-
+        batch_associated_with_another_product = (
+            db.session.query(Batch)
+            .join(Product, Batch.product_id == Product.id)
+            .filter(
+                Batch.batch_number == batch_number,
+                Product.company_id == current_user.company_id,
+                Batch.product_id != product_id
+            )
+            .first()
+        )
         if batch_associated_with_another_product:
             flash(f'Batch number "{batch_number}" is already associated with another product', 'danger')
             return redirect(url_for("inventory_bp.inventory_list"))
@@ -78,7 +101,7 @@ def manage_batch(product_id):
             existing_batch.expiration_date = expiration_date
             existing_batch.quantity = quantity
             existing_batch.unit_price = float(unit_price)
-            existing_batch.updated_at = datetime.utcnow()
+            existing_batch.updated_at =  datetime.now(tz=timezone.utc)
             existing_batch.update_months_left() # update days left of the expiration date
             flash_msg = f'Batch updated successfully to {product.name}'
         else:
@@ -88,7 +111,7 @@ def manage_batch(product_id):
                               quantity=int(quantity),
                               unit_price = float(unit_price),
                               product_id=product_id,
-                              created_at = datetime.utcnow())
+                              created_at =  datetime.now(tz=timezone.utc))
             
             new_batch.update_months_left() # update days left of the expiration date
             db.session.add(new_batch)

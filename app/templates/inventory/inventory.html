@@ -111,6 +111,13 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tableBody">
+                                    {% if products.items|length == 0 %}
+                                    <tr>
+                                        <td colspan="12">No products available. Add a new product.</td>
+                                    </tr>
+                                {% else %}
+                                    
+
                                     {% for product in products %}
                                     <tr>
                                         <td>{{ loop.index }}</td>
@@ -132,6 +139,8 @@
                                         </td>
                                     </tr>
                                     {% endfor %}
+                                  
+                                    {% endif %}
                                 </tbody>
                             </table>
                         </div>

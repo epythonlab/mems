@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from app import db
 
 class UserLog(db.Model):
@@ -9,7 +9,7 @@ class UserLog(db.Model):
     device_os = db.Column(db.String(100))
     browser_type = db.Column(db.String(100))
     action = db.Column(db.String(200))
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default= datetime.now(tz=timezone.utc))
 
     # Additional fields to capture more details
     action_type = db.Column(db.String(100))  # e.g., 'login', 'data_modification', 'error'

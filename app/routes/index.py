@@ -16,59 +16,91 @@ def index():
 
 @index_bp.route('/order_analysis')
 def get_order_analysis():
-    
     try:
+        # Assuming you have a way to get the current user's information
+        # current_user = get_current_user()
+        company_id = current_user.company_id
+        # Define the base query for orders
+        if current_user.has_role('user'):
+            orders_query = Order.query.join(Customer).filter(Customer.company_id == company_id)
+        else:
+            orders_query = Order.query
+
         # Total Number of Orders
-        total_orders = Order.query.count()
-        # print(f"Total Orders: {total_orders}")
+        total_orders = orders_query.count()
 
         # Calculate Total Revenue
-        total_revenue = db.session.query(func.sum(Order.total_amount)).scalar() or 0
-        # print(f"Total Revenue: {total_revenue}")
+        total_revenue = db.session.query(func.sum(Order.total_amount)).join(Customer)
+        if current_user.has_role('user'):
+            total_revenue = total_revenue.filter(Customer.company_id == company_id)
+        total_revenue = total_revenue.scalar() or 0
 
         # Calculate Average Order Value (AOV)
         aov = total_revenue / total_orders if total_orders else 0
-        # print(f"Average Order Value (AOV): {aov}")
 
         # Orders by day for the past week
         last_week = datetime.now(tz=timezone.utc) - timedelta(weeks=1)
-        daily_orders = db.session.query(func.date(Order.order_date), func.count(Order.id), func.sum(Order.total_amount)) \
-            .filter(Order.order_date >= last_week) \
-            .group_by(func.date(Order.order_date)) \
-            .all()
+        daily_orders = db.session.query(
+            func.date(Order.order_date),
+            func.count(Order.id),
+            func.sum(Order.total_amount)
+        ).join(Customer).filter(
+            Order.order_date >= last_week
+        )
+        if current_user.has_role('user'):
+            daily_orders = daily_orders.filter(Customer.company_id == company_id)
+        daily_orders = daily_orders.group_by(
+            func.date(Order.order_date)
+        ).all()
         daily_orders = [{'date': date.strftime('%Y-%m-%d'), 'count': count, 'revenue': revenue} for date, count, revenue in daily_orders]
-        # print(f"Daily Orders: {daily_orders}")
 
         # Orders by month for the past year
         last_year = datetime.now(tz=timezone.utc) - timedelta(weeks=52)
-        monthly_orders = db.session.query(func.date_format(Order.order_date, '%Y-%m'), func.count(Order.id), func.sum(Order.total_amount)) \
-            .filter(Order.order_date >= last_year) \
-            .group_by(func.date_format(Order.order_date, '%Y-%m')) \
-            .all()
+        monthly_orders = db.session.query(
+            func.date_format(Order.order_date, '%Y-%m'),
+            func.count(Order.id),
+            func.sum(Order.total_amount)
+        ).join(Customer).filter(
+            Order.order_date >= last_year
+        )
+        if current_user.has_role('user'):
+            monthly_orders = monthly_orders.filter(Customer.company_id == company_id)
+        monthly_orders = monthly_orders.group_by(
+            func.date_format(Order.order_date, '%Y-%m')
+        ).all()
         monthly_orders = [{'month': month, 'count': count, 'revenue': revenue} for month, count, revenue in monthly_orders]
-        # print(f"Monthly Orders: {monthly_orders}")
 
         # Orders by year
-        yearly_orders = db.session.query(func.date_format(Order.order_date, '%Y'), func.count(Order.id), func.sum(Order.total_amount)) \
-            .group_by(func.date_format(Order.order_date, '%Y')) \
-            .all()
+        yearly_orders = db.session.query(
+            func.date_format(Order.order_date, '%Y'),
+            func.count(Order.id),
+            func.sum(Order.total_amount)
+        ).join(Customer)
+        if current_user.has_role('user'):
+            yearly_orders = yearly_orders.filter(Customer.company_id == company_id)
+        yearly_orders = yearly_orders.group_by(
+            func.date_format(Order.order_date, '%Y')
+        ).all()
         yearly_orders = [{'year': year, 'count': count, 'revenue': revenue} for year, count, revenue in yearly_orders]
-        # print(f"Yearly Orders: {yearly_orders}")
-        
+
         # New vs. Returning Customers
-        new_customers = db.session.query(Order.customer_id).distinct(Order.customer_id).count()
+        new_customers_query = db.session.query(Order.customer_id).join(Customer)
+        if current_user.has_role('user'):
+            new_customers_query = new_customers_query.filter(Customer.company_id == company_id)
+        new_customers = new_customers_query.distinct(Order.customer_id).count()
+
         returning_customers = total_orders - new_customers
         new_customer_percentage = (new_customers / total_orders) * 100 if total_orders else 0
         returning_customer_percentage = 100 - new_customer_percentage
-        print(new_customer_percentage)
-        print(returning_customer_percentage)
-        print(returning_customers)
 
         # Customer Lifetime Value (CLV)
-        total_customers = Customer.query.count()
+        total_customers_query = Customer.query
+        if current_user.has_role('user'):
+            total_customers_query = total_customers_query.filter(Customer.company_id == company_id)
+        total_customers = total_customers_query.count()
+
         clv = total_revenue / total_customers if total_customers else 0
-        print(clv)
-        
+
         # Create a dictionary with the fetched statistics
         order_analysis = {
             "total_orders": total_orders,
@@ -88,6 +120,7 @@ def get_order_analysis():
     except Exception as e:
         print(f"Error occurred: {e}")
         return jsonify({"error": str(e)}), 500
+
         
     # return render_template('anayltics/order_analysis.html', total_orders=total_orders, daily_orders=daily_orders, monthly_orders=monthly_orders, yearly_orders=yearly_orders)
 

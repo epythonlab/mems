@@ -1,15 +1,17 @@
 from app import db
-from datetime import datetime
+from datetime import datetime, timezone
 from app.models.inventory import Batch, Product
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(200), nullable=False)
     tin = db.Column(db.String(50), nullable=False)  # Added TIN field
     orders = db.relationship('Order', backref='customer', lazy=True)
+    company = db.relationship('Company', backref='customer', lazy=True)
 
     def __repr__(self):
         return f'<Customer {self.name}>'
@@ -44,7 +46,7 @@ class Customer(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
-    order_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    order_date = db.Column(db.DateTime, nullable=False, default= datetime.now(tz=timezone.utc))
     total_amount = db.Column(db.Float, nullable=False, default=0.0)
     items = db.relationship('OrderItem', back_populates='order', lazy=True, cascade="all, delete-orphan")
 
