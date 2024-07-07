@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Details</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-    </head>
+   
     <body>
         <div class="overlay-container" id="overlay" >
             <a href="/inventory" class="close-button" id="close-form-btn">
@@ -68,7 +62,7 @@
                 document.getElementById('action-input').value = action;
                 document.getElementById('status-form').submit();
             }
-</script>
+        </script>
         <!-- add the script files in the body of every html content -->
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
         

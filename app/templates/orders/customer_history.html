@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+   
+<body>
+    <div class="overlay-container" id="overlay" >
+        <a href="/customer_list" class="close-button" id="close-form-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="container mt-5">
+            <h5 class="card-title">Customer History</h5>
+            <p><strong>Customer:</strong> {{ customer.name }}</p>
+            <p><strong>Email:</strong> {{ customer.email }}</p>
+            <p><strong>Phone:</strong> {{ customer.phone }}</p>
+            <p><strong>Address:</strong> {{ customer.address }}</p>
+            <h3>Orders</h3>
+            <p>Total Orders: {{ orders|length }}</p>
+    
+            <div id="customer-history"></div>
+            {% for order in orders %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <strong>Order ID:</strong> {{ order.id }} <br>
+                    <strong>Order Date:</strong> {{ order.order_date.strftime('%Y-%m-%d %H:%M:%S') }} <br>
+                    <strong>Total Amount:</strong> {{ "{:,.2f}".format(order.total_amount) }} ETB
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Items</h5>
+                    <ul class="list-group">
+                        {% for item in order.items %}
+                        <li class="list-group-item">
+                            <strong>Product Name:</strong> {{ item.batch.product.name }} <br>
+                            <strong>Batch Number:</strong> {{ item.batch.batch_number }} <br>
+                            <strong>Quantity:</strong> {{ item.quantity }} <br>
+                            <strong>Unit Price:</strong> {{ "{:,.2f}".format(item.batch.unit_price) }} ETB
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        function submitForm(action) {
+            document.getElementById('action-input').value = action;
+            document.getElementById('status-form').submit();
+        }
+    </script>
+     <!-- add the script files in the body of every html content -->
+     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

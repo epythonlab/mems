@@ -42,22 +42,26 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Customer</th>
-                            <th scope="col">Order Date</th>
-                            <th scope="col">Total Amount</th>
-                            <!-- Add more columns as needed -->
+                            <th scope="col">Customer Name</th>
+                            <th scope="col">Total Orders</th>
+                            <th scope="col">Total Revenue</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for order in orders %}
+                        {% for customer in customers %}
                         <tr>
-                            <th scope="row">{{ order.id }}</th>
-                            <td>{{ order.customer.name }}</td>
-                            <td>{{ order.order_date }}</td>
-                            <td>{{ "{:,.2f}".format(order.total_amount)  }} ETB </td>
-
-
-                            <!-- Add more columns as needed -->
+                            <th scope="row">{{ customer.id }}</th>
+                            <td>{{ customer.name }}</td>
+                            <td>{{ customer.total_orders }}</td>
+                            <td>{{ "{:,.2f}".format(customer.total_revenue) }} ETB</td>
+                            <td>
+                                <button class="btn-custom-primary btn-sm button-hover open-detail-btn" data-row-id="{{customer.id}}" data-page-url="{{ url_for('orders_bp.customer_history')}}" title="View Details" >
+                                    <i class="fas fa-eye"></i> <!-- Font Awesome icon for view -->
+                                    View History
+                                </button>
+                                <!-- <button class="btn btn-primary btn-sm" onclick="viewHistory({{ customer.id }})">View History</button> -->
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -91,7 +95,12 @@
     <div class="loading-spinner" id="loadingSpinner"></div>
     <div class="loading-message" id="loadingMessage">Processing your request, please wait...</div>
 </div>
-
+<!-- overlay the customer history here -->
+<div class="overlay" id="overlay"></div>
+<!-- add the script files in the body of every html content -->
+<script src="{{ url_for('static', filename='js/table.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/page_overlay.js') }}"></script>
 {% endblock body %}
 
 <script>

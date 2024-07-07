@@ -1,4 +1,4 @@
-from flask import jsonify, request, render_template, redirect, url_for
+from flask import jsonify, request, render_template, redirect,flash, url_for
 from flask_login import login_required, current_user
 from app import db
 from app.models.orders import Customer, Order, OrderItem
@@ -6,6 +6,8 @@ from app.models.inventory import Product, Batch
 from datetime import datetime, timezone
 from . import orders_bp
 from sqlalchemy import and_
+from sqlalchemy.sql import func
+from sqlalchemy.orm import joinedload
 
 
 @orders_bp.route('/new_order')
@@ -100,7 +102,7 @@ def create_order():
              
             db.session.commit()
 
-            return jsonify({'success': True, 'redirect': url_for('orders_bp.list_orders')})
+            return jsonify({'success': True, 'redirect': url_for('orders_bp.customer_list')})
 
         except Exception as e:
             db.session.rollback()
@@ -113,8 +115,51 @@ def create_order():
     return render_template('orders/create_order.html', customer=customer)
 
 
-@orders_bp.route('/list_orders')
+@orders_bp.route('/customer_list')
 @login_required
-def list_orders():
-    orders = Order.query.all()
-    return render_template('orders/list_orders.html', orders=orders)
+def customer_list():
+    try:
+        customers = db.session.query(
+            Customer.id,
+            Customer.name,
+            func.count(Order.id).label('total_orders'),
+            func.sum(Order.total_amount).label('total_revenue')
+        ).join(Order, Customer.id == Order.customer_id).group_by(Customer.id).all()
+        
+        return render_template('orders/customer_list.html', customers=customers)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    # orders = Order.query.all()
+    # return render_template('orders/list_orders.html', orders=orders)
+
+@orders_bp.route('/customer_history')
+@login_required
+def customer_history():
+    customer_id = request.args.get('id')
+    print(customer_id)
+    if not customer_id:
+        flash("Customer ID is required", 'warning')
+        return render_template('orders/customer_history.html', customer=None, orders=[])
+
+    try:
+        customer = db.session.query(Customer).filter_by(id=customer_id).first()
+        print(customer.name)
+        
+        if not customer:
+            flash("Customer not found", 'warning')
+            return render_template('orders/customer_history.html', customer=None, orders=[])
+
+        orders = db.session.query(Order).options(
+            joinedload(Order.items).joinedload(OrderItem.batch).joinedload(Batch.product)
+        ).filter_by(customer_id=customer_id).all()
+        for order in orders:
+            for item in order.items:
+                print(item)
+        
+
+        return render_template('orders/customer_history.html', customer=customer, orders=orders)
+
+    except Exception as e:
+        flash(f"An error occurred: {e}", 'danger')
+        return render_template('orders/customer_history.html', customer=None, orders=[]), 500
