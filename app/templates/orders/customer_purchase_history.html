@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<title>{% block title %}Customer Purchase History Tracker{% endblock title %}</title>
+{% block body %}
+{% include 'header.html' %}
+<!-- Main content -->
+<div class="container-fluid">
+    {% include 'sideheader.html' %}
+    <div class="main">
+        <!-- Container for sidebar content -->
+        {% include 'sidenav.html' %}
+        <div class="page-content">
+
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-dark">Customer Purchase History Tracker</h3>
+                    <div>
+                        <!-- <button class="btn btn-primary btn-print mr-2" onclick="window.print()"><i class="fas fa-print"></i> Print</button> -->
+                        <button class="btn btn-success mr-2" onclick="exportToExcel()"><i class="far fa-file-excel"></i> Export to Excel</button>
+                        <button class="btn btn-danger" onclick="window.print()"><i class="far fa-file-pdf"></i> Export to PDF</button>
+                    </div>
+                </div>
+
+                <div class="header-row">
+                    <div class="month-name">{{ month }}</div>
+                    <div class="card-container">
+                        <!-- Card for Total Amount -->
+                        <div class="track-card bg-gradient-primary text-white">
+                            <i class="fas fa-dollar-sign icon-left"></i>
+                            <div>
+                                <h5 class="text-uppercase">Total Amount</h5>
+                                <h3>${{ "{:,.2f}".format(total_amount) }}</h3>
+                            </div>
+                        </div>
+                        <!-- Card for Total Quantity -->
+                        <div class="track-card bg-gradient-success text-white">
+                            <i class="fas fa-cubes icon-left"></i>
+                            <div>
+                                <h5 class="text-uppercase">Total Quantity</h5>
+                                <h3>{{ total_quantity }}</h3>
+                            </div>
+                        </div>
+                        <!-- Card for Total Customers -->
+                        <div class="track-card bg-gradient-info text-white">
+                            <i class="fas fa-users icon-left"></i>
+                            <div>
+                                <h5 class="text-uppercase">Total Customers</h5>
+                                <h3>{{ total_customers }}</h3>
+                            </div>
+                        </div>
+                        <!-- Additional cards for other months -->
+                        {% for month in other_months %}
+                        <div class="track-card bg-gradient-secondary text-white">
+                            <div>
+                                <h5 class="text-uppercase">{{ month.name }}</h5>
+                                <h3>{{ month.total }}</h3>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="card custom-card-border table-responsive">
+                    <table id="purchase-history-table" class="table table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Customer Name</th>
+                                <th scope="col">Product Purchased</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Total Amount</th>
+                                <th scope="col">Money</th>
+                                <th scope="col">Change</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in order_data %}
+                            <tr>
+                                <td>{{ order.order_date.strftime('%d-%b-%Y') }}</td>
+                                <td>{{ order.customer_name }}</td>
+                                <td>{{ order.product_name }}</td>
+                                <td>{{ order.quantity }}</td>
+                                <td>${{ "{:,.2f}".format(order.unit_price) }}</td>
+                                <td>${{ "{:,.2f}".format(order.total_amount) }}</td>
+                                <td>${{ "{:,.2f}".format(order.money) }}</td>
+                                <td>${{ "{:,.2f}".format(order.change) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        function exportToExcel() {
+            // Get table element
+            var table = document.getElementById("purchase-history-table");
+
+            // Convert table to Excel workbook
+            var wb = XLSX.utils.table_to_book(table, {sheet: "Sheet1"});
+            
+            // Save as Excel file
+            try {
+                XLSX.writeFile(wb, 'customer_purchase_history.xlsx');
+            } catch (e) {
+                console.error('Error exporting to Excel:', e);
+                alert('There was an issue exporting to Excel. Please try again or check your browser settings.');
+            }
+        }
+
+        function exportToPDF() {
+            // Initialize jsPDF
+            var doc = new jsPDF();
+
+            // Add header
+            doc.text("Customer Purchase History", 20, 10);
+
+            // Convert table to PDF using autotable plugin
+            try {
+                doc.autoTable({ html: '#purchase-history-table' });
+
+                // Save PDF
+                doc.save('customer_purchase_history.pdf');
+            } catch (e) {
+                console.error('Error exporting to PDF:', e);
+                alert('There was an issue exporting to PDF. Please try again or check your browser settings.');
+            }
+        }
+    </script>
+{% endblock body %}

@@ -2025,9 +2025,6 @@ td:last-child .btn-status .fas {
 }
 
 /* Form Labels */
-.form-label {
-  color: #007A3E; /* Darker shade of green */
-}
 
 /* Form Control Placeholder Text */
 .form-control::placeholder {
@@ -2242,4 +2239,138 @@ canvas {
   .chart-section {
       width: calc(33.3333% - 20px);
   }
+}
+
+/* Css- customer history tracker */
+.track-card {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  min-width: 200px;
+  flex: 1 1 calc(33.333% - 10px);
+}
+
+.track-card:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.track-card .text-uppercase {
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-bottom: 5px;  /* Reduced margin */
+}
+
+.track-card h3 {
+  font-size: 20px;  /* Reduced font size */
+  margin: 5px 0;  /* Reduced margin */
+}
+
+.track-card i {
+  font-size: 24px;  /* Reduced font size */
+  margin-bottom: 5px;  /* Reduced margin */
+  opacity: 0.7;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+}
+
+.bg-gradient-success {
+  background: linear-gradient(45deg, #28a745, #1e7e34);
+}
+
+.bg-gradient-info {
+  background: linear-gradient(45deg, #17a2b8, #117a8b);
+}
+
+.text-white {
+  color: #ffffff !important;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.month-name {
+  font-size: 24px;
+  background-color: #00AB4F;
+  padding: 2px 50px;
+  text-align: center;
+  color: #333;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: nowrap; /* Ensure cards stay in a single row */
+  gap: 15px;
+  overflow-x: auto; /* Allow horizontal scrolling on smaller screens */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.track-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  flex: 1 1 auto; /* Allow cards to shrink on smaller screens */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Responsive adjustments for small devices */
+@media (max-width: 672px) {
+  .track-card {
+      min-width: calc(50% - 10px); /* Adjust card width for two-column layout */
+      padding: 8px; /* Reduced padding */
+  }
+
+  .icon-left {
+      font-size: 18px; /* Reduced icon size */
+  }
+
+  .track-card .text-uppercase {
+      font-size: 9px; /* Further reduced font size */
+  }
+
+  .track-card h3 {
+      font-size: 14px; /* Further reduced font size */
+  }
+}
+
+.icon-left {
+  margin-right: 10px;
+  font-size: 20px;
+  opacity: 0.7;
+}
+
+.track-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.track-card > div {
+  flex: 1;
+  text-align: left;
+}
+
+.track-card h5 {
+  font-size: 12px;
+  margin-bottom: 3px;
+  opacity: 0.8;
+}
+
+.track-card h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
 }
