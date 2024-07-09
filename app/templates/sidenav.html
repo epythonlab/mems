@@ -6,76 +6,84 @@
                 <span>Dashboard</span>
             </a>
         </li>
-        <li>
+        <li class="nav-item dropdown">
             <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-target="inventorySubmenu">
-                <i class="fas fa-archive"></i> <!-- Icon for "Inventory" -->
+                <i class="fas fa-archive"></i>
                 <span>Inventory</span>
             </a>
             <ul class="list-unstyled" id="inventorySubmenu" style="display: none;">
                 <li>
                     <a href="/add_modal" class="nav-link">
-                        <i class="fas fa-plus"></i> <!-- Icon for "Add Item" -->
+                        <i class="fas fa-plus"></i>
                         <span>Add Item</span>
                     </a>
                 </li>
                 <li>
                     <a href="/inventory" class="nav-link">
-                        <i class="fas fa-list"></i> <!-- Icon for "List Items" -->
+                        <i class="fas fa-list"></i>
                         <span>List Items</span>
                     </a>
                 </li>
             </ul>
         </li>
-        <li>
-            <a href="javascript:void(0)" class="nav-link dropdown-toggle arrow" data-target="userManagementSubmenu">
-                <i class="fas fa-user"></i>
-                <span>User Management</span>
-               
+        <li class="nav-item dropdown">
+            <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-target="orderSubmenu">
+                <i class="fas fa-sync-alt"></i>
+                <span>Order Processing</span>
             </a>
-            <ul class="list-unstyled" id="userManagementSubmenu" style="display: none;">
+            <ul class="list-unstyled" id="orderSubmenu" style="display: none;">
                 <li>
-                    <a href="/analytics" class="nav-link">
-                        <i class="fas fa-chart-line"></i>
-                        <span>User Analytics</span>
-                    </a>
-                </li>
-                {% if current_user.has_role('root') or current_user.has_role('admin') %}
-                <li>
-                    <a href="/users" class="nav-link">
-                        <i class="fas fa-users"></i>
-                        <span>Users</span>
+                    <a href="/orders/customer_list" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/user_log" class="nav-link">
-                        <i class="fas fa-file-alt"></i>
-                        <span>Users Log</span>
+                    <a href="/orders/customer_purchase_history" class="nav-link">
+                        <i class="fas fa-history"></i>
+                        <span>Track History</span>
                     </a>
                 </li>
-                <li>
-                    <a href="/roles" class="nav-link">
-                        <i class="fas fa-lock"></i>
-                        <span>Roles</span>
-                    </a>
-                </li>
-                {% endif %}
             </ul>
         </li>
         <li>
-            <a href="/orders/customer_list" class="nav-link">
-                <i class="material-icons">grid_on</i>
-                <span>Orders</span>
-            </a>
+            {% if current_user.has_role('root') or current_user.has_role('admin') %}
+                <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-target="userManagementSubmenu">
+                    <i class="fas fa-user"></i>
+                    <span>User Management</span>
+                </a>
+                <ul class="list-unstyled" id="userManagementSubmenu" style="display: none;">
+                    <li>
+                        <a href="/analytics" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>User Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/users" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/user_log" class="nav-link">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Users Log</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/roles" class="nav-link">
+                            <i class="fas fa-lock"></i>
+                            <span>Roles</span>
+                        </a>
+                    </li>
+                </ul>
+            {% endif %}
         </li>
-        <li>
-            <a href="/orders/customer_purchase_history" class="nav-link">
-                <i class="material-icons">grid_on</i>
-                <span>History</span>
-            </a>
-        </li>
+        
         <li>
             <a href="#" class="nav-link">
-                <i class="fas fa-notification"></i>
+                <i class="fas fa-bell"></i>
                 <span>Notifications</span>
             </a>
         </li>
@@ -96,10 +104,11 @@
         </li>
     </ul>
 </div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var dropdownToggles = document.querySelectorAll(".dropdown-toggle");
-    
+
         dropdownToggles.forEach(function(toggle) {
             toggle.addEventListener("click", function(event) {
                 event.preventDefault(); // Prevent default link behavior
@@ -107,7 +116,7 @@
                 
                 var targetId = toggle.getAttribute("data-target");
                 var submenu = document.getElementById(targetId);
-    
+
                 // Toggle submenu visibility
                 if (submenu.style.display === "none" || submenu.style.display === "") {
                     submenu.style.display = "block";
@@ -117,7 +126,7 @@
                     toggle.classList.remove("rotated"); // Remove rotated class
                 }
             });
-    
+
             // Ensure submenu remains hidden initially
             var targetId = toggle.getAttribute("data-target");
             var submenu = document.getElementById(targetId);
@@ -125,7 +134,19 @@
                 submenu.style.display = "none";
             }
         });
+
+        // Keep submenu expanded if a menu item is active
+        var activeLink = document.querySelector(".nav-link.active");
+        if (activeLink) {
+            var parentDropdown = activeLink.closest(".nav-item.dropdown");
+            if (parentDropdown) {
+                var targetId = parentDropdown.querySelector(".dropdown-toggle").getAttribute("data-target");
+                var submenu = document.getElementById(targetId);
+                if (submenu) {
+                    submenu.style.display = "block";
+                    parentDropdown.querySelector(".dropdown-toggle").classList.add("rotated");
+                }
+            }
+        }
     });
-    
-    
 </script>

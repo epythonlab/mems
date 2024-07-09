@@ -214,8 +214,10 @@ def customer_purchase_history():
             for item in order.items:
                 order_data.append({
                     "order_date": order.order_date,
+                    "tin":order.customer.tin,
                     "customer_name": order.customer.name,
                     "product_name": item.batch.product.name,
+                    "batch": item.batch.batch_number,
                     "quantity": item.quantity,
                     "unit_price": item.batch.unit_price,
                     "total_amount": item.quantity * item.batch.unit_price,
