@@ -8,98 +8,116 @@
     <div class="main">
         <!-- Container for sidebar content -->
         {% include 'sidenav.html' %}
-        <div class="page-content" id="">
+        <div class="page-content" id="printArea">
 
-            <div id="printArea">
-
-            
-                <div class="header-row d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-dark">Customer Purchase History Tracker</h3>
-                    <div class="button-group">
-                        <button class="btn btn-success mr-2" onclick="exportToExcel()"><i class="far fa-file-excel"></i> Export to Excel</button>
-                        <button class="btn btn-danger" onclick="openPDF()"><i class="far fa-file-pdf"></i> Export to PDF</button>
-                    </div>
-                </div>
+            <div class="header-row d-flex justify-content-between align-items-center mb-4">
+                <h3 class="text-dark">Customer Purchase History Tracker</h3>
+                <div class="button-group">
+                    <button class="btn btn-success mr-2" onclick="exportToExcel()"><i class="far fa-file-excel"></i> Export to Excel</button>
+                    <button class="btn btn-danger" onclick="openPDF()"><i class="far fa-file-pdf"></i> Export to PDF</button>
+                </div> 
+            </div>
               
-
-                <div class="header-row" >
-                    <div class="month-name">{{ month }}, {{year}}</div>
-                        <div class="card-container">
-                            <!-- Card for Total Amount -->
-                            <div class="track-card bg-gradient-primary">
-                                <i class="fas fa-dollar-sign icon-left"></i>
-                                <div>
-                                    <h5 class="text-uppercase">Total Amount</h5>
-                                    <h3>ETB{{ "{:,.2f}".format(total_amount) }}</h3>
+            <div class="header-row">
+                <div class="filter-history mt-2">
+                    <div class="history-date-filters">
+                        <span ><i class="fas fa-filter"></i> Filter Options</span>
+                        <form action="{{ url_for('orders_bp.customer_purchase_history') }}" class="row" method="get">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="start-date">Start Date:</label>
+                                    <input type="date" id="start-date" name="start_date" class="form-control" value="{{start_date}}">
                                 </div>
                             </div>
-                            <!-- Card for Total Quantity -->
-                            <div class="track-card bg-gradient-success">
-                                <i class="fas fa-cubes icon-left"></i>
-                                <div>
-                                    <h5 class="text-uppercase">Total Quantity</h5>
-                                    <h3>{{ total_quantity }}</h3>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="end-date">End Date:</label>
+                                    <input type="date" id="end-date" name="end_date" class="form-control" value="{{end_date}}" >
                                 </div>
                             </div>
-                            <!-- Card for Total Customers -->
-                            <div class="track-card bg-gradient-info">
-                                <i class="fas fa-users icon-left"></i>
-                                <div>
-                                    <h5 class="text-uppercase">Total Customers</h5>
-                                    <h3>{{ total_customers }}</h3>
-                                </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary">Apply Filter</button>
                             </div>
-                            <!-- Additional cards for other months -->
-                            {% for month in other_months %}
-                            <div class="track-card bg-gradient-secondary">
-                                <div>
-                                    <h5 class="text-uppercase">{{ month.name }}</h5>
-                                    <h3>{{ month.total }}</h3>
-                                </div>
-                            </div>
-                            {% endfor %}
+                        </form>
+                    </div>
+                    <div class="date-range-display">{{ date_range }}</div>
+                </div>
+                
+                <div class="card-container">
+                    <!-- Card for Total Amount -->
+                    <div class="track-card bg-gradient-primary">
+                        <i class="fas fa-dollar-sign icon-left"></i>
+                        <div>
+                            <h5 class="text-uppercase">Total Amount</h5>
+                            <h3>ETB{{ "{:,.2f}".format(total_amount) }}</h3>
                         </div>
                     </div>
-            
-                <div class="card custom-card-border table-responsive">
-                    <table id="purchase-history-table" class="table table-hover">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">TIN</th>
-                                <th scope="col">Customer Name</th>
-                                <th scope="col">Product Purchased</th>
-                                <th scope="col">Batch Number</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Unit Price</th>
-                                <th scope="col">Total Amount</th>
-                                <th scope="col">Money</th>
-                                <th scope="col">Change</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for order in order_data %}
-                            <tr>
-                                <td>{{ order.order_date.strftime('%d-%b-%Y') }}</td>
-                                <td>{{ order.tin }}</td>
-                                <td>{{ order.customer_name }}</td>
-                                <td>{{ order.product_name }}</td>
-                                <td>{{order.batch}}</td>
-                                <td>{{ order.quantity }}</td>
-                                <td>ETB{{ "{:,.2f}".format(order.unit_price) }}</td>
-                                <td>ETB{{ "{:,.2f}".format(order.total_amount) }}</td>
-                                <td>ETB{{ "{:,.2f}".format(order.money) }}</td>
-                                <td>ETB{{ "{:,.2f}".format(order.change) }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <!-- Card for Total Quantity -->
+                    <div class="track-card bg-gradient-success">
+                        <i class="fas fa-cubes icon-left"></i>
+                        <div>
+                            <h5 class="text-uppercase">Total Quantity</h5>
+                            <h3>{{ total_quantity }}</h3>
+                        </div>
+                    </div>
+                    <!-- Card for Total Customers -->
+                    <div class="track-card bg-gradient-info">
+                        <i class="fas fa-users icon-left"></i>
+                        <div>
+                            <h5 class="text-uppercase">Total Customers</h5>
+                            <h3>{{ total_customers }}</h3>
+                        </div>
+                    </div>
+                    <!-- Additional cards for other months -->
+                    {% for month in other_months %}
+                    <div class="track-card bg-gradient-secondary">
+                        <div>
+                            <h5 class="text-uppercase">{{ month.name }}</h5>
+                            <h3>{{ month.total }}</h3>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-            </div>    
-        </div>
+            </div>  
+            <div class="card custom-card-border table-responsive">
+                <table id="purchase-history-table" class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">TIN</th>
+                            <th scope="col">Customer Name</th>
+                            <th scope="col">Product Purchased</th>
+                            <th scope="col">Batch Number</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Unit Price</th>
+                            <th scope="col">Total Amount</th>
+                            <th scope="col">Money</th>
+                            <th scope="col">Change</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in order_data %}
+                        <tr>
+                            <td>{{ order.order_date.strftime('%d-%b-%Y') }}</td>
+                            <td>{{ order.tin }}</td>
+                            <td>{{ order.customer_name }}</td>
+                            <td>{{ order.product_name }}</td>
+                            <td>{{order.batch}}</td>
+                            <td>{{ order.quantity }}</td>
+                            <td>ETB{{ "{:,.2f}".format(order.unit_price) }}</td>
+                            <td>ETB{{ "{:,.2f}".format(order.total_amount) }}</td>
+                            <td>ETB{{ "{:,.2f}".format(order.money) }}</td>
+                            <td>ETB{{ "{:,.2f}".format(order.change) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>    
     </div>
-
 </div>
+
+
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script>
         function exportToExcel() {
@@ -140,6 +158,9 @@
                     
                         .button-group{
                           display:none;
+                        }
+                        .history-date-filters{
+                            display: none;
                         }
                         /* apply the current layout to the printed pdf file */
                         .track-card {
@@ -266,6 +287,9 @@
         newWin.close();
     };
 }
+
+
+
 </script>
 
 {% endblock body %}

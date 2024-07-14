@@ -177,27 +177,37 @@ def customer_history():
 
 
 
-@orders_bp.route('/customer_purchase_history')
+@orders_bp.route('/customer_purchase_history', methods=['GET'])
 @login_required
 def customer_purchase_history():
     try:
-        current_date = datetime.now()
-        month = current_date.month
-        year = current_date.year
+        start_date_str = request.args.get('start_date')
+        end_date_str = request.args.get('end_date')
         company_id = current_user.company_id  # Get the company ID of the current user
 
-        
-        # Fetch orders for all customers of the current user's company for the current month/year
-        orders = db.session.query(Order).join(Customer).options(
+        query = db.session.query(Order).join(Customer).options(
             joinedload(Order.items).joinedload(OrderItem.batch).joinedload(Batch.product),
-        ).filter(
-            extract('month', Order.order_date) == month,
-            extract('year', Order.order_date) == year,
-            Customer.company_id == company_id  # Filter by company ID
-        ).all()
+        ).filter(Customer.company_id == company_id)  # Filter by company ID
+
+        if start_date_str and end_date_str:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+            query = query.filter(Order.order_date.between(start_date, end_date))
+            date_range = f"{start_date.strftime('%d-%B, %Y')} - {end_date.strftime('%d-%B, %Y')}"
+        else:
+            current_date = datetime.now()
+            month = current_date.month
+            year = current_date.year
+            query = query.filter(
+                extract('month', Order.order_date) == month,
+                extract('year', Order.order_date) == year,
+            )
+            date_range = f"{current_date.strftime('%B')}, {current_date.year}"
+
+        orders = query.all()
 
         if not orders:
-            flash("No orders found for the current month", 'info')
+            flash("No orders found for the selected period", 'info')
 
         # Prepare data for the template
         order_data = []
@@ -214,7 +224,7 @@ def customer_purchase_history():
             for item in order.items:
                 order_data.append({
                     "order_date": order.order_date,
-                    "tin":order.customer.tin,
+                    "tin": order.customer.tin,
                     "customer_name": order.customer.name,
                     "product_name": item.batch.product.name,
                     "batch": item.batch.batch_number,
@@ -233,8 +243,9 @@ def customer_purchase_history():
             total_amount=total_amount,
             total_quantity=total_quantity,
             total_customers=total_customers,
-            month=datetime.now().strftime('%B'),
-            year=year,
+            date_range=date_range,
+            start_date=start_date_str,
+            end_date=end_date_str
         )
 
     except Exception as e:
