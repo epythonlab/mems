@@ -19,28 +19,25 @@
             </div>
               
             <div class="header-row">
-                <div class="filter-history mt-2">
-                    <div class="history-date-filters">
-                        <span ><i class="fas fa-filter"></i> Filter Options</span>
-                        <form action="{{ url_for('orders_bp.customer_purchase_history') }}" class="row" method="get">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="start-date">Start Date:</label>
-                                    <input type="date" id="start-date" name="start_date" class="form-control" value="{{start_date}}">
-                                </div>
+                <div class="history-date-filters">
+                    <span ><i class="fas fa-filter"></i> Filter Options</span>
+                    <form action="{{ url_for('orders_bp.customer_purchase_history') }}" class="row" method="get">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="start-date">Start Date:</label>
+                                <input type="date" id="start-date" name="start_date" class="form-control" value="{{start_date}}">
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="end-date">End Date:</label>
-                                    <input type="date" id="end-date" name="end_date" class="form-control" value="{{end_date}}" >
-                                </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="end-date">End Date:</label>
+                                <input type="date" id="end-date" name="end_date" class="form-control" value="{{end_date}}" >
                             </div>
-                            <div class="col-md-4 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary">Apply Filter</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="date-range-display">{{ date_range }}</div>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary">Apply Filter</button>
+                        </div>
+                    </form>
                 </div>
                 
                 <div class="card-container">
@@ -79,39 +76,45 @@
                     {% endfor %}
                 </div>
             </div>  
-            <div class="card custom-card-border table-responsive">
-                <table id="purchase-history-table" class="table table-hover">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">TIN</th>
-                            <th scope="col">Customer Name</th>
-                            <th scope="col">Product Purchased</th>
-                            <th scope="col">Batch Number</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Unit Price</th>
-                            <th scope="col">Total Amount</th>
-                            <th scope="col">Money</th>
-                            <th scope="col">Change</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for order in order_data %}
-                        <tr>
-                            <td>{{ order.order_date.strftime('%d-%b-%Y') }}</td>
-                            <td>{{ order.tin }}</td>
-                            <td>{{ order.customer_name }}</td>
-                            <td>{{ order.product_name }}</td>
-                            <td>{{order.batch}}</td>
-                            <td>{{ order.quantity }}</td>
-                            <td>ETB{{ "{:,.2f}".format(order.unit_price) }}</td>
-                            <td>ETB{{ "{:,.2f}".format(order.total_amount) }}</td>
-                            <td>ETB{{ "{:,.2f}".format(order.money) }}</td>
-                            <td>ETB{{ "{:,.2f}".format(order.change) }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="card custom-card-border ">
+                <div class="card-body">
+                    <h4 class="card-title">Purchase History of {{ date_range }}</h4>
+                   
+                    <div class="table-responsive">
+                        <table id="purchase-history-table" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">TIN</th>
+                                    <th scope="col">Customer Name</th>
+                                    <th scope="col">Product Purchased</th>
+                                    <th scope="col">Batch Number</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Unit Price</th>
+                                    <th scope="col">Total Amount</th>
+                                    <th scope="col">Money</th>
+                                    <th scope="col">Change</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in order_data %}
+                                <tr>
+                                    <td>{{ order.order_date.strftime('%d-%b-%Y') }}</td>
+                                    <td>{{ order.tin }}</td>
+                                    <td>{{ order.customer_name }}</td>
+                                    <td>{{ order.product_name }}</td>
+                                    <td>{{order.batch}}</td>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>ETB{{ "{:,.2f}".format(order.unit_price) }}</td>
+                                    <td>ETB{{ "{:,.2f}".format(order.total_amount) }}</td>
+                                    <td>ETB{{ "{:,.2f}".format(order.money) }}</td>
+                                    <td>ETB{{ "{:,.2f}".format(order.change) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>    
     </div>
