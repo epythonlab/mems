@@ -7,8 +7,10 @@
 }
 
 body {
-  background-color: #F8F9FA; /* Light background */
-  color: #333; /* Dark text */
+  background-color: #F8F9FA;
+  /* Light background */
+  color           : #333;
+  /* Dark text */
   display         : flex;
   justify-content : flex-end;
   /* Align buttons to the right */
@@ -132,6 +134,14 @@ a:hover {
   position        : relative;
   padding-left    : 20px;
   background-color: #f8f9fa;
+  z-index         : 1040;
+  /* Ensure it is above other content */
+
+}
+
+.sidebar.open {
+  transform: translateX(220px);
+  /* Slide into view */
 }
 
 .container-fluid.nav-closed .sidebar,
@@ -174,10 +184,12 @@ a:hover {
   font-size   : 1rem;
   color       : #333;
 }
+
 .sidebar ul li a.active i,
 .sidebar ul li a:hover i {
   color: #fff;
 }
+
 .sidebar ul li a.dropdown-toggle::after {
   display    : inline-block;
   margin-left: auto;
@@ -320,31 +332,6 @@ a:hover {
   transition : width 0.5s ease;
 }
 
-/* Search Menu Styles */
-.search-menu input[type="search"] {
-  height       : auto;
-  padding      : 10px 20px 10px 50px;
-  box-sizing   : border-box;
-  background   : #E8F0FE;
-  color        : #333;
-  width        : 100%;
-  border-radius: 10px;
-  border       : 1px solid #00AB4F;
-  font-size    : 1rem;
-  line-height  : 22px;
-  font-weight  : 500;
-  transition   : border-color 0.3s ease;
-}
-
-.search-menu input[type="search"]:focus {
-  border-color: #00AB4F;
-  outline     : none;
-}
-
-.search-menu input[type="search"]::placeholder {
-  color       : #b9b5b5;
-  padding-left: 10px;
-}
 
 .header-menu .button-menu:focus {
   outline: none;
@@ -355,6 +342,26 @@ a:hover {
   fill: #00AB4F;
 }
 
+.sidebar-logo {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.sidebar-logo img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px; /* Optional: round the corners of the logo */
+}
+
+.company-text {
+  text-align: center;
+  margin-bottom: 10px; /* Space between the text and the logo */
+  font-size: 18px; /* Adjust as needed */
+  font-weight: bold; /* Adjust as needed */
+}
+
 /* Responsive Adjustments */
 @media (max-width: 992px) {
   .header {
@@ -363,9 +370,11 @@ a:hover {
     align-items    : center;
     padding        : 0 10px;
   }
-.greeting{
-  font-size: 18px;
-}
+
+  .greeting {
+    font-size: 18px;
+  }
+
   .header-menu {
     margin-left: -10px;
   }
@@ -373,8 +382,18 @@ a:hover {
   .sidebar {
     margin-left: 0;
     margin-left: 0;
-    padding: 0;
+    padding    : 0;
+    position: fixed;
+    z-index: 1040;
   }
+
+  .sidebar.open {
+    transform: translateX(220px);
+  }
+  .sidebar-logo{
+    display: flex;
+  }
+  
 
   .header-logo {
     flex: 0 0 auto;
@@ -452,6 +471,32 @@ a:hover {
   transform     : translateY(-50%);
   color         : #b9b5b5;
   pointer-events: none;
+}
+
+/* Search Menu Styles */
+.search-menu input[type="search"] {
+  height       : auto;
+  padding      : 10px 20px 10px 50px;
+  box-sizing   : border-box;
+  background   : #E8F0FE;
+  color        : #333;
+  width        : 100%;
+  border-radius: 10px;
+  border       : 1px solid #00AB4F;
+  font-size    : 1rem;
+  line-height  : 22px;
+  font-weight  : 500;
+  transition   : border-color 0.3s ease;
+}
+
+.search-menu input[type="search"]:focus {
+  border-color: #00AB4F;
+  outline     : none;
+}
+
+.search-menu input[type="search"]::placeholder {
+  color       : #b9b5b5;
+  padding-left: 10px;
 }
 
 @media (min-width: 600px) {
@@ -698,9 +743,11 @@ a:hover {
   box-shadow: none;
   /* Removes any box shadow that might be used for focus */
 }
-.card-title{
+
+.card-title {
   padding-left: 10px;
 }
+
 .custom-btn {
   width : fit-content;
   margin: 10px;
@@ -2395,7 +2442,7 @@ canvas {
   transition      : all 0.3s ease;
   width           : 100%;
   max-width       : 500px;
-  margin-bottom: 10px;
+  margin-bottom   : 10px;
 
   /* Adjust max-width as needed */
 }
@@ -2481,7 +2528,7 @@ th {
 .table td {
   padding       : 0.9375rem;
   vertical-align: top;
-  
+
 }
 
 .table thead th {
@@ -2492,9 +2539,11 @@ th {
 .table tbody+tbody {
   border-top: 2px solid #ebedf2;
 }
+
 .table-bordered thead th,
 .table-bordered thead td {
-    border-bottom-width: 2px; }
+  border-bottom-width: 2px;
+}
 
 /* Table layout styles */
 .table-container {
@@ -2526,7 +2575,9 @@ th {
   color: #1F419B;
   /* Change to desired active color */
 }
+
 .table-responsive::-webkit-scrollbar {
   display: none;
 }
+
 /* header print */
