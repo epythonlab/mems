@@ -3,7 +3,7 @@
   margin     : 0;
   padding    : 0;
   box-sizing : border-box;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Roboto', 'Arial', sans-serif;
 }
 
 body {
@@ -627,12 +627,12 @@ a:hover {
   right        : -200px;
   width        : 250px;
   height       : 100vh;
-  background   : #fff;
   border-radius: 10px;
   box-shadow   : 5px 0 10px #1F419B;
   transition   : right 0.3s ease-in-out;
   z-index      : 9999;
   display      : none;
+  background-color: #282828;
 }
 
 .menu.active {
@@ -645,8 +645,11 @@ a:hover {
   display        : flex;
   align-items    : center;
   justify-content: space-between;
-  border-bottom  : 1px solid #ccc;
+  border-bottom  : 1px solid rgba(255, 255, 255, 0.2);
+  background-color: #282828;
+ 
 }
+
 
 .menu-header img {
   width: 100px;
@@ -657,7 +660,7 @@ a:hover {
   border    : none;
   cursor    : pointer;
   font-size : 18px;
-  color     : #333;
+  color     : #f1f1f1;
 }
 
 .menu::before {
@@ -667,7 +670,7 @@ a:hover {
   right     : 14px;
   width     : 20px;
   height    : 20px;
-  background: #fff;
+  background-color: #282828;
   transform : rotate(45deg);
   z-index   : -1;
 }
@@ -677,7 +680,9 @@ a:hover {
   display       : flex;
   flex-direction: column;
   z-index       : 10;
-  background    : #fff;
+  background    : #282828;
+  color: #f1f1f1;
+
 }
 
 .menu ul li {
@@ -687,15 +692,17 @@ a:hover {
 
 .menu ul li a {
   text-decoration: none;
-  color          : #111;
+  color          : #fff;
   display        : flex;
   align-items    : start;
-  padding        : 15px 20px 10px;
+  padding        : 15px;
   gap            : 6px;
+  font-size: 1.25rem;
+  font-weight: 400;
 }
 
 .menu ul li a:hover {
-  background: #1F419B;
+  background: #333;
   color     : #ccc;
 }
 
@@ -1681,6 +1688,10 @@ td:last-child .btn-status .fas {
 .form-group label {
   display      : block;
   margin-bottom: 5px;
+  font-size: 1.25rem;
+  line-height: 2rem;
+  font-weight: 400;
+    
 }
 
 .form-group input {
@@ -2117,11 +2128,12 @@ td:last-child .btn-status .fas {
   text-align : center;
   font-size  : 1.2em;
   color      : #1F419B;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Roboto', 'Arial', sans-serif;
   z-index    : 1000;
 }
 
 /* css for chart layout */
+/* Maintain existing mobile layout styles */
 main {
   margin : 0 auto;
   padding: auto !important;
@@ -2131,15 +2143,10 @@ main {
 .summary-container {
   display         : flex;
   flex-wrap       : nowrap;
-  /* Prevent wrapping */
   overflow-x      : auto;
-  /* Enable horizontal scroll */
   justify-content : space-around;
-  /* Center items with space around */
   gap             : 20px;
-  /* Adjust as needed */
   scroll-snap-type: x mandatory;
-
 }
 
 .summary-container::-webkit-scrollbar {
@@ -2192,19 +2199,16 @@ main .section-title {
 .total-orders-icon {
   background-color: #E8EAF6;
   color           : #1F419B;
-  /* Example color for Total Orders */
 }
 
 .total-revenue-icon {
   background-color: #FCE4EC;
   color           : #500041;
-  /* Example color for Total Revenue */
 }
 
 .average-order-icon {
   background-color: #E8F5E9;
   color           : #00AB4F;
-  /* Example color for Average Order Value */
 }
 
 .info-container {
@@ -2229,34 +2233,33 @@ main .section-title {
 
 @media (max-width: 768px) {
   .summary-item {
-    min-width: calc(50% - 30px);
+      min-width: calc(50% - 30px);
   }
 }
 
 @media (max-width: 576px) {
   .summary-item {
-    min-width: calc(100% - 30px);
+      min-width: calc(100% - 30px);
   }
 
-  /* Pagination Dots */
   .pagination-dots {
-    display        : flex;
-    justify-content: center;
-    margin-bottom  : 25px;
+      display        : flex;
+      justify-content: center;
+      margin-bottom  : 25px;
   }
 
   .dot {
-    height          : 10px;
-    width           : 10px;
-    margin          : 1px 5px;
-    background-color: #bbb;
-    border-radius   : 50%;
-    display         : inline-block;
-    transition      : background-color 0.6s ease;
+      height          : 10px;
+      width           : 10px;
+      margin          : 1px 5px;
+      background-color: #bbb;
+      border-radius   : 50%;
+      display         : inline-block;
+      transition      : background-color 0.6s ease;
   }
 
   .dot.active {
-    background-color: #500041;
+      background-color: #500041;
   }
 }
 
@@ -2276,7 +2279,6 @@ section {
   display   : flex;
   flex-wrap : nowrap;
   overflow-x: auto;
-
 }
 
 .charts-container::-webkit-scrollbar {
@@ -2286,7 +2288,6 @@ section {
 .chart-section {
   flex : 0 0 auto;
   width: 300px;
-
 }
 
 .chart-section:last-child {
@@ -2298,19 +2299,115 @@ canvas {
   height: 200px;
 }
 
-
 @media (min-width: 768px) {
   .chart-section {
-    width: 500px;
+      width: 500px;
   }
 }
 
-@media (min-width: 1200px) {
+/* Desktop Layout */
+/* Desktop-specific styles */
+@media (min-width: 992px) {
+  main {
+    display: flex;
+    gap: 2rem; /* Adjust the gap between the graph and card sections */
+    justify-content: space-between;
+  }
+
+  /* Left section for graphs */
+  .summary-graph {
+    flex: 2; /* More space for the graphs section */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Vertical gap between chart sections */
+    order: 1; /* Ensure this section is first */
+    width: 85%; /* Set width to 85% of the container */
+  }
 
   .chart-section {
-    width: calc(33.3333% - 20px);
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
   }
+
+  .chart-section canvas {
+    width: 100%;
+    height: auto; /* Ensure the canvas resizes appropriately */
+  }
+
+  /* Right section for cards */
+  .card-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* gap: 2rem; Vertical gap between different summary containers */
+    /* background-color: #0056b3; */
+    /* border: 1px solid #f2f2f2; */
+    order: 2; /* Ensure this section is second */
+    width: 15%; /* Set width to 15% of the container */
+
+  }
+
+  .summary-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Vertical gap between summary items */
+  }
+
+  #summary-container-1,
+  #summary-container-2 {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px 20px;
+    max-width: 100%;
 }
+
+#summary-container-1 .summary-item, 
+#summary-container-2 .summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px; /* Reduced padding to minimize vertical spacing */
+  border: none;
+  border-bottom: 1px solid rgba(25, 24, 24, 0.2);
+  box-shadow: none;
+  background-color: #fff;
+  width: 100%;
+  margin-bottom: 0; /* Ensure there's no margin around the items */
+}
+
+
+#summary-container-1 .summary-item:not(:last-child),
+#summary-container-2 .summary-item:not(:last-child) {
+  margin-bottom: -20px; /* Ensure there's no margin at the bottom of each item except the last */
+}
+
+/* Remove the bottom border from the last summary item */
+#summary-container-1 .summary-item:last-child,
+#summary-container-2 .summary-item:last-child {
+  border-bottom: none;
+}
+
+
+#summary-container-1 .info-container,
+#summary-container-2 .info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+
+#summary-container-1 .stat-text,
+#summary-container-2 .stat-text {
+  color: #00AB4F;
+}
+}
+
+
 
 /* Css- customer history tracker */
 .track-card {

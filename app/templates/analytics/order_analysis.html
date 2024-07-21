@@ -1,111 +1,114 @@
 <main>
-    <!-- Summary Containers with Pagination -->
-    <!-- Order Value -->
-    <p class="section-title">Order Value</p>
-    <div class="summary-container" id="summary-container-1">
-        <section id="total-orders" class="summary-item">
-            <div class="icon-container total-orders-icon">
-                <i class="fas fa-shopping-cart"></i>
-            </div>
-            <div class="info-container">
-                <h5 class="stat-text">Total Orders</h5>
-                <p id="total-orders-value">...</p>
-            </div>
-        </section>
+    <!-- Right section for cards -->
+    <div class="card-section">
+        
+        <!-- Order Value -->
+        <p class="section-title">Order Value</p>
+        <div class="summary-container" id="summary-container-1">
+            <section id="total-orders" class="summary-item">
+                <div class="icon-container total-orders-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="info-container">
+                    <h5 class="stat-text">Total Orders</h5>
+                    <p id="total-orders-value">...</p>
+                </div>
+            </section>
 
-        <section id="total-revenue" class="summary-item">
-            <div class="icon-container total-revenue-icon">
-                <i class="fas fa-dollar-sign"></i>
-            </div>
-            <div class="info-container">
-                <h5 class="stat-text">Total Revenue</h5>
-                <p id="total-revenue-value">...</p>
-            </div>
-        </section>
+            <section id="total-revenue" class="summary-item">
+                <div class="icon-container total-revenue-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="info-container">
+                    <h5 class="stat-text">Total Revenue</h5>
+                    <p id="total-revenue-value">...</p>
+                </div>
+            </section>
 
-        <section id="average-order" class="summary-item">
-            <div class="icon-container average-order-icon">
-                <i class="fas fa-chart-line"></i>
-            </div>
-            <div class="info-container">
-                <h5 class="stat-text">Average Order Value</h5>
-                <p id="aov-value">...</p>
-            </div>
-        </section>
-    </div>
+            <section id="average-order" class="summary-item">
+                <div class="icon-container average-order-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="info-container">
+                    <h5 class="stat-text">Average Order Value</h5>
+                    <p id="aov-value">...</p>
+                </div>
+            </section>
+        </div>
 
-    <div class="pagination-dots" data-target="summary-container-1">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-    </div>
+        <div class="pagination-dots" data-target="summary-container-1">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
 
-    <!-- Customer Analysis -->
-    <p class="section-title">Customer Analysis</p>
-    <div class="summary-container" id="summary-container-2">
-        <section id="new-customer" class="summary-item">
-            <div class="icon-container new-customers-icon">
-                <i class="fas fa-user-friends"></i>
-            </div>
-            <div class="info-container">
-                <h5 class="stat-text">New Customers</h5>
-                <p id="new-customer-percentage">...</p>
-            </div>
-        </section>
+        <!-- Customer Analysis -->
+        <p class="section-title">Customer Analysis</p>
+        <div class="summary-container" id="summary-container-2">
+            <section id="new-customer" class="summary-item">
+                <div class="icon-container new-customers-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <div class="info-container">
+                    <h5 class="stat-text">New Customers</h5>
+                    <p id="new-customer-percentage">...</p>
+                </div>
+            </section>
 
-        <section id="returning-customer" class="summary-item">
-            <div class="icon-container returning-customers-icon">
-                <i class="fas fa-user-friends"></i>
-            </div>
-            <div class="info-container">
-                <h5 class="stat-text">Returning Customers</h5>
-                <p id="returning-customer-percentage">...</p>
-            </div>
-        </section>
+            <section id="returning-customer" class="summary-item">
+                <div class="icon-container returning-customers-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <div class="info-container">
+                    <h5 class="stat-text">Returning Customers</h5>
+                    <p id="returning-customer-percentage">...</p>
+                </div>
+            </section>
 
-        <section id="clv" class="summary-item">
-            <div class="icon-container clv-icon">
-                <i class="fas fa-dollar-sign"></i>
-            </div>
-            <div class="info-container">
-                <h5 class="stat-text">Customer Lifetime Value</h5>
-                <p id="clv-value">...</p>
-            </div>
-        </section>
-    </div>
+            <section id="clv" class="summary-item">
+                <div class="icon-container clv-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="info-container">
+                    <h5 class="stat-text">Customer Lifetime Value</h5>
+                    <p id="clv-value">...</p>
+                </div>
+            </section>
+        </div>
 
-    <div class="pagination-dots" data-target="summary-container-2">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
+        <div class="pagination-dots" data-target="summary-container-2">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
     </div>
 
     <!-- Charts Containers with Pagination -->
     <!-- Order Volume and Trends -->
-    <p class="section-title">Order Volume and Trends</p>
-    <div class="summary-container" id="summary-container-3">
-        <section id="daily-orders" class="chart-section">
-            <h5 class="stat-text">Daily(Last 7 Days)</h5>
-            <canvas id="dailyOrdersChart"></canvas>
-        </section>
+    <div class="summary-graph">
+        <p class="section-title">Order Volume and Trends</p>
+        <div class="summary-container" id="summary-container-3" >
+            <section id="daily-orders" class="chart-section">
+                <h5 class="stat-text">Daily(Last 7 Days)</h5>
+                <canvas id="dailyOrdersChart"></canvas>
+            </section>
 
-        <section id="monthly-orders" class="chart-section">
-            <h5 class="stat-text">Monthly(Last Year)</h5>
-            <canvas id="monthlyOrdersChart"></canvas>
-        </section>
+            <section id="monthly-orders" class="chart-section">
+                <h5 class="stat-text">Monthly(Last Year)</h5>
+                <canvas id="monthlyOrdersChart"></canvas>
+            </section>
 
-        <section id="yearly-orders" class="chart-section">
-            <h5 class="stat-text">Yearly</h5>
-            <canvas id="yearlyOrdersChart"></canvas>
-        </section>
+            <section id="yearly-orders" class="chart-section">
+                <h5 class="stat-text">Yearly</h5>
+                <canvas id="yearlyOrdersChart"></canvas>
+            </section>
+        </div>
+        <div class="pagination-dots" data-target="summary-container-3">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
     </div>
-
-    <div class="pagination-dots" data-target="summary-container-3">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-    </div>
-
 </main>
 
 

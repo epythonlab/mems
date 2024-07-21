@@ -22,8 +22,7 @@ def inventory_list():
 
     if filter_type == 'expired':
         products_query = products_query.join(Batch).filter(
-            Batch.expiration_date < datetime.now(tz=timezone.utc),
-            Batch.company_id == company_id
+            Batch.expiration_date < datetime.now(tz=timezone.utc)
         )
         session['filter_criteria'] = filter_type
 
@@ -202,9 +201,9 @@ def product_details():
 
         # Filter the batches based on the expiration criteria and quantity
         if filter_criteria == 'expired':
-            product.batches = [batch for batch in product.batches if batch.expiration_date < date.today() and batch.quantity > 0]
+            product.batches = [batch for batch in product.batches if batch.expiration_date <= date.today() and batch.quantity > 0]
         else:
-            product.batches = [batch for batch in product.batches if batch.expiration_date > date.today() and batch.quantity > 0]
+            product.batches = [batch for batch in product.batches if batch.expiration_date > date.today() and batch.quantity >= 0]
 
     # Pass the product data and filtered batches to the template
     return render_template('inventory/product_details.html', product=product)
